@@ -1,0 +1,10 @@
+# config/packages/sonata_user.yaml
+
+sonata_user:
+    manager_type: orm # can be orm or mongodb
+    class:
+        user: App\Entity\User
+        group: App\Entity\Group
+    admin:
+        user: 
+            class: App\Admin\User

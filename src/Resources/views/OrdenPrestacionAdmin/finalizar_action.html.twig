@@ -1,0 +1,15 @@
+{% if 'ROLE_ADMIN_SERVICIO' in app.user.roles %}
+{% set f = 0 %}
+{% for insumo in object.insumos  %}
+        {% if (insumo.estadoinsumo.estado.codigo == 4) %}
+                {% set f = 1 %}
+        {% endif %}
+{% endfor %}
+
+{% if f == 1 %}
+<a href="{{ path('admin_app_ordenprestacion_finalizarop', {'id': object.id}) }}" class="btn btn-sm btn-primary view_link" title="{{ 'Finalizar'|trans({}, 'SonataAdminBundle') }}">
+        <i class="glyphicon glyphicon-list"></i>
+        Finalizar
+</a>
+{% endif %}
+{% endif %}

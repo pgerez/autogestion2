@@ -1,0 +1,15 @@
+{% if 'ROLE_ADMIN_FARMACIA' in app.user.roles %}
+{% set f = 0 %}
+{% for insumo in object.insumos  %}
+        {% if insumo.estadoinsumo.estado.codigo == 3 %}
+                {% set f = 1 %}
+        {% endif %}
+{% endfor %}
+
+{% if f == 1 %}
+<a href="{{ path('admin_app_ordenprestacion_servicio', {'id': object.id}) }}" class="btn btn-sm btn-warning view_link" title="{{ 'Servicio'|trans({}, 'SonataAdminBundle') }}">
+        <i class="fa fa-user-md"> </i>
+         A Servicio
+</a>
+{% endif %}
+{% endif %}

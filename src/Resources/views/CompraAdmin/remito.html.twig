@@ -1,0 +1,61 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+<style>
+	.table1 {
+	  border: 1px solid black;
+	  padding:5px;
+	}
+</style>
+
+	<table>
+		<tr>
+			<td><h4>DETALLE DE CONSIGNACIÓN</h4></td>			
+		</tr>
+		<tr>
+			<td>Sucursal: {{ compra.sucursal }}</td>				
+		</tr>			
+		<tr>
+			<td>Nro: {{ compra.id }}</td>				
+		</tr>
+		<tr>
+			<td>Fecha: {{ compra.fecha|date("d/m/Y") }}</td>			
+		</tr>
+	</table>
+	
+	<br/><br/>
+	
+	
+	{% if compra|length > 0 %}
+	
+		<table class="table1">
+			<tr>
+				<th width="30%"><b>Descripcion</b></th>
+				<th width="10%"><b>Codigo</b></th>
+				<th width="10%"><b>Cantidad</b></th>
+				<th width="10%"><b>Precio Unit.</b></th>
+				<th><b>Total</b></th>
+			</tr>
+			
+			{% for item in compra.insumos %}
+				<tr>
+					<td>{{ item.descripcion }}</td>
+					<td>{{ item.codigo }}</td>
+					<td>{{ item.cantidad }}</td>
+					<td>{{ item.getPrecUnitario }}</td>
+					<td>{{ item.total }}</td>
+					{# <td>{{ item.estadoinsumo }}</td> #}
+				</tr>
+			{% endfor %}
+					
+		</table>	
+	{% endif %}
+

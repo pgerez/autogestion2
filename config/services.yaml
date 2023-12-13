@@ -1,0 +1,91 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: 'es'
+    mailer_user: 'something@example.com'
+    upload_dir: '%kernel.project_dir%/public/uploads/images'
+    sonata.user.admin.user.class: App\Admin\UserAdmin
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
+
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: ['controller.service_arguments']
+
+    admin.anexoii:
+        class: App\Admin\AnexoiiAdmin
+        arguments: [~, App\Entity\Anexoii, App\Controller\AnexoiiAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Anexoii }
+        public: true
+
+    admin.factura:
+        class: App\Admin\FacturaAdmin
+        arguments: [~, App\Entity\Factura, App\Controller\FacturaAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Factura }
+        public: true
+        calls:
+            - [ addChild, ["@admin.item_prefacturacion"]]
+
+    admin.hospital:
+        class: App\Admin\HospitalAdmin
+        arguments: [~, App\Entity\Hospital, App\Controller\HospitalAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Hospital }
+        public: true
+
+    admin.item_prefacturacion:
+        class: App\Admin\ItemPrefacturacionAdmin
+        arguments: [~, App\Entity\ItemPrefacturacion, App\Controller\ItemPrefacturacionAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: ItemPrefacturacion }
+        public: true
+
+    admin.nomencla:
+        class: App\Admin\NomenclaAdmin
+        arguments: [~, App\Entity\Nomencla, App\Controller\NomenclaAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Nomencla }
+        public: true
+
+    admin.obras_sociales:
+        class: App\Admin\ObrasSocialesAdmin
+        arguments: [~, App\Entity\ObrasSociales, App\Controller\ObrasSocialesAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: ObrasSociales }
+        public: true
+
+    admin.servicios:
+        class: App\Admin\ServiciosAdmin
+        arguments: [~, App\Entity\Servicios, App\Controller\ServiciosAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Servicios }
+        public: true
+
+    admin.pago:
+        class: App\Admin\PagoAdmin
+        arguments: [~, App\Entity\Pago, App\Controller\PagoAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Pago }
+        public: true

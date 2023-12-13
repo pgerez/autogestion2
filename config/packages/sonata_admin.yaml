@@ -1,0 +1,16 @@
+# config/packages/sonata_admin.yaml
+
+sonata_admin:
+    title: Autogestion Hospitalaria
+    persist_filters: true
+    templates:
+        #layout: 'standard_layout.html.twig'
+    title_logo: false
+    security:
+        handler: sonata.admin.security.handler.role
+
+sonata_block:
+    blocks:
+        # enable the SonataAdminBundle block
+        sonata.admin.block.admin_list:
+            contexts: [admin]

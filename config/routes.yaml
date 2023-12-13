@@ -1,0 +1,20 @@
+# config/routes.yaml
+index:
+    path: /
+    controller: App\Controller\SiteController:index
+
+sonata_user_admin_security:
+    resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
+    prefix: /admin
+
+sonata_user_admin_resetting:
+    resource: '@SonataUserBundle/Resources/config/routing/admin_resetting.xml'
+    prefix: /admin/resetting
+
+ApplicationToolsBundle:
+    resource: "@ApplicationToolsBundle/Resources/config/routing.yml"
+    prefix:   /
+    
+#sonata_admin_dashboard:
+#    path: /dashboard
+#    controller: app.admin.action.dashboard

@@ -1,0 +1,30 @@
+{% extends "standard_layout.html.twig" %}
+
+{% block sonata_admin_content %}
+
+          {% block notice %}
+            {% include ['@SonataCore/FlashMessage/render.html.twig', '@SonataTwig/FlashMessage/render.html.twig'] %}
+          {% endblock notice %}
+  <h3>Carga de Archivo Excel</h3>
+  <form action="{{ path('process_excel') }}" method="post" enctype="multipart/form-data">
+
+        <input type="hidden" name="token" value="{{ csrf_token('upload') }}" />
+
+        <div>
+            <label for="myfile">Archivo:</label>
+            <input type="file" name="excelfile" id="excelfile">
+        </div>
+        <div>
+            <label for="myfile">Hospital:</label>
+            <select name="hospitalid">
+                {% for hospital in hospitals %}
+                    <option value="{{hospital.id}}">{{hospital.codigoh}} - {{hospital.descriph}}</option><br />
+                {% endfor %}
+            </select>
+        </div>
+        <br>
+        <button type="submit">Procesar</button>
+
+  </form>
+
+{% endblock %}
