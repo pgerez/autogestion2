@@ -21,6 +21,10 @@ class User extends BaseUser
      */
     protected $id;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Hospital::class, inversedBy="users", cascade={"persist"})
+     */
+    private $hospital;
 
 		
     
@@ -34,6 +38,17 @@ class User extends BaseUser
         parent::__construct();
     }
 
+    public function getHospital(): ?Hospital
+    {
+        return $this->hospital;
+    }
+
+    public function setHospital(?Hospital $hospital): self
+    {
+        $this->hospital = $hospital;
+
+        return $this;
+    }
     
     
 	
