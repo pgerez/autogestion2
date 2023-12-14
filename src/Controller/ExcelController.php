@@ -61,7 +61,7 @@ class ExcelController extends AbstractController
                     /**
                      * Numero del punto de venta
                      **/
-                    $punto_de_venta = 3;
+                    $punto_de_venta = 112;
 
                     /**
                      * Tipo de factura
