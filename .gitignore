@@ -10,6 +10,7 @@
 /vendor/
 /.htaccess
 /public/.htaccess
+/src/Afip_res
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###
