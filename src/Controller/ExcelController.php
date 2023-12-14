@@ -57,7 +57,13 @@ class ExcelController extends AbstractController
             if(!$entityManager->getRepository(Factura::class)->findOneBy(['codigo' => $fila['A']])):
                 $rnos = $entityManager->getRepository(ObrasSociales::class)->findByRnos($fila['G']);
                 if($rnos):
-                    $afip = new Afip(array('CUIT' => 23216313194)); //Reemplazar el CUIT
+                    $afip = new Afip(array('CUIT' => 23216313194,
+                                            'cert' => 'produccion.crt',
+                                            'key'=> 'produccion.key',
+                                            'res_folder' => '/Afip_res',
+                                            'production' => true
+                        ));
+                //Reemplazar el CUIT
                     /**
                      * Numero del punto de venta
                      **/
