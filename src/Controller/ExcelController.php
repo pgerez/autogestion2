@@ -60,7 +60,7 @@ class ExcelController extends AbstractController
                     $afip = new Afip(array('CUIT' => 23216313194,
                                             'cert' => 'produccion.crt',
                                             'key'=> 'produccion.key',
-                                            'res_folder' => '/Afip_res',
+                                            'res_folder' => '/Afip_res/',
                                             'production' => true
                         ));
                 //Reemplazar el CUIT
