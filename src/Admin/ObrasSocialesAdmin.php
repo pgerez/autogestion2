@@ -87,6 +87,7 @@ final class ObrasSocialesAdmin extends AbstractAdmin
             ->add('codbco')
             ->add('codsuc')
             ->add('ctabanc')
+            ->add('cuit')
             ->add('estado')
             ;
     }
