@@ -9,7 +9,7 @@ use App\Repository\ObrasSocialesRepository;
  * ObrasSociales
  *
  * @ORM\Table(name="obras_sociales", indexes={@ORM\Index(name="codobra", columns={"codobra"}), @ORM\Index(name="codobra_2", columns={"codobra"})})
- * @ORM\Entity(repositor    yClass=ObrasSocialesRepository::class)
+ * @ORM\Entity(repositoryClass=ObrasSocialesRepository::class)
  */
 class ObrasSociales
 {
