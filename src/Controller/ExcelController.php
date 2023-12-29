@@ -62,8 +62,8 @@ class ExcelController extends AbstractController
                                             'key'=> 'produccion.key',
                                             'res_folder' => dirname(__DIR__).'/Afip_res/',
                                             'ta_folder'  => dirname(__DIR__).'/Afip_res/',
-                                            'production' => true,
-                                            'access_token' => 's5qWtS4s9zhLnpWnXhheuzkb3JOINwiuMjd7yNxcor4kkbgj3Hp8lXBp0RcPwweL'
+                                            'production' => TRUE,
+                                            #'access_token' => 'A90CkOCpcfYF5PuDs3VkrnpUszzndpkddKFm0Dzp4DBBDYx1k8ZBTvkXHdFEwk7v'
                         ));
                 //Reemplazar el CUIT
                     /**
