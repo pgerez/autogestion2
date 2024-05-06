@@ -1,0 +1,66 @@
+{% block app_admin_anexoii_busquedadni_hidden_widget %}
+        {{ form_start(form) }}
+        <div class="row">
+                <div class="form-group col-lg-6">
+                        <div class="col-lg-1">
+                                <label class="control-label" for="numexp">Documento</label>
+                                {{ form_row(form.documento) }}
+                        </div>
+                </div>
+        </div>
+        <script>
+
+                $( document ).ready(function() {
+                        alert('pingo');
+                        if($('#{{ form.parent.offsetGet('documento').vars.id }}').val() != 0){
+                                $('#nro-exp-block').show();
+                                $('#nro-tram-block').hide();
+                        }else{
+                                $('#nro-exp-block').hide();
+                                $('#nro-tram-block').show();
+                        }
+                        $('#{{ form.parent.offsetGet('tipo').vars.id }}').change(function(){
+                                if($('#{{ form.parent.offsetGet('tipo').vars.id }}').val() != 1){
+                                        $('#nro-exp-block').show();
+                                        $('#nro-tram-block').hide();
+                                }else{
+                                        $('#nro-exp-block').hide();
+                                        $('#nro-tram-block').show();
+                                }
+                        })
+
+                        $('#{{ form.parent.offsetGet('tipo').vars.id }}').change(function(){
+                                if($('#{{ form.parent.offsetGet('tipo').vars.id }}').val() != 3){
+                                        $('#block_numero').show();
+                                        $('#block_destino').hide();
+                                }else{
+                                        $('#block_numero').hide();
+                                        $('#block_destino').show();
+                                }
+                        })
+
+                        if($('#{{ form.parent.offsetGet('tipo').vars.id }}').val() != 3){
+                                $('#block_numero').show();
+                                $('#block_destino').hide();
+                        }
+
+
+                });
+
+                function actualizarTotal(id) {
+                        var cad = id;
+                        cad = cad.split('_') // separa el string según espacios en blanco
+                                .slice(0, -1) // toma todos los elementos menos el último
+                                .join('_'); // vuelve a armar el string
+                        var cantidad = $('#'+cad+'_cantidad').val();
+                        var punitario = $('#'+cad+'_precioUnitario').val();
+                        var ajuste = $('#'+cad+'_ajuste').val();
+                        var cantidadStr = cantidad.toString();
+                        var punitarioStr = punitario.toString();
+                        var ajusteStr = ajuste.toString();
+
+                        $('#'+cad+'_total').val(parseFloat(cantidadStr.replace(',','.')) * ( parseFloat(punitario.replace(',','.')) + parseFloat(ajuste.replace(',','.')) ));
+                }
+
+        </script>
+{% endblock app_admin_anexoii_busquedadni_hidden_widget %}

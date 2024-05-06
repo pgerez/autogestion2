@@ -81,7 +81,7 @@ final class FacturaAdmin extends AbstractAdmin
     {
         $list
             ->add('idFactura')
-            ->add('codigo')
+            #->add('codigo')
             ->add('puntoVenta',null,['label' => 'PV OP'])
             ->add('numeroFactura',null,['label' => 'Num OP'])
             #->add('digitalPv',null,['label' => 'PV Digital'])
@@ -110,8 +110,8 @@ final class FacturaAdmin extends AbstractAdmin
             #->add('digitalFecha')
             #->add('digitalMonto')
             #->add('fechaEnvioSuper')
-            ->add('cae')
-            ->add('cae_vto')
+            #->add('cae')
+            #->add('cae_vto')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'items' => ['template' => 'ItemPrefacturacionAdmin/items.html.twig'],

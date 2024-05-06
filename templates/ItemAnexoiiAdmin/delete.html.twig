@@ -1,0 +1,6 @@
+{% if object.cerrado != 1 %}
+<a href="{{ path('admin_app_anexoii_delete', {'id': object.NumAnexo}) }}" class="btn btn-sm btn-default view_link" title="{{ 'Borrar'|trans({}, 'SonataAdminBundle') }}">
+        <i class="fa fa-times"></i>
+        {{ 'Borrar' }}
+</a>
+{% endif %}

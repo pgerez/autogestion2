@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\NomenclaRepository;
 
 /**
  * Nomencla
  *
  * @ORM\Table(name="nomencla")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass=NomenclaRepository::class)
  */
 class Nomencla
 {
@@ -91,10 +94,22 @@ class Nomencla
      */
     private $fechaFin;
 
-    public function getRowId(): ?int
+    /**
+     * @ORM\OneToMany(targetEntity=ItemPrefacturacion::class, mappedBy="nomencla", cascade={"persist"})
+     */
+    private $itemPrefacturacions;
+
+    public function __construct()
     {
-        return $this->rowId;
+        $this->itemPrefacturacions = new ArrayCollection();
     }
+
+
+    public function __toString()
+    {
+        return (string)$this->getTema().': [ $'.$this->arancel.' ]';
+    }
+   
 
     public function getCodigon(): ?string
     {
@@ -154,6 +169,11 @@ class Nomencla
         $this->arancel = $arancel;
 
         return $this;
+    }
+
+    public function getTemaArancel(): ?string
+    {
+        return $this->tema.': $'.$this->arancel;
     }
 
     public function getTema(): ?string
@@ -216,5 +236,39 @@ class Nomencla
         return $this;
     }
 
+    /**
+     * @return Collection<int, ItemPrefacturacion>
+     */
+    public function getItemPrefacturacions(): Collection
+    {
+        return $this->itemPrefacturacions;
+    }
+
+    public function addItemPrefacturacion(ItemPrefacturacion $itemPrefacturacion): self
+    {
+        if (!$this->itemPrefacturacions->contains($itemPrefacturacion)) {
+            $this->itemPrefacturacions[] = $itemPrefacturacion;
+            $itemPrefacturacion->setNomencla($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItemPrefacturacion(ItemPrefacturacion $itemPrefacturacion): self
+    {
+        if ($this->itemPrefacturacions->removeElement($itemPrefacturacion)) {
+            // set the owning side to null (unless already changed)
+            if ($itemPrefacturacion->getNomencla() === $this) {
+                $itemPrefacturacion->setNomencla(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getRowId(): ?int
+    {
+        return $this->rowId;
+    }
 
 }
