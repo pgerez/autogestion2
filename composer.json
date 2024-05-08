@@ -11,8 +11,10 @@
         "doctrine/doctrine-bundle": "^2.2",
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.7",
+        "lexik/jwt-authentication-bundle": "^2.21",
         "phpdocumentor/reflection-docblock": "^5.2",
         "phpoffice/phpspreadsheet": "^1.24",
+        "rbdwllr/reallysimplejwt": "^5.0",
         "sensio/framework-extra-bundle": "^5.1",
         "sonata-project/admin-bundle": "^3.81",
         "sonata-project/doctrine-orm-admin-bundle": "^3.26",
@@ -43,6 +45,7 @@
         "symfony/yaml": "4.4.*",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0",
+        "web-token/jwt-signature": "^3.2",
         "whiteoctober/tcpdf-bundle": "^1.1"
     },
     "require-dev": {

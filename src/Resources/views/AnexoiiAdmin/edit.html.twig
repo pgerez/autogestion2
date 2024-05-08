@@ -1,0 +1,45 @@
+{% extends '@SonataAdmin/CRUD/base_edit.html.twig' %}
+
+{% block form %}
+    {{ parent() }}
+    <script >
+        $( document ).ready(function() {
+            formId = '{{ form.vars.id }}';
+            {% if object.cerrado == 0 %}
+            $('#'+formId+'_documento').css({'width': '400px','display':'inline'})
+            $('#'+formId+'_documento').parent().append('<select name="selectSexo" class="select2-chosen select2-dropdown" id="sexo" ><option value="2">M</option><option value="1">F</option></select> <button type="button" id="busqueda" style="display: inline" class="btn btn-primary">Buscar</button> <a class="btn btn-default" href="https://www.sssalud.gob.ar/index.php?b_publica=Acceso+P%C3%BAblico&user=GRAL&page=bus650" target="_blank" role="button">Acceso Público</a>')
+            $('#'+formId+'_documento').parent().append('<br><span id="mensajeOS" class="badge badge-primary"></span><br><span id="mensajeRenaper" class="badge badge-secondary"></span>')
+            {% endif %}
+            $("#busqueda").click(function () {
+                $('#mensajeOS').text('');
+                $('#mensajeRenaper').text('');
+                $.ajax({
+                    url: '{{ path('admin_app_anexoii_buscarOs') }}',
+                    method: 'POST',
+                    processData: false,
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({ "dni": $('#'+formId+'_documento').val(), "sexo": $('#sexo').val() }),
+                    dataType: "json",
+                    success: function (data) {
+                        $('#mensajeOS').text(data.texto);
+                        $('#'+formId+'_codOs option[value='+data.osid+']').prop('selected','selected').change();
+                    }
+                });
+                $.ajax({
+                    url: '{{ path('admin_app_anexoii_renaper') }}',
+                    method: 'POST',
+                    processData: false,
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({ "dni": $('#'+formId+'_documento').val(), "sexo": $('#sexo').val() }),
+                    dataType: "json",
+                    success: function (data) {
+                        $('#mensajeRenaper').text(data.texto);
+                        $('#'+formId+'_apeynom').val(data.apellido+' '+data.nombres);
+                    }
+                });
+            });
+
+        });
+    </script>
+
+{% endblock form %}

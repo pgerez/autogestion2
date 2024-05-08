@@ -39,6 +39,8 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Anexoii }
         public: true
+        calls:
+            - [ addChild, ["@admin.item_prefacturacion"]]
 
     admin.factura:
         class: App\Admin\FacturaAdmin
@@ -53,14 +55,14 @@ services:
         class: App\Admin\HospitalAdmin
         arguments: [~, App\Entity\Hospital, App\Controller\HospitalAdminController]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Hospital }
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Hospital,  show_in_dashboard: false}
         public: true
 
     admin.item_prefacturacion:
         class: App\Admin\ItemPrefacturacionAdmin
         arguments: [~, App\Entity\ItemPrefacturacion, App\Controller\ItemPrefacturacionAdminController]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: ItemPrefacturacion }
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Prefacturacion,  show_in_dashboard: false}
         public: true
 
     admin.nomencla:
@@ -89,4 +91,18 @@ services:
         arguments: [~, App\Entity\Pago, App\Controller\PagoAdminController]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Pago }
+        public: true
+
+    admin.auditoria_administrativa_cod_cie10:
+        class: App\Admin\AuditoriaAdministrativaCodCie10Admin
+        arguments: [~, App\Entity\AuditoriaAdministrativaCodCie10, App\Controller\AuditoriaAdministrativaCodCie10AdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: AnexoCie10, show_in_dashboard: false}
+        public: true
+
+    admin.cod_cie10:
+        class: App\Admin\CodCie10Admin
+        arguments: [~, App\Entity\CodCie10, App\Controller\CodCie10AdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Cie10 }
         public: true

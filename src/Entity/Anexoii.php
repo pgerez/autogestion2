@@ -59,18 +59,24 @@ class Anexoii
     private $sexo = '';
 
     /**
-     * @var string
+     * @var \Hospital
      *
-     * @ORM\Column(name="Cod_H", type="string", length=15, nullable=false)
+     * @ORM\ManyToOne(targetEntity="Hospital")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="Cod_H", referencedColumnName="id")
+     * })
      */
-    private $codH = '0';
+    private $codH;
 
     /**
-     * @var int
+     * @var \ObrasSociales
      *
-     * @ORM\Column(name="Cod_OS", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="ObrasSociales")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="Cod_OS", referencedColumnName="row_id")
+     * })
      */
-    private $codOs = '0';
+    private $codOs;
 
     /**
      * @var int
@@ -105,7 +111,7 @@ class Anexoii
      *
      * @ORM\Column(name="Mes_Facturacion", type="date", nullable=false, options={"default"="0000-00-00"})
      */
-    private $mesFacturacion = '0000-00-00';
+    private $mesFacturacion;
 
     /**
      * @var int
@@ -157,9 +163,27 @@ class Anexoii
     private $sfGuardUserId;
 
     /**
-     * @ORM\OneToMany(targetEntity=ItemPrefacturacion::class, mappedBy="Num_Anexo",cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=ItemPrefacturacion::class, mappedBy="Num_Anexo", cascade={"persist"})
      */
     private $itemPrefacturacions;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="cerrado", type="boolean", nullable=false)
+     */
+    private $cerrado = '0';
+
+    /**
+     * @ORM\OneToMany(targetEntity=AuditoriaAdministrativaCodCie10::class, mappedBy="auditoriaAdministrativaNumAnexo", cascade={"persist"})
+     */
+    private $cie10;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $sistema = 1;
+
 
     public function __toString()
     {
@@ -169,6 +193,13 @@ class Anexoii
     public function __construct()
     {
         $this->itemPrefacturacions = new ArrayCollection();
+        $this->setMesFacturacion(new \DateTime());
+        $this->setHoraCarga(new \DateTime());
+        $this->setFechaCarga(new \DateTime());
+        $this->setFechaNac(new \DateTime());
+        $this->setSexo(0);
+        $this->setCerrado(0);
+        $this->cie10 = new ArrayCollection();
     }
 
     public function getNumAnexo(): ?int
@@ -232,30 +263,6 @@ class Anexoii
     public function setSexo(string $sexo): self
     {
         $this->sexo = $sexo;
-
-        return $this;
-    }
-
-    public function getCodH(): ?string
-    {
-        return $this->codH;
-    }
-
-    public function setCodH(string $codH): self
-    {
-        $this->codH = $codH;
-
-        return $this;
-    }
-
-    public function getCodOs(): ?int
-    {
-        return $this->codOs;
-    }
-
-    public function setCodOs($codOs): self
-    {
-        $this->codOs = $codOs;
 
         return $this;
     }
@@ -404,6 +411,31 @@ class Anexoii
         return $this;
     }
 
+
+    public function getCodH(): ?Hospital
+    {
+        return $this->codH;
+    }
+
+    public function setCodH(?Hospital $codH): self
+    {
+        $this->codH = $codH;
+
+        return $this;
+    }
+
+    public function getCodOs(): ?ObrasSociales
+    {
+        return $this->codOs;
+    }
+
+    public function setCodOs(?ObrasSociales $codOs): self
+    {
+        $this->codOs = $codOs;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, ItemPrefacturacion>
      */
@@ -434,5 +466,60 @@ class Anexoii
         return $this;
     }
 
+    public function getCerrado(): ?bool
+    {
+        return $this->cerrado;
+    }
+
+    public function setCerrado(bool $cerrado): self
+    {
+        $this->cerrado = $cerrado;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AuditoriaAdministrativaCodCie10>
+     */
+    public function getCie10(): Collection
+    {
+        return $this->cie10;
+    }
+
+    public function addCie10(AuditoriaAdministrativaCodCie10 $cie10): self
+    {
+        if (!$this->cie10->contains($cie10)) {
+            $this->cie10[] = $cie10;
+            $cie10->setAuditoriaAdministrativaNumAnexo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCie10(AuditoriaAdministrativaCodCie10 $cie10): self
+    {
+        if ($this->cie10->removeElement($cie10)) {
+            // set the owning side to null (unless already changed)
+            if ($cie10->getAuditoriaAdministrativaNumAnexo() === $this) {
+                $cie10->setAuditoriaAdministrativaNumAnexo(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getSistema(): ?int
+    {
+        return $this->sistema;
+    }
+
+    public function setSistema(int $sistema): self
+    {
+        $this->sistema = $sistema;
+
+        return $this;
+    }
+
+    
 
 }

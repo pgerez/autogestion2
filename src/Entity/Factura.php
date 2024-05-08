@@ -252,6 +252,11 @@ class Factura
      */
     private $cae_vto;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $sistema = 1;
+
 
 
     public function __toString()
@@ -692,6 +697,18 @@ class Factura
     public function setCaeVto(?string $cae_vto): self
     {
         $this->cae_vto = $cae_vto;
+
+        return $this;
+    }
+
+    public function getSistema(): ?int
+    {
+        return $this->sistema;
+    }
+
+    public function setSistema(int $sistema): self
+    {
+        $this->sistema = $sistema;
 
         return $this;
     }

@@ -14,7 +14,3 @@ sonata_user_admin_resetting:
 ApplicationToolsBundle:
     resource: "@ApplicationToolsBundle/Resources/config/routing.yml"
     prefix:   /
-    
-#sonata_admin_dashboard:
-#    path: /dashboard
-#    controller: app.admin.action.dashboard

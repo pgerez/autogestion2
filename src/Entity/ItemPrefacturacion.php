@@ -3,12 +3,13 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ItemPrefacturacionRepository;
 
 /**
  * ItemPrefacturacion
  *
  * @ORM\Table(name="item_prefacturacion", indexes={@ORM\Index(name="Cod_NHPGD", columns={"id_nomenclador_FK"}), @ORM\Index(name="id_factura_FK", columns={"id_factura_FK"}), @ORM\Index(name="Num_Anexo", columns={"Num_Anexo"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass=ItemPrefacturacionRepository::class)
  */
 class ItemPrefacturacion
 {
@@ -21,21 +22,6 @@ class ItemPrefacturacion
      */
     private $id;
 
-    #/**
-    # * @var int
-    # *
-    # * @ORM\Column(name="Num_Anexo", type="integer", nullable=false)
-    # */
-    #/**
-
-
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id_nomenclador_FK", type="integer", nullable=false)
-     */
-    private $idNomencladorFk = '0';
 
     /**
      * @var int
@@ -47,9 +33,9 @@ class ItemPrefacturacion
     /**
      * @var string
      *
-     * @ORM\Column(name="precio", type="string", length=10, nullable=false)
+     * @ORM\Column(name="precio", type="string", length=10, nullable=true)
      */
-    private $precio;
+    private $precio = '0';
 
     /**
      * @var float
@@ -128,13 +114,6 @@ class ItemPrefacturacion
      */
     private $id_factura_FK;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Anexoii::class)
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="Num_Anexo", referencedColumnName="Num_Anexo")
-     * })
-     */
-    private $Num_Anexo;
 
     /**
      * @ORM\ManyToOne(targetEntity=Servicios::class)
@@ -144,29 +123,37 @@ class ItemPrefacturacion
      */
     private $codserv_FK;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Anexoii::class)
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="Num_Anexo", referencedColumnName="Num_Anexo")
+     * })
+     */
+    private $Num_Anexo;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Nomencla::class)
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_nomenclador_FK", referencedColumnName="row_id")
+     * })
+     */
+    private $nomencla;
 
 
+    public function __construct()
+    {
+        $this->setEstadoFactura(1);
+        $this->setEstadoDebito(0);
+    }
 
     public function __toString()
     {
-        return $this->getId();
+        return (string)$this->getId();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getIdNomencladorFk(): ?int
-    {
-        return $this->idNomencladorFk;
-    }
-
-    public function setIdNomencladorFk(int $idNomencladorFk): self
-    {
-        $this->idNomencladorFk = $idNomencladorFk;
-
-        return $this;
     }
 
     public function getCantidad(): ?int
@@ -186,7 +173,7 @@ class ItemPrefacturacion
         return $this->precio;
     }
 
-    public function setPrecio(string $precio): self
+    public function setPrecio(string $precio)
     {
         $this->precio = $precio;
 
@@ -301,18 +288,6 @@ class ItemPrefacturacion
         return $this;
     }
 
-    public function getNumAnexo(): ?Anexoii
-    {
-        return $this->Num_Anexo;
-    }
-
-    public function setNumAnexo(?Anexoii $Num_Anexo): self
-    {
-        $this->Num_Anexo = $Num_Anexo;
-
-        return $this;
-    }
-
     public function getCodservFK(): ?Servicios
     {
         return $this->codserv_FK;
@@ -325,6 +300,34 @@ class ItemPrefacturacion
         return $this;
     }
 
+    public function getNumAnexo(): ?Anexoii
+    {
+        return $this->Num_Anexo;
+    }
+
+    public function setNumAnexo(?Anexoii $Num_Anexo): self
+    {
+        $this->Num_Anexo = $Num_Anexo;
+
+        return $this;
+    }
+
+    public function getNomencla(): ?Nomencla
+    {
+        return $this->nomencla;
+    }
+
+    public function setNomencla(?Nomencla $nomencla): self
+    {
+        $this->nomencla = $nomencla;
+
+        return $this;
+    }
+
+
+
+
     
+        
     
 }

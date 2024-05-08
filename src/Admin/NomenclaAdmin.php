@@ -16,13 +16,12 @@ final class NomenclaAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
-            ->add('rowId')
+            ->add('id')
             ->add('codigon')
             ->add('subcodn')
             ->add('letra')
             ->add('item')
             ->add('arancel')
-            ->add('tema')
             ->add('estado')
             ->add('canPrac')
             ->add('fechaInicio')
@@ -33,7 +32,7 @@ final class NomenclaAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $list): void
     {
         $list
-            ->add('rowId')
+            ->add('id')
             ->add('codigon')
             ->add('subcodn')
             ->add('letra')
@@ -73,7 +72,7 @@ final class NomenclaAdmin extends AbstractAdmin
     protected function configureShowFields(ShowMapper $show): void
     {
         $show
-            ->add('rowId')
+            ->add('id')
             ->add('codigon')
             ->add('subcodn')
             ->add('letra')

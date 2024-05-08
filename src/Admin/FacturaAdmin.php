@@ -35,10 +35,9 @@ final class FacturaAdmin extends AbstractAdmin
         if (!$this->isGranted('ROLE_AUTOGESTION') and !$this->isGranted('ROLE_SUPER_ADMIN')):
             $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
             $query
-                ->join($query->getRootAlias()[0].'.hospitalId', 'h', 'WITH', $query->getRootAlias()[0].'.hospitalId = h.id')
-                #->join('c.sucursal',  's','WITH','s.id = c.sucursal')
-                #->join('ppa.partidaAfectacion', 'pa','WITH','pa.id = ppa.partidaAfectacion')
-                ->where('h.id = '.$user->getHospital()->getId() );
+                #->join($query->getRootAlias()[0].'.hospitalId', 'h', 'WITH', $query->getRootAlias()[0].'.hospitalId = h.id')
+                ->where($query->getRootAlias()[0].'.hospitalId = '.$user->getHospital()->getId() )
+                ->andWhere($query->getRootAlias()[0].'.sistema = 1');
         endif;
         
         return $query;
@@ -81,7 +80,7 @@ final class FacturaAdmin extends AbstractAdmin
     {
         $list
             ->add('idFactura')
-            ->add('codigo')
+            #->add('codigo')
             ->add('puntoVenta',null,['label' => 'PV OP'])
             ->add('numeroFactura',null,['label' => 'Num OP'])
             #->add('digitalPv',null,['label' => 'PV Digital'])
@@ -110,8 +109,8 @@ final class FacturaAdmin extends AbstractAdmin
             #->add('digitalFecha')
             #->add('digitalMonto')
             #->add('fechaEnvioSuper')
-            ->add('cae')
-            ->add('cae_vto')
+            #->add('cae')
+            #->add('cae_vto')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'items' => ['template' => 'ItemPrefacturacionAdmin/items.html.twig'],
