@@ -35,10 +35,9 @@ final class FacturaAdmin extends AbstractAdmin
         if (!$this->isGranted('ROLE_AUTOGESTION') and !$this->isGranted('ROLE_SUPER_ADMIN')):
             $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
             $query
-                ->join($query->getRootAlias()[0].'.hospitalId', 'h', 'WITH', $query->getRootAlias()[0].'.hospitalId = h.id')
-                #->join('c.sucursal',  's','WITH','s.id = c.sucursal')
-                #->join('ppa.partidaAfectacion', 'pa','WITH','pa.id = ppa.partidaAfectacion')
-                ->where('h.id = '.$user->getHospital()->getId() );
+                #->join($query->getRootAlias()[0].'.hospitalId', 'h', 'WITH', $query->getRootAlias()[0].'.hospitalId = h.id')
+                ->where($query->getRootAlias()[0].'.hospitalId = '.$user->getHospital()->getId() )
+                ->andWhere($query->getRootAlias()[0].'.sistema = 1');
         endif;
         
         return $query;

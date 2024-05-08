@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Admin;
 
 use App\Entity\Hospital;
-use phpDocumentor\Reflection\Types\Collection;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -16,16 +16,8 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\CollectionType;
 use Sonata\Form\Type\DatePickerType;
 use Sonata\AdminBundle\Route\RouteCollection;
-use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Jose\Component\Core\AlgorithmManager;
-use Jose\Component\Core\JWK;
-use Namshi\JOSE\Signer\OpenSSL\HS512;
-use Jose\Component\Core\AlgorithmManagerFactory;
-use Jose\Component\Signature\JWSBuilder;
-use Jose\Component\Signature\Serializer\CompactSerializer;
 
 
 final class AnexoiiAdmin extends AbstractAdmin
@@ -42,7 +34,8 @@ final class AnexoiiAdmin extends AbstractAdmin
         if (!$this->isGranted('ROLE_AUTOGESTION') and !$this->isGranted('ROLE_SUPER_ADMIN')):
             $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
             $query
-                ->where($query->getRootAlias()[0].'.codH = '.$user->getHospital()->getId() );
+                ->where($query->getRootAlias()[0].'.codH = '.$user->getHospital()->getId() )
+                ->andWhere($query->getRootAlias()[0].'.sistema = 1');
         endif;
 
         return $query;
@@ -115,7 +108,7 @@ final class AnexoiiAdmin extends AbstractAdmin
             #->add('horaCarga')
             #->add('idEntrada')
             #->add('sfGuardUserId')
-            ->add('cerrado')
+            ->add('cerrado', null, ['editable' => true])
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'items' => ['template' => 'ItemAnexoiiAdmin/items.html.twig'],

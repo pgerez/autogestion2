@@ -179,6 +179,11 @@ class Anexoii
      */
     private $cie10;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $sistema = 1;
+
 
     public function __toString()
     {
@@ -499,6 +504,18 @@ class Anexoii
                 $cie10->setAuditoriaAdministrativaNumAnexo(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSistema(): ?int
+    {
+        return $this->sistema;
+    }
+
+    public function setSistema(int $sistema): self
+    {
+        $this->sistema = $sistema;
 
         return $this;
     }
