@@ -103,8 +103,10 @@ final class ItemPrefacturacionAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $estado = false;
+        $disabled = '';
         if ($this->getSubject()->getEstadoPago() == 1):
             $estado = true;
+            $disabled = 'disabled';
         endif;
 
         $form
@@ -133,7 +135,7 @@ final class ItemPrefacturacionAdmin extends AbstractAdmin
                 'disabled' => $estado
 
             ])
-            ->add('cantidad')
+            ->add('cantidad', null,['disabled' => $disabled])
             #->add('precio', null, ['disabled' => true])
             #->add('precio')
             #->add('reparto')
