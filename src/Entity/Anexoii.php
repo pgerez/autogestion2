@@ -63,7 +63,7 @@ class Anexoii
      *
      * @ORM\ManyToOne(targetEntity="Hospital")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="Cod_H", referencedColumnName="codigoh")
+     *   @ORM\JoinColumn(name="Cod_H", referencedColumnName="id")
      * })
      */
     private $codH;
@@ -73,7 +73,7 @@ class Anexoii
      *
      * @ORM\ManyToOne(targetEntity="ObrasSociales")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="Cod_OS", referencedColumnName="codobra")
+     *   @ORM\JoinColumn(name="Cod_OS", referencedColumnName="row_id")
      * })
      */
     private $codOs;
