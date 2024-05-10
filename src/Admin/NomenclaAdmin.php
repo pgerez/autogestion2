@@ -23,7 +23,7 @@ final class NomenclaAdmin extends AbstractAdmin
             ->add('item')
             ->add('arancel')
             ->add('estado')
-            ->add('canPrac')
+            ->add('tema')
             ->add('fechaInicio')
             ->add('fechaFin')
             ;
