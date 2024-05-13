@@ -208,7 +208,7 @@ final class FacturaAdmin extends AbstractAdmin
     public function prePersist($object)
      {
 
-        $afip = new Afip(array('CUIT' => 20265863206)); //Reemplazar el CUIT
+        $afip = new Afip(array('CUIT' => 21631319)); //Reemplazar el CUIT
         /**
          * Numero del punto de venta
          **/
