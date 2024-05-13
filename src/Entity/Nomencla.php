@@ -178,7 +178,7 @@ class Nomencla
 
     public function getTema(): ?string
     {
-        return $this->tema;
+        return utf8_encode($this->tema);
     }
 
     public function setTema(?string $tema): self
