@@ -374,7 +374,7 @@ final class FacturaAdmin extends AbstractAdmin
          $itemPrefac = new \App\Entity\ItemPrefacturacion();
          $itemPrefac->setNumAnexo($anexoii);
          $itemPrefac->setCodservFK($servicioRepo->findOneByCodserv(269));
-         $itemPrefac->setIdNomencladorFK($nomenclaRepo->findOneById(1));
+         $itemPrefac->setNomencla($nomenclaRepo->findOneById(1));
          $itemPrefac->setCantidad(1);
          $itemPrefac->setPrecio((string)$object->getMontoReal());
          $itemPrefac->setIdFacturaFK($object);
