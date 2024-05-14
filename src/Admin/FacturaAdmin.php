@@ -212,7 +212,7 @@ final class FacturaAdmin extends AbstractAdmin
         /**
          * Numero del punto de venta
          **/
-        $punto_de_venta = 112;
+        $punto_de_venta = 113;
 
         /**
          * Tipo de factura
@@ -265,7 +265,7 @@ final class FacturaAdmin extends AbstractAdmin
         /**
          * Importe de la Factura
          **/
-        $importe_total = 100;
+        $importe_total = $object->getMontoFact();
 
         /**
          * Los siguientes campos solo son obligatorios para los conceptos 2 y 3
@@ -350,7 +350,7 @@ final class FacturaAdmin extends AbstractAdmin
          $anexoii->setApeynom('XXXX XXXXX');
          $anexoii->setFechaNac($object->getFechaEmision());
          $anexoii->setSexo('M');    
-         $anexoii->setCodH($object->getHospitalId()->getCodigoh());
+         $anexoii->setCodH($object->getHospitalId());
          $anexoii->setCodOs($object->getCodOs());
          $anexoii->setNumAfil('99999999');
          $anexoii->setTipoBenef('Titular');
