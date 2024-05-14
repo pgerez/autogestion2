@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Admin;
 
 
+use App\Entity\Nomencla;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -341,6 +342,7 @@ final class FacturaAdmin extends AbstractAdmin
          $facturaRepo = $this->getModelManager()->getEntityManager(Factura::class)->getRepository(Factura::class);
          $servicioRepo = $this->getModelManager()->getEntityManager(Servicios::class)->getRepository(Servicios::class);
          $osRepo = $this->getModelManager()->getEntityManager(ObrasSociales::class)->getRepository(ObrasSociales::class);
+         $nomenclaRepo = $this->getModelManager()->getEntityManager(Nomencla::class)->getRepository(Nomencla::class);
          
          $object->setPuntoVenta($object->getHospitalId()->getPtoVta());
          $object->setNumeroFactura($facturaRepo->findById($object->getHospitalId()->getPtoVta())[0]['numeroFactura'] + 1);
@@ -372,7 +374,7 @@ final class FacturaAdmin extends AbstractAdmin
          $itemPrefac = new \App\Entity\ItemPrefacturacion();
          $itemPrefac->setNumAnexo($anexoii);
          $itemPrefac->setCodservFK($servicioRepo->findOneByCodserv(269));
-         $itemPrefac->setIdNomencladorFK(2511);
+         $itemPrefac->setIdNomencladorFK($nomenclaRepo->findOneById(1));
          $itemPrefac->setCantidad(1);
          $itemPrefac->setPrecio((string)$object->getMontoReal());
          $itemPrefac->setIdFacturaFK($object);
