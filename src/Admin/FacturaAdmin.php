@@ -340,6 +340,7 @@ final class FacturaAdmin extends AbstractAdmin
                  ->getEntityManager('App\Entity\ItemPrefacturacion');
          $facturaRepo = $this->getModelManager()->getEntityManager(Factura::class)->getRepository(Factura::class);
          $servicioRepo = $this->getModelManager()->getEntityManager(Servicios::class)->getRepository(Servicios::class);
+         $osRepo = $this->getModelManager()->getEntityManager(ObrasSociales::class)->getRepository(ObrasSociales::class);
          
          $object->setPuntoVenta($object->getHospitalId()->getPtoVta());
          $object->setNumeroFactura($facturaRepo->findById($object->getHospitalId()->getPtoVta())[0]['numeroFactura'] + 1);
@@ -351,7 +352,7 @@ final class FacturaAdmin extends AbstractAdmin
          $anexoii->setFechaNac($object->getFechaEmision());
          $anexoii->setSexo('M');    
          $anexoii->setCodH($object->getHospitalId());
-         $anexoii->setCodOs($object->getCodOs());
+         $anexoii->setCodOs($osRepo->findByRnos($object->getCodOs()));
          $anexoii->setNumAfil('99999999');
          $anexoii->setTipoBenef('Titular');
          $anexoii->setParentesco('Otro');
