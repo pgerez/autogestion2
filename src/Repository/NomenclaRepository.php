@@ -68,7 +68,7 @@ class NomenclaRepository extends ServiceEntityRepository
     public function findOneById($value): ?Nomencla
     {
         return $this->createQueryBuilder('n')
-            ->andWhere('n.row_id = :val')
+            ->andWhere('n.rowId = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()
