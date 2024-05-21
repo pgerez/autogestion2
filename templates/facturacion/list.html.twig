@@ -12,8 +12,11 @@
             Debe seleccionar al menos un item para Facturar.
         </div>
     {% endif %}
-    <h3>Listado de Items a Facturar</h3>
+    <div class="box box-title">
+        <h3>Listado de Items a Facturar</h3>
+    </div>
     <form action="{{ path('process_items_facturacion') }}" method="post" enctype="multipart/form-data">
+        <div class="box box-primary">
         {% set total = 0 %}
         <input type="hidden" name="token" value="{{ csrf_token('upload') }}" />
         <input type="hidden" name="hospitalid" value="{{ hospitalid }}" />
@@ -54,10 +57,10 @@
                    </table>
 
 
-        <br>
         <button type="submit" class="btn btn-primary">Generar Factura</button>
         <a href="{{ path('app_facturacion') }}" type="button" class="btn btn-warning">Volver a calcular</a>
-
+        <br>
+        </div>
     </form>
 {% endblock %}
 {% block javascripts %}
