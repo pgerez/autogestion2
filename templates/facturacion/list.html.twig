@@ -56,10 +56,10 @@
                         </tr>
                    </table>
 
-
-        <button type="submit" class="btn btn-primary">Generar Factura</button>
-        <a href="{{ path('app_facturacion') }}" type="button" class="btn btn-warning">Volver a calcular</a>
-        <br>
+        <div   class="sonata-ba-form-actions well well-small form-actions">
+            <button type="submit" class="btn btn-primary">Generar Factura</button>
+            <a href="{{ path('app_facturacion') }}" type="button" class="btn btn-warning">Volver a calcular</a>
+        </div>
         </div>
     </form>
 {% endblock %}

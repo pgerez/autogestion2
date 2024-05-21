@@ -14,7 +14,8 @@
     {% endif %}
     <h3>Facturacion</h3>
     <form action="{{ path('process_facturacion') }}" method="post" enctype="multipart/form-data">
-
+        <div class="box box-primary">
+            <div class="box-body">
         <input type="hidden" name="token" value="{{ csrf_token('upload') }}" />
 
         <div>
@@ -68,10 +69,12 @@
                 });
             </script>
         </div>
+            </div>
         <br>
-        <button type="submit" class="btn btn-primary">Procesar</button>
-
-
+         <div   class="sonata-ba-form-actions well well-small form-actions">
+            <button type="submit" class="btn btn-primary">Procesar</button>
+         </div>
+        </div>
     </form>
 
 {% endblock %}
