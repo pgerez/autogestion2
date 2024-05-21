@@ -1,8 +1,9 @@
 # config/packages/sonata_admin.yaml
 
 sonata_admin:
-    title: SAHSE
+    title: false
     persist_filters: true
+    title_logo: sahse.png
     security:
         handler: sonata.admin.security.handler.role
 

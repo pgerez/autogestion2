@@ -209,11 +209,11 @@ final class FacturaAdmin extends AbstractAdmin
     public function prePersist($object)
      {
 
-        $afip = new Afip(array('CUIT' => 23216313194, 'production' => true)); //Reemplazar el CUIT
+        $afip = new Afip(array('CUIT' => $_ENV['CUIT'], 'production' => $_ENV['PRODUCCION'])); //Reemplazar el CUIT
         /**
          * Numero del punto de venta
          **/
-        $punto_de_venta = 113;
+        $punto_de_venta = $_ENV['PTO_VTA'];
 
         /**
          * Tipo de factura

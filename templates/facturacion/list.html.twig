@@ -1,0 +1,73 @@
+{% extends "standard_layout.html.twig" %}
+
+{% block title %}Facturacion{% endblock %}
+
+{% block sonata_admin_content %}
+
+    {% block notice %}
+        {% include ['@SonataCore/FlashMessage/render.html.twig', '@SonataTwig/FlashMessage/render.html.twig'] %}
+    {% endblock notice %}
+    {% if error == 1 %}
+        <div class="alert alert-danger" role="alert">
+            Debe seleccionar al menos un item para Facturar.
+        </div>
+    {% endif %}
+    <h3>Listado de Items a Facturar</h3>
+    <form action="{{ path('process_items_facturacion') }}" method="post" enctype="multipart/form-data">
+        {% set total = 0 %}
+        <input type="hidden" name="token" value="{{ csrf_token('upload') }}" />
+        <input type="hidden" name="hospitalid" value="{{ hospitalid }}" />
+        <input type="hidden" name="obrasocialid" value="{{ os }}" />
+        <input type="hidden" name="fechainicio" value="{{ fechai }}" />
+        <input type="hidden" name="fechafin" value="{{ fechaf }}" />
+
+                    <table class="table table-responsive">
+                        <tr>
+                            <th><input type="checkbox" id="checkall"></th>
+                            <th>ID</th>
+                            <th>HOSPITAL/OBRA SOCIAL</th>
+                            <th>ANEXO</th>
+                            <th>FECHA ANEXO</th>
+                            <th>SERVICIO</th>
+                            <th>CANTIDAD</th>
+                            <th>IMPORTE</th>
+                            <th>TOTAL</th>
+                        </tr>
+                    {% for item in items %}
+                        <tr>
+                            <td><input type="checkbox" name="checkbox[]"  id="checkbox-{{ item.id }}" value="{{ item.id }}" class="checkbox"/></td>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.numAnexo.codH }}/{{ item.numAnexo.codOs }}</td>
+                            <td>{{ item.numAnexo }}</td>
+                            <td>{{ item.numAnexo.fechaCarga|date("d/m/Y") }}</td>
+                            <td>{{ item.codservFk.descripcionServicio }}</td>
+                            <td>{{ item.cantidad }}</td>
+                            <td>{{ item.precio }}</td>
+                            <td>{{ item.precio * item.cantidad }}</td>
+                            {% set total = total + (item.precio * item.cantidad)  %}
+                        </tr>
+                   {% endfor %}
+                        <tr>
+                            <td colspan="8" style="text-align: right"><u>TOTAL A FACTURAR:</u></td>
+                            <td><strong>{{ total }}</strong></td>
+                        </tr>
+                   </table>
+
+
+        <br>
+        <button type="submit" class="btn btn-primary">Generar Factura</button>
+        <a href="{{ path('app_facturacion') }}" type="button" class="btn btn-warning">Volver a calcular</a>
+
+    </form>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+    <script type="text/javascript">
+            $('#checkall').click(function () {
+                alert('si');
+                $("input[type=checkbox]").each(function () {
+                    $(this).attr('checked', true);
+                });
+            });
+    </script>
+{% endblock %}

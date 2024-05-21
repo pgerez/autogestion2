@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Anexoii;
 use App\Entity\ItemPrefacturacion;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
@@ -47,22 +48,57 @@ class ItemPrefacturacionRepository extends ServiceEntityRepository
         }
     }
 
-    // /**
-    //  * @return ItemPrefacturacion[] Returns an array of ItemPrefacturacion objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return ItemPrefacturacion[] Returns an array of ItemPrefacturacion objects
+     */
+    public function findItemsByHospAndOS($h,$os,$fi,$ff)
     {
         return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
+            ->join('i.Num_Anexo', 'a')
+            ->where('a.codH = :h')
+            ->andWhere('a.codOs = :os')
+            ->andWhere('a.fechaCarga BETWEEN :fi AND :ff')
+            ->andWhere('a.cerrado = 0')
+            ->andWhere('i.id_factura_FK is NULL')
+            ->setParameter('fi', $fi)
+            ->setParameter('ff', $ff)
+            ->setParameter('h', $h)
+            ->setParameter('os', $os)
             ->orderBy('i.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
+    /**
+     * @return ItemPrefacturacion[] Returns an array of ItemPrefacturacion objects
+     */
+    public function findTotalItems($array)
+    {
+        return $this->createQueryBuilder('i')
+            ->select('sum(i.cantidad * i.precio)')
+            ->where('i.id IN (:array)')
+            ->setParameter('array', $array)
+            ->orderBy('i.id', 'ASC')
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
+
+    /**
+     * @return ItemPrefacturacion[] Returns an array of ItemPrefacturacion objects
+     */
+    public function updateIdfacturaItems($array, $idf)
+    {
+        return $this->createQueryBuilder('i')
+            ->update(ItemPrefacturacion::class, 'i')
+            ->set('i.id_factura_FK', $idf)
+            ->where('i.id IN (:array)')
+            ->setParameter('array', $array)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 
     /*
     public function findOneBySomeField($value): ?ItemPrefacturacion

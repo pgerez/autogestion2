@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ItemPrefacturacionRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * ItemPrefacturacion
@@ -25,7 +26,7 @@ class ItemPrefacturacion
 
     /**
      * @var int
-     *
+     * @Assert\GreaterThan(0)
      * @ORM\Column(name="cantidad", type="integer", nullable=false)
      */
     private $cantidad = '0';
