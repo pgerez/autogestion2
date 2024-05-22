@@ -111,7 +111,7 @@ final class AnexoiiAdmin extends AbstractAdmin
             ->add('cerrado', null, ['editable' => true])
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
-                    'items' => ['template' => 'ItemAnexoiiAdmin/items.html.twig'],
+                    #'items' => ['template' => 'ItemAnexoiiAdmin/items.html.twig'],
                     'show' => [],
                     'edit' => [],
                     'delete' => ['template' => 'ItemAnexoiiAdmin/delete.html.twig'],
@@ -205,15 +205,7 @@ final class AnexoiiAdmin extends AbstractAdmin
     protected function configureShowFields(ShowMapper $show): void
     {
         $show
-            ->add('numAnexo')
-            ->add('documento')
-            ->add('apeynom')
-            ->add('codH')
-            ->add('codOs')
-            ->add('tipoBenef')
-            ->add('estadoAnexo')
-            ->add('fechaCarga')
-            ->add('sfGuardUserId')
+            ->add('estadoAnexo', null, array('template' => 'anexoii/items.html.twig', 'label' => false))
             ;
     }
 

@@ -114,7 +114,7 @@ final class FacturaAdmin extends AbstractAdmin
             #->add('cae_vto')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
-                    'items' => ['template' => 'ItemPrefacturacionAdmin/items.html.twig'],
+                    #'items' => ['template' => 'ItemPrefacturacionAdmin/items.html.twig'],
                     'show' => [],
                     'edit' => [],
                     'delete' => [],
@@ -176,33 +176,7 @@ final class FacturaAdmin extends AbstractAdmin
     protected function configureShowFields(ShowMapper $show): void
     {
         $show
-            ->add('idFactura')
-            ->add('puntoVenta')
-            ->add('numeroFactura')
-            ->add('fechaEmision')
-            ->add('periodo')
-            ->add('usuarioFacturacion')
-            ->add('horaFactura')
-            ->add('codOs')
-            ->add('montoFact')
-            ->add('montoReal')
-            ->add('codEstadofacturaFk')
-            ->add('tipoFact')
-            ->add('estadoId')
-            ->add('fechaEnvio')
-            ->add('fechaAcuse')
-            ->add('pagoId')
-            ->add('debito')
-            ->add('tipoDebitoId')
-            ->add('hospitalId')
-            ->add('cartaDocumento')
-            ->add('fechaCarta')
-            ->add('digitalPv')
-            ->add('digitalNum')
-            ->add('digitalFecha')
-            ->add('digitalMonto')
-            ->add('fechaEnvioSuper')
-            ->add('fechaFiscEstado')
+            ->add('itemPrefacturacions', null, array('template' => 'factura/items.html.twig', 'label' => false))
             ;
     }
 

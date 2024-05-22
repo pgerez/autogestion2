@@ -194,7 +194,7 @@ class FacturacionController extends AbstractController
             $res = $afip->ElectronicBilling->CreateVoucher($data);
             $object->setDigitalNum($afip->ElectronicBilling->GetLastVoucher($punto_de_venta, $tipo_de_comprobante));
             $object->setDigitalPv($punto_de_venta);
-
+            $object->setTipoFact('C');
             $object->setDigitalMonto($montoFact);
             $object->setMontoReal($montoFact);
             #$object->setCae('CAE-MODIFICAR');

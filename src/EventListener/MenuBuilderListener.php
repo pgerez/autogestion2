@@ -43,29 +43,9 @@ class MenuBuilderListener
 				'icon' => '<i class="fa fa-file-excel-o"></i>',
 			]);
 			
-			$child->addChild('Informe afiliados', [
-				'label' => 'Informe afiliados',
-				'route' => 'admin_app_afiliados_informeafil',
-			]);
-
-			$child->addChild('Informe Profesionales', [
-				'label' => 'Informe Profesionales',
-				'route' => 'admin_app_profesionales_informecuentacorriente',
-			]);
-
-			$child->addChild('Informe Facturacion', [
-				'label' => 'Informe Facturacion',
-				'route' => 'admin_app_factura_informe',
-			]);
-			
-			$child->addChild('Profesionales Activos', [
-				'label' => 'Profesionales Activos',
-				'route' => 'admin_app_profesionales_informeprofact',
-			]);
-
-			$child->addChild('Informe Vencimientos', [
-				'label' => 'Informe Vencimientos',
-				'route' => 'admin_app_ordenprestacion_informeop',
+			$child->addChild('Facturacion', [
+				'label' => 'Facturacion',
+				'route' => 'app_facturacion',
 			]);
 
 		}

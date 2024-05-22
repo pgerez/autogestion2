@@ -133,7 +133,7 @@ class ItemPrefacturacion
     private $Num_Anexo;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Nomencla::class)
+     * @ORM\ManyToOne(targetEntity=Nomencla::class, inversedBy="itemPrefacturacions")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_nomenclador_FK", referencedColumnName="row_id")
      * })
