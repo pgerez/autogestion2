@@ -77,7 +77,7 @@ class FacturacionController extends AbstractController
             $montoFact = $entityManager->getRepository(ItemPrefacturacion::class)->findTotalItems($check);
 
             $afip = new Afip(array('CUIT' => $_ENV['CUIT'], 'production' => $_ENV['PRODUCCION'])); //Reemplazar el CUIT
-            echo $afip;exit;
+            echo var_dump($afip);exit;
             /**
              * Numero del punto de venta
              **/
