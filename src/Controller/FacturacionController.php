@@ -187,6 +187,7 @@ class FacturacionController extends AbstractController
             /**
              * Creamos la Factura
              **/
+            $hospital = $em->getRepository(Hospital::class)->find($hospitalid);
             $object = new Factura();
             $res = $afip->ElectronicBilling->CreateVoucher($data);
             $object->setDigitalNum($afip->ElectronicBilling->GetLastVoucher($punto_de_venta, $tipo_de_comprobante));
@@ -194,8 +195,11 @@ class FacturacionController extends AbstractController
             $object->setTipoFact('C');
             $object->setDigitalMonto($montoFact);
             $object->setCodOs($osid);
-            $object->setHospitalId($em->getRepository(Hospital::class)->find($hospitalid));
+            $object->setHospitalId($hospital);
             $object->setMontoReal($montoFact);
+            $object->setMontoFact($montoFact);
+            $object->setPuntoVenta($hospital->getPtoVta());
+            $object->setNumeroFactura($em->getRepository(Factura::class)->findById($hospital->getPtoVta())[0]['numeroFactura'] + 1);
             #$object->setCae('CAE-MODIFICAR');
             $object->setCae($res['CAE']);
             $em->persist($object);
