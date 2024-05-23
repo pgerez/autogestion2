@@ -188,7 +188,7 @@ class FacturacionController extends AbstractController
             /**
              * Creamos la Factura
              **/
-            $facturaManager = $this->getModelManager()
+            $facturaManager = $this->getDoctrine()
                             ->getEntityManager(Factura::class);
             $object = new Factura();
             $res = $afip->ElectronicBilling->CreateVoucher($data);
