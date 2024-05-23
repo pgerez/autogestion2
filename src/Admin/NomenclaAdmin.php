@@ -20,12 +20,13 @@ final class NomenclaAdmin extends AbstractAdmin
             $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
             $query
                 #->join($query->getRootAlias()[0].'.hospitalId', 'h', 'WITH', $query->getRootAlias()[0].'.hospitalId = h.id')
-                ->andWhere($query->getRootAlias()[0].'.estado = 1');
+                ->andWhere($query->getRootAlias()[0].'.estado = 1')
+                ->andWhere($query->getRootAlias()[0].".fechaInicio = '2022-10-4'");
         endif;
 
         return $query;
     }
-    
+
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
