@@ -137,7 +137,7 @@ final class ItemPrefacturacionAdmin extends AbstractAdmin
                 'disabled' => $estado
 
             ])*/
-            ->add('nomencla', ModelListType::class, ['btn_add' => false, 'btn_edit' => false])
+            ->add('nomencla', ModelListType::class, ['btn_add' => false, 'btn_edit' => false, 'disabled' => $estado])
             ->add('cantidad', null,['disabled' => $disabled])
             #->add('precio', null, ['disabled' => true])
             #->add('precio')
