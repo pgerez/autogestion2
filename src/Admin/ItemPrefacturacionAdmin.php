@@ -52,6 +52,8 @@ final class ItemPrefacturacionAdmin extends AbstractAdmin
     */
 
 
+
+
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
@@ -123,7 +125,7 @@ final class ItemPrefacturacionAdmin extends AbstractAdmin
             #, ModelListType::class, array(
             #    'by_reference' => false,'btn_edit' => false,'btn_delete' => false,'btn_add' => false, 'label' => 'Servicio'
             #))
-            ->add('nomencla', EntityType::class,
+            /*->add('nomencla', EntityType::class,
                 ['class' => Nomencla::class,
                 #'choice_value' => 'getTemaArancel',
                 'query_builder' => function (EntityRepository $er): QueryBuilder {
@@ -134,7 +136,8 @@ final class ItemPrefacturacionAdmin extends AbstractAdmin
                 'label' => 'Nomenclador',
                 'disabled' => $estado
 
-            ])
+            ])*/
+            ->add('nomencla', ModelListType::class, ['btn_add' => false, 'btn_edit' => false])
             ->add('cantidad', null,['disabled' => $disabled])
             #->add('precio', null, ['disabled' => true])
             #->add('precio')
