@@ -13,6 +13,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use App\Entity\Servicios;
 use App\Entity\Factura;
@@ -106,7 +107,7 @@ final class ItemPrefacturacionAdmin extends AbstractAdmin
     {
         $estado = false;
         $disabled = '';
-        if ($this->getSubject()->getEstadoPago() == 1):
+        if ($this->getSubject()->getEstadoPago() == 1 or $this->getSubject()->getNumAnexo()->getCerrado() == 1):
             $estado = true;
             $disabled = 'disabled';
         endif;
@@ -137,7 +138,12 @@ final class ItemPrefacturacionAdmin extends AbstractAdmin
                 'disabled' => $estado
 
             ])*/
-            ->add('nomencla', ModelListType::class, ['btn_add' => false, 'btn_edit' => false, 'disabled' => $estado])
+            ->ifFalse($estado)
+                ->add('nomencla', ModelListType::class, ['btn_add' => false, 'btn_edit' => false])
+            ->ifEnd()
+            ->ifTrue($estado)
+                ->add('nomencla', TextType::class, ['disabled' => $disabled])
+            ->ifEnd()
             ->add('cantidad', null,['disabled' => $disabled])
             #->add('precio', null, ['disabled' => true])
             #->add('precio')
