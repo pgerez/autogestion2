@@ -37,7 +37,7 @@ final class NomenclaAdmin extends AbstractAdmin
             ->add('item')
             ->add('arancel')
             ->add('estado')
-            ->add('tema')
+            ->add('tema', null, ['show_filter' => true])
             ->add('fechaInicio')
             ->add('fechaFin')
             ;

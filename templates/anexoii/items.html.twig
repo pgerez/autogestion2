@@ -34,6 +34,7 @@
         <tr>
             <th>ID</th>
             <th>Servicio</th>
+            <th>Practica</th>
             <th>Cantidad</th>
             <th>Precio</th>
             <th>Total</th>
@@ -43,6 +44,7 @@
         <tr>
             <td>{{ item.id }}</td>
             <td>{{ item.codservFK.descripcionServicio }}</td>
+            <td>{{ item.nomencla.tema }}</td>
             <td>{{ item.cantidad }}</td>
             <td>{{ item.precio }}</td>
             <td>{{ item.precio * item.cantidad }}</td>
@@ -50,7 +52,7 @@
         </tr>
         {% endfor %}
         <tr>
-            <td colspan="4" style="text-align: right">TOTAL</td>
+            <td colspan="5" style="text-align: right">TOTAL</td>
             <td>{{ total }}</td>
         </tr>
     </table>
