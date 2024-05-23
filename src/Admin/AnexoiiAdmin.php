@@ -94,8 +94,9 @@ final class AnexoiiAdmin extends AbstractAdmin
             ->add('codH')
             ->add('codOs')
             #->add('numAfil')
-            ->add('tipoBenef', 'choice', [
+            ->add('tipoAtencion', 'choice', [
                 'choices' => [
+                    ''  => 'Sin Tipo de Atencion',
                     '1' => 'Ambulatorio',
                     '2' => 'Internacion',
                 ], 'label' => 'Tipo'])
@@ -167,7 +168,7 @@ final class AnexoiiAdmin extends AbstractAdmin
             ->ifEnd()
             ->add('codOs', null, ['label' => 'Obra Social', 'disabled' => $disabled])
             #->add('numAfil')
-            ->add('tipoBenef', ChoiceType::class,
+            ->add('tipoAtencion', ChoiceType::class,
             ['choices' => [
                 'Ambulatorio' => 1,
                 'Internacion' => 2,

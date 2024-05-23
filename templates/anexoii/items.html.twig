@@ -2,7 +2,7 @@
 {% set cl = {1 : 'badge-custome bg-info text-dark', 2 : 'badge-custome bg-primary', 3 : 'badge-custome bg-warning', 0 : 'badge-custome bg-secondary', 5 : 'badge-custome bg-secondary', 6 : 'badge-custome bg-dark'} %}
 {% set cle = {0 : 'text-dark', 1 : 'text-info', 2 : 'text-success', 3 : 'text-success', 4 : 'badge bg-secondary', 5 : 'badge bg-dark'} %}
 {% set eenv = {0 : 'No Asociado', 1 : 'Asociado', 2 : 'Enviado', 3 : 'Aceptado'} %}
-{% set tipo = {1: 'Ambulatorio' , 2 : 'Internacion'} %}
+{% set tipo = {1: 'Ambulatorio' , 2 : 'Internacion', '' : 'Sin Tipo de Atencion'} %}
 
 {% block stylesheets %}
     <link href="{{ asset('css/badge-custome.css') }}" type="text/css" rel="stylesheet" />
@@ -26,12 +26,13 @@
             <td>{{ object.codH }}</td>
             <td>{{ object.codOs }}</td>
             <td>{{ object.fechaCarga|date("d/m/Y") }}</td>
-            <td>{{ tipo[object.tipoBenef] }}</td>
+            <td>{{ tipo[object.tipoAtencion] }}</td>
         </tr>
     </table>
+    <div class="box-header"><h6 class="box-title"><strong>ITEMS A FACTURAR</strong></h6></div>
     <table class="table table-bordered table-striped">
         <tr>
-            <th>Id</th>
+            <th>ID</th>
             <th>Servicio</th>
             <th>Cantidad</th>
             <th>Precio</th>

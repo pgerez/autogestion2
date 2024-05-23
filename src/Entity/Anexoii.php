@@ -187,6 +187,13 @@ class Anexoii
      */
     private $sistema = 1;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="tipo_atencion", type="integer", nullable=true)
+     */
+    private $tipoAtencion = null;
+
 
     public function __toString()
     {
@@ -519,6 +526,18 @@ class Anexoii
     public function setSistema(int $sistema): self
     {
         $this->sistema = $sistema;
+
+        return $this;
+    }
+
+    public function getTipoAtencion(): ?int
+    {
+        return $this->tipoAtencion;
+    }
+
+    public function setTipoAtencion(?int $tipoAtencion): self
+    {
+        $this->tipoAtencion = $tipoAtencion;
 
         return $this;
     }
