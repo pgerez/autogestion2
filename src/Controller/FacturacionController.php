@@ -68,13 +68,12 @@ class FacturacionController extends AbstractController
         $osid = $request->get('obrasocialid');
         $fechai = $request->get('fechainicio');
         $fechaf = $request->get('fechafin');
-        $check = $request->get('checkbox');
+        $check = $request->get('idx');
         $em = $this->getDoctrine()->getManager();
         if(isset($check)):
             $error = 0;
             ##calculo total a facturar#####
             $montoFact = $em->getRepository(ItemPrefacturacion::class)->findTotalItems($check);
-
             $afip = new Afip(array('CUIT' => $_ENV['CUIT'], 'production' => TRUE)); //Reemplazar el CUIT
             /**
              * Numero del punto de venta

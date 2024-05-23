@@ -17,8 +17,8 @@ final class Builder implements ContainerAwareInterface
 
         $menu->addChild('Home', ['route' => 'homepage']);
 
-        $menu->addChild('Archivos', [
-            'route' => 'excel',
+        $menu->addChild('Pago', [
+            'route' => 'facturacion',
             #'routeParameters' => ['id' => $blog->getId()]
         ]);
 

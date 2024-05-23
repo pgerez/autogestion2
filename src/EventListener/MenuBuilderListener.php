@@ -32,21 +32,25 @@ class MenuBuilderListener
 
 		$user = $this->tokenStorage->getToken()->getUser();
 		$roles = $user->getRoles(); 
-		
-		if(in_array("ROLE_ADMIN_INFORMES", $roles)){		
+        if(in_array("ROLE_ADMIN_FACTURACION", $roles)){
 			$menu = $event->getMenu();		
 			
-			$child = $menu->addChild('Informes', [
-				'label' => 'Informes',
+			$child = $menu->addChild('Facturacion', [
+				'label' => 'Facturacion',
 				//'route' => 'excel',
 			])->setExtras([
-				'icon' => '<i class="fa fa-file-excel-o"></i>',
+				'icon' => '<i class="fa fa-money" aria-hidden="true"></i>',
 			]);
 			
 			$child->addChild('Facturacion', [
 				'label' => 'Facturacion',
 				'route' => 'app_facturacion',
 			]);
+
+            $child->addChild('Facturas', [
+                'label' => 'Facturas',
+                'route' => 'admin_app_factura_list',
+            ]);
 
 		}
 		

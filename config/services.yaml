@@ -50,7 +50,7 @@ services:
         class: App\Admin\FacturaAdmin
         arguments: [~, App\Entity\Factura, App\Controller\FacturaAdminController]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Factura }
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Factura, show_in_dashboard: false}
         public: true
         calls:
             - [ addChild, ["@admin.item_prefacturacion"]]
