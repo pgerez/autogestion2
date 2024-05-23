@@ -69,7 +69,6 @@ class FacturacionController extends AbstractController
         $fechai = $request->get('fechainicio');
         $fechaf = $request->get('fechafin');
         $check = $request->get('checkbox');
-        echo '---'.$osid;exit;
         $em = $this->getDoctrine()->getManager();
         if(isset($check)):
             $error = 0;
