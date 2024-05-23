@@ -43,8 +43,8 @@ class FacturacionController extends AbstractController
         $fechai = $request->get('fechainicio');
         $fechaf = $request->get('fechafin');
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $items = $entityManager->getRepository(ItemPrefacturacion::class)->findItemsByHospAndOS($hospitalid,$osid,$fechai,$fechaf);
+        $em = $this->getDoctrine()->getManager();
+        $items = $em->getRepository(ItemPrefacturacion::class)->findItemsByHospAndOS($hospitalid,$osid,$fechai,$fechaf);
 
         return $this->render('facturacion/list.html.twig', [
             'controller_name' => 'FacturacionController',
@@ -69,12 +69,11 @@ class FacturacionController extends AbstractController
         $fechai = $request->get('fechainicio');
         $fechaf = $request->get('fechafin');
         $check = $request->get('checkbox');
-
+        $em = $this->getDoctrine()->getManager();
         if(isset($check)):
             $error = 0;
             ##calculo total a facturar#####
-            $entityManager = $this->getDoctrine()->getManager();
-            $montoFact = $entityManager->getRepository(ItemPrefacturacion::class)->findTotalItems($check);
+            $montoFact = $em->getRepository(ItemPrefacturacion::class)->findTotalItems($check);
 
             $afip = new Afip(array('CUIT' => $_ENV['CUIT'], 'production' => TRUE)); //Reemplazar el CUIT
             /**
@@ -188,8 +187,6 @@ class FacturacionController extends AbstractController
             /**
              * Creamos la Factura
              **/
-            $facturaManager = $this->getDoctrine()
-                            ->getEntityManager(Factura::class);
             $object = new Factura();
             $res = $afip->ElectronicBilling->CreateVoucher($data);
             $object->setDigitalNum($afip->ElectronicBilling->GetLastVoucher($punto_de_venta, $tipo_de_comprobante));
@@ -199,12 +196,12 @@ class FacturacionController extends AbstractController
             $object->setMontoReal($montoFact);
             #$object->setCae('CAE-MODIFICAR');
             $object->setCae($res['CAE']);
-            $facturaManager->persist($object);
-            $facturaManager->flush();
+            $em->persist($object);
+            $em->flush();
             ###update id factura en items#####
-            $result = $entityManager->getRepository(ItemPrefacturacion::class)->updateIdfacturaItems($check, $object->getIdFactura());
-            $hospitals = $entityManager->getRepository('App\Entity\Hospital')->findAll();
-            $oss = $entityManager->getRepository('App\Entity\ObrasSociales')->findAll();
+            $result = $em->getRepository(ItemPrefacturacion::class)->updateIdfacturaItems($check, $object->getIdFactura());
+            $hospitals = $em->getRepository('App\Entity\Hospital')->findAll();
+            $oss = $em->getRepository('App\Entity\ObrasSociales')->findAll();
 
             return $this->render('facturacion/index.html.twig', [
                 'controller_name' => 'FacturacionController',
@@ -215,8 +212,7 @@ class FacturacionController extends AbstractController
 
         else:
             $error = 1;
-            $entityManager = $this->getDoctrine()->getManager();
-            $items = $entityManager->getRepository(ItemPrefacturacion::class)->findItemsByHospAndOS($hospitalid,$osid,$fechai,$fechaf);
+            $items = $em->getRepository(ItemPrefacturacion::class)->findItemsByHospAndOS($hospitalid,$osid,$fechai,$fechaf);
 
             return $this->render('facturacion/list.html.twig', [
                 'controller_name' => 'FacturacionController',
