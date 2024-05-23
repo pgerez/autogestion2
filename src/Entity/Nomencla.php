@@ -27,14 +27,14 @@ class Nomencla
     /**
      * @var string|null
      *
-     * @ORM\Column(name="codigon", type="string", length=2, nullable=true, options={"fixed"=true})
+     * @ORM\Column(name="codigon", type="string", length=10, nullable=true, options={"fixed"=true})
      */
     private $codigon;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="subcodn", type="string", length=2, nullable=true, options={"fixed"=true})
+     * @ORM\Column(name="subcodn", type="string", length=10, nullable=true, options={"fixed"=true})
      */
     private $subcodn;
 
