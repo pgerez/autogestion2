@@ -69,6 +69,7 @@ class FacturacionController extends AbstractController
         $fechai = $request->get('fechainicio');
         $fechaf = $request->get('fechafin');
         $check = $request->get('checkbox');
+        echo '---'.$osid;exit;
         $em = $this->getDoctrine()->getManager();
         if(isset($check)):
             $error = 0;
@@ -193,8 +194,8 @@ class FacturacionController extends AbstractController
             $object->setDigitalPv($punto_de_venta);
             $object->setTipoFact('C');
             $object->setDigitalMonto($montoFact);
-            $object->getCodOs($osid);
-            $object->getHospitalId($em->getRepository(Hospital::class)->find($hospitalid));
+            $object->setCodOs($osid);
+            $object->setHospitalId($em->getRepository(Hospital::class)->find($hospitalid));
             $object->setMontoReal($montoFact);
             #$object->setCae('CAE-MODIFICAR');
             $object->setCae($res['CAE']);
