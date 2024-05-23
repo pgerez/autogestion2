@@ -58,7 +58,7 @@ class ItemPrefacturacionRepository extends ServiceEntityRepository
             ->where('a.codH = :h')
             ->andWhere('a.codOs = :os')
             ->andWhere('a.fechaCarga BETWEEN :fi AND :ff')
-            ->andWhere('a.cerrado = 0')
+            ->andWhere('a.cerrado = 1')
             ->andWhere('i.id_factura_FK is NULL')
             ->setParameter('fi', $fi)
             ->setParameter('ff', $ff)
