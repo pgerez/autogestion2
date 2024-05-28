@@ -126,13 +126,6 @@ class Factura
     private $fechaAcuse;
 
     /**
-     * @var int|null
-     *
-     * @ORM\Column(name="pago_id", type="integer", nullable=true)
-     */
-    private $pagoId;
-
-    /**
      * @var float|null
      *
      * @ORM\Column(name="debito", type="float", precision=10, scale=0, nullable=true)
@@ -256,6 +249,15 @@ class Factura
      * @ORM\Column(type="integer")
      */
     private $sistema = 1;
+
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity=Pago::class)
+     * @ORM\JoinColumns({
+     * @ORM\JoinColumn(name="pago_id", referencedColumnName="id")
+     * })
+     */
+    private $pago;
 
 
 
@@ -463,18 +465,6 @@ class Factura
     public function setFechaAcuse(?\DateTimeInterface $fechaAcuse): self
     {
         $this->fechaAcuse = $fechaAcuse;
-
-        return $this;
-    }
-
-    public function getPagoId(): ?int
-    {
-        return $this->pagoId;
-    }
-
-    public function setPagoId(?int $pagoId): self
-    {
-        $this->pagoId = $pagoId;
 
         return $this;
     }
@@ -713,6 +703,17 @@ class Factura
         return $this;
     }
 
-     
+    public function getPago(): ?Pago
+    {
+        return $this->pago;
+    }
+
+    public function setPago(?Pago $pago): self
+    {
+        $this->pago = $pago;
+
+        return $this;
+    }
+
 
 }

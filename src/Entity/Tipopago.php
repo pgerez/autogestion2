@@ -35,6 +35,10 @@ class Tipopago
      */
     private $observacion;
 
+    public function __toString()
+    {
+        return (string) $this->getNombre();
+    }
     public function getId(): ?int
     {
         return $this->id;

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -52,13 +54,6 @@ class Pago
     /**
      * @var int
      *
-     * @ORM\Column(name="obras_sociales_cod_os", type="integer", nullable=false)
-     */
-    private $obrasSocialesCodOs;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="sf_guard_user_id", type="integer", nullable=false)
      */
     private $sfGuardUserId;
@@ -85,11 +80,25 @@ class Pago
     private $notaCredito;
 
     /**
-     * @var int|null
+     * @var \Hospital
      *
-     * @ORM\Column(name="hospital_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Hospital")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="hospital_id", referencedColumnName="id")
+     * })
      */
     private $hospitalId;
+
+    /**
+     * @var \ObrasSociales
+     *
+     * @ORM\ManyToOne(targetEntity="ObrasSociales")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="obras_sociales_cod_os", referencedColumnName="row_id")
+     * })
+     */
+    private $obrasSocialesCodOs;
+
 
     /**
      * @var string|null
@@ -97,6 +106,23 @@ class Pago
      * @ORM\Column(name="descripcion", type="text", length=65535, nullable=true)
      */
     private $descripcion;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Cuota::class, mappedBy="pago", cascade={"persist"})
+     */
+    private $cuotas;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Factura::class, mappedBy="pago")
+     */
+    private $facturas;
+
+    public function __construct()
+    {
+        $this->cuotas = new ArrayCollection();
+        $this->facturas = new ArrayCollection();
+        $this->setSfGuardUserId(1);
+    }
 
     public function getId(): ?int
     {
@@ -151,18 +177,6 @@ class Pago
         return $this;
     }
 
-    public function getObrasSocialesCodOs(): ?int
-    {
-        return $this->obrasSocialesCodOs;
-    }
-
-    public function setObrasSocialesCodOs(int $obrasSocialesCodOs): self
-    {
-        $this->obrasSocialesCodOs = $obrasSocialesCodOs;
-
-        return $this;
-    }
-
     public function getSfGuardUserId(): ?int
     {
         return $this->sfGuardUserId;
@@ -210,18 +224,7 @@ class Pago
 
         return $this;
     }
-
-    public function getHospitalId(): ?int
-    {
-        return $this->hospitalId;
-    }
-
-    public function setHospitalId(?int $hospitalId): self
-    {
-        $this->hospitalId = $hospitalId;
-
-        return $this;
-    }
+    
 
     public function getDescripcion(): ?string
     {
@@ -231,6 +234,90 @@ class Pago
     public function setDescripcion(?string $descripcion): self
     {
         $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Cuota>
+     */
+    public function getCuotas(): Collection
+    {
+        return $this->cuotas;
+    }
+
+    public function addCuota(Cuota $cuota): self
+    {
+        if (!$this->cuotas->contains($cuota)) {
+            $this->cuotas[] = $cuota;
+            $cuota->setPago($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCuota(Cuota $cuota): self
+    {
+        if ($this->cuotas->removeElement($cuota)) {
+            // set the owning side to null (unless already changed)
+            if ($cuota->getPago() === $this) {
+                $cuota->setPago(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getHospitalId(): ?Hospital
+    {
+        return $this->hospitalId;
+    }
+
+    public function setHospitalId(?Hospital $hospitalId): self
+    {
+        $this->hospitalId = $hospitalId;
+
+        return $this;
+    }
+
+    public function getObrasSocialesCodOs(): ?ObrasSociales
+    {
+        return $this->obrasSocialesCodOs;
+    }
+
+    public function setObrasSocialesCodOs(?ObrasSociales $obrasSocialesCodOs): self
+    {
+        $this->obrasSocialesCodOs = $obrasSocialesCodOs;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Factura>
+     */
+    public function getFacturas(): Collection
+    {
+        return $this->facturas;
+    }
+
+    public function addFactura(Factura $factura): self
+    {
+        if (!$this->facturas->contains($factura)) {
+            $this->facturas[] = $factura;
+            $factura->setPago($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFactura(Factura $factura): self
+    {
+        if ($this->facturas->removeElement($factura)) {
+            // set the owning side to null (unless already changed)
+            if ($factura->getPago() === $this) {
+                $factura->setPago(null);
+            }
+        }
 
         return $this;
     }

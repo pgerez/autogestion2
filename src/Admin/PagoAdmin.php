@@ -4,14 +4,25 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Entity\Factura;
+use App\Entity\ObrasSociales;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\Form\Type\CollectionType;
+use Sonata\Form\Type\DatePickerType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 
 final class PagoAdmin extends AbstractAdmin
 {
+
+    public function  configure(){
+        $this->setTemplate('edit', '/PagoAdmin/edit.html.twig');
+    }
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
@@ -57,19 +68,84 @@ final class PagoAdmin extends AbstractAdmin
 
     protected function configureFormFields(FormMapper $form): void
     {
+        $true = false;
+        $trueFacturas = false;
+        $disabled = false;
+        if($this->getSubject()->getId()):
+            $true = true;
+        endif;
+        if(count($this->getSubject()->getFacturas()) > 0):
+            $trueFacturas = true;
+        endif;
+        if(count($this->getSubject()->getCuotas()) > 0):
+            $disabled = true;
+        endif;
+
         $form
-            ->add('id')
-            ->add('debito')
-            ->add('fecha')
-            ->add('cantidad')
-            ->add('observacion')
-            ->add('obrasSocialesCodOs')
-            ->add('sfGuardUserId')
-            ->add('monto')
-            ->add('isSuperIntendencia')
-            ->add('notaCredito')
-            ->add('hospitalId')
-            ->add('descripcion')
+            ->with('Pago', ['class' => 'col-md-4', 'box_class' => 'box box-solid box-primary'])
+            ->end()
+            ->with('Facturas', ['class' => 'col-md-8', 'box_class' => 'box box-solid box-info'])
+            ->end()
+            ->with('Cuotas', ['class' => 'col-md-8', 'box_class' => 'box box-solid box-info'])
+            ->end();
+
+        $form
+            ->with('Pago')
+                #->add('id')
+                ->add('hospitalId', null, ['label' => 'Hospital'])
+                ->add('obrasSocialesCodOs', null, ['label' => 'Obra Social'])
+                ->add('debito')
+                ->add('fecha', DatePickerType::class, Array('label'=>'Fecha Carga', 'format'=>'d/M/y'))
+                ->add('cantidad')
+                ->add('observacion')
+                #->add('sfGuardUserId')
+                ->add('monto')
+                ->add('isSuperIntendencia')
+                ->add('notaCredito')
+                #->add('descripcion')
+            ->end()
+            ->with('Facturas')
+                ->ifTrue($true)
+                    ->add('facturas', EntityType::class, [
+                        'class' => Factura::class,
+                        #'choice_label' => 'digital_num',
+                        'choice_value' => 'id_factura',
+                        'by_reference' => false,
+                        'multiple' => true,
+                        'disabled' => $disabled,
+                        #'expanded' => true,
+                        'query_builder' => function (EntityRepository $er): QueryBuilder {
+                            return $er->createQueryBuilder('f')
+                                ->where('f.hospitalId = :hid')
+                                ->andWhere('f.codOs = :osid')
+                                ->andWhere('f.pago is null')
+                                ->orWhere('f.pago = :pid')
+                                ->setParameter('hid', $this->getSubject()->getHospitalId()->getId())
+                                ->setParameter('pid', $this->getSubject()->getId())
+                                ->setParameter('osid', $this->getSubject()->getObrasSocialesCodOs()->getCodobra());
+                        },
+                        'choice_label' => function (Factura $f = null) {
+                            return null === $f ? '': $f->getDigitalPv().'-'.$f->getDigitalNum();
+                        },
+                    ])
+                ->ifEnd()
+            ->end()
+            ->with('Cuotas')
+                ->ifTrue($trueFacturas)
+                    ->add('cuotas', CollectionType::class, [
+                        'by_reference' => false,
+                        'label' => 'Cuotas',
+                        #'disabled' => $disabled,
+                        #'btn_add' => $btn
+
+                        ],
+                        [
+                            'edit' => 'inline',
+                            'inline' => 'table',
+                            'sortable' => 'position',
+                        ])
+                ->ifEnd()
+            ->end()
             ;
     }
 

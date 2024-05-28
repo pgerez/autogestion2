@@ -1,0 +1,26 @@
+{% extends '@SonataAdmin/CRUD/base_edit.html.twig' %}
+{% block form %}
+    <script >
+        $( document ).ready(function() {
+            cuotaId = '{{ object.id }}';
+            formId  = '{{ form.vars.id }}'
+            $("#busqueda").click(function () {
+                $('#mensajeOS').text('');
+                $('#mensajeRenaper').text('');
+                $.ajax({
+                    url: '{{ path('admin_app_anexoii_buscarOs') }}',
+                    method: 'POST',
+                    processData: false,
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({ "dni": $('#'+formId+'_documento').val(), "sexo": $('#sexo').val() }),
+                    dataType: "json",
+                    success: function (data) {
+                        $('#mensajeOS').text(data.texto);
+                        $('#'+formId+'_codOs option[value='+data.osid+']').prop('selected','selected').change();
+                    }
+                });
+            });
+        });
+    </script>
+    {{ parent() }}
+{% endblock %}

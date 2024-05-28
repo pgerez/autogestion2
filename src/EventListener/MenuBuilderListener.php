@@ -52,6 +52,10 @@ class MenuBuilderListener
                 'route' => 'admin_app_factura_list',
             ]);
 
+            $child->addChild('Pagos', [
+                'label' => 'Pagos',
+                'route' => 'admin_app_pago_list',
+            ]);
 		}
 		
 		

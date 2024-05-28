@@ -318,11 +318,6 @@ class ItemPrefacturacion
         return $this->nomencla;
     }
 
-    public function getNomencla2(): ?Nomencla
-    {
-        return $this->nomencla;
-    }
-
     public function setNomencla(?Nomencla $nomencla): self
     {
         $this->nomencla = $nomencla;

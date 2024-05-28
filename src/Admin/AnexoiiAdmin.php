@@ -91,8 +91,8 @@ final class AnexoiiAdmin extends AbstractAdmin
             ->add('apeynom')
             #->add('fechaNac')
             #->add('sexo')
-            ->add('codH')
-            ->add('codOs')
+            ->add('codH', null, ['label' => 'Hospital'])
+            ->add('codOs', null, ['label' => 'Obra Social'])
             #->add('numAfil')
             ->add('tipoAtencion', 'choice', [
                 'choices' => [

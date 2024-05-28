@@ -12,6 +12,7 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -42,6 +43,12 @@ final class FacturaAdmin extends AbstractAdmin
         endif;
         
         return $query;
+    }
+
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->add('listitems');
+        $collection->add('saveitems');
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
@@ -143,7 +150,7 @@ final class FacturaAdmin extends AbstractAdmin
             ->add('codOs', EntityType::class, [
                 'class' => ObrasSociales::class,
                 #'choice_label' => 'codobra',
-                'choice_value' => 'codobra',
+                'choice_value' => 'row_id',
                 'choice_label' => function (ObrasSociales $os = null) {
                     return null === $os ? '': $os->getCodobra().'-'.$os->getDenomina();
                 },

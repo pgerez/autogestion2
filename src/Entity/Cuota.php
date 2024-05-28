@@ -90,7 +90,7 @@ class Cuota
     /**
      * @var \Pago
      *
-     * @ORM\ManyToOne(targetEntity="Pago")
+     * @ORM\ManyToOne(targetEntity="Pago", inversedBy="cuotas")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="pago_id", referencedColumnName="id")
      * })
@@ -106,6 +106,7 @@ class Cuota
      * })
      */
     private $tipopago;
+
 
     public function getId(): ?int
     {
@@ -220,18 +221,6 @@ class Cuota
         return $this;
     }
 
-    public function getPago(): ?Pago
-    {
-        return $this->pago;
-    }
-
-    public function setPago(?Pago $pago): self
-    {
-        $this->pago = $pago;
-
-        return $this;
-    }
-
     public function getTipopago(): ?Tipopago
     {
         return $this->tipopago;
@@ -240,6 +229,18 @@ class Cuota
     public function setTipopago(?Tipopago $tipopago): self
     {
         $this->tipopago = $tipopago;
+
+        return $this;
+    }
+
+    public function getPago(): ?Pago
+    {
+        return $this->pago;
+    }
+
+    public function setPago(?Pago $pago): self
+    {
+        $this->pago = $pago;
 
         return $this;
     }
