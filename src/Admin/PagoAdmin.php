@@ -71,8 +71,10 @@ final class PagoAdmin extends AbstractAdmin
         $true = false;
         $trueFacturas = false;
         $disabled = false;
+
         if($this->getSubject()->getId()):
             $true = true;
+            $sql = $this->getSubject()->getHospitalId() ? true : false;
         endif;
         if(count($this->getSubject()->getFacturas()) > 0):
             $trueFacturas = true;
@@ -114,7 +116,15 @@ final class PagoAdmin extends AbstractAdmin
                         'multiple' => true,
                         'disabled' => $disabled,
                         #'expanded' => true,
-                        'query_builder' => function (EntityRepository $er): QueryBuilder {
+                        'query_builder' => function (EntityRepository $er) use ($sql) : QueryBuilder {
+                            if(!$sql):
+                            return $er->createQueryBuilder('f')
+                                ->Where('f.codOs = :osid')
+                                ->andWhere('f.pago is null')
+                                ->orWhere('f.pago = :pid')
+                                ->setParameter('pid', $this->getSubject()->getId())
+                                ->setParameter('osid', $this->getSubject()->getObrasSocialesCodOs()->getCodobra());
+                            else:
                             return $er->createQueryBuilder('f')
                                 ->where('f.hospitalId = :hid')
                                 ->andWhere('f.codOs = :osid')
@@ -123,6 +133,7 @@ final class PagoAdmin extends AbstractAdmin
                                 ->setParameter('hid', $this->getSubject()->getHospitalId()->getId())
                                 ->setParameter('pid', $this->getSubject()->getId())
                                 ->setParameter('osid', $this->getSubject()->getObrasSocialesCodOs()->getCodobra());
+                            endif;
                         },
                         'choice_label' => function (Factura $f = null) {
                             return null === $f ? '': $f->getDigitalPv().'-'.$f->getDigitalNum();
