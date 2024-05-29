@@ -117,7 +117,7 @@ final class FacturaAdmin extends AbstractAdmin
             #->add('digitalFecha')
             #->add('digitalMonto')
             #->add('fechaEnvioSuper')
-            #->add('cae')
+            ->add('cae')
             #->add('cae_vto')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [

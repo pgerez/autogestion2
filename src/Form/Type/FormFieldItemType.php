@@ -18,7 +18,8 @@ class FormFieldItemType extends HiddenType
         parent::configureOptions($resolver);
 
         $resolver->setRequired(array(
-            'facturas'
+            'facturas',
+            'idCuota'
         ));
     }
 
@@ -42,14 +43,17 @@ class FormFieldItemType extends HiddenType
         parent::buildForm($builder, $options);
 
         $builder->setAttribute("facturas", $options['facturas']);
+        $builder->setAttribute("idCuota", $options['idCuota']);
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $options = array(
             'facturas'=> $form->getConfig()->getAttribute('facturas'),
+            'idCuota'=> $form->getConfig()->getAttribute('idCuota'),
         );
         $view->vars['facturas'] = $form->getConfig()->getAttribute('facturas');
+        $view->vars['idCuota'] = $form->getConfig()->getAttribute('idCuota');
     }
 
 }

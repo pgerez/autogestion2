@@ -62,6 +62,7 @@ final class CuotaAdmin extends AbstractAdmin
         $facturas = [];
         if($this->getSubject()->getId()):
             $facturas = $this->getSubject()->getPago()->getFacturas();
+            $idCuota = $this->getSubject()->getId();
         endif;
 
         $form
@@ -70,7 +71,7 @@ final class CuotaAdmin extends AbstractAdmin
                 ->add('fechaLiquidacion', DatePickerType::class, Array('label'=>'Liquidacion', 'format'=>'d/M/y'))
                 ->add('tipopago')
                 ->add('numeroComprobante')
-                ->add('facturas', FormFieldItemType::class, ['mapped' => false, 'facturas' => $facturas])
+                ->add('facturas', FormFieldItemType::class, ['mapped' => false, 'facturas' => $facturas, 'idCuota' => $idCuota])
             ;
     }
 

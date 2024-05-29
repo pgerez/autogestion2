@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class FacturaAdminController extends CRUDController{
 
@@ -22,8 +23,23 @@ final class FacturaAdminController extends CRUDController{
         $data = json_decode($data1);
         $idfactura = $data->idfactura;
         $idpago = $data->idpago;
+        $idCuota = $data->idCuota;
         $items = $em->getRepository(Factura::class)->find($idfactura)->getItemPrefacturacions();
-        $html = '<table class="table table-bordered table-striped"> 
+        $url = $this->generateUrl(
+            'admin_app_factura_saveitems',
+            array(),
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+        $html = '<form action="'.$url.'" method="post" enctype="multipart/form-data">
+                <div class="box box-primary">
+                <input type="hidden" name="idfactura" value="'.$idfactura.'" />
+                <input type="hidden" name="idpago" value="'.$idpago.'" />
+                <input type="hidden" name="idCuota" value="'.$idCuota.'" />
+
+                <table class="table table-bordered table-striped"> 
+                    <tr>
+                        <td colspan="7" style="text-align: center">Factura: '.$em->getRepository(Factura::class)->find($idfactura)->getNumeroCompleto().'</td>
+                    </tr>
                     <tr>
                         <th>
                             <div class="icheckbox_square-blue" style="position: relative;">
@@ -47,7 +63,7 @@ final class FacturaAdminController extends CRUDController{
                                 </td>
                                 <td>'.$item->getNumAnexo().'</td>
                                 <td>'.$item->getNumAnexo()->getApeynom().'</td>
-                                <td>'.$item->getCodservFK().'</td>
+                                <td>'.$item->getCodservFK()->getDescripcionServicio().'</td>
                                 <td>'.$item->getNomencla()->getTema().'</td>
                                 <td>'.$item->getCantidad().'</td>
                                 <td>'.$item->getPrecio().'</td>
@@ -55,42 +71,46 @@ final class FacturaAdminController extends CRUDController{
                 endforeach;
          $html .= <<<EOF
                  </table>
+                 </div>
+                 <div   class="sonata-ba-form-actions well well-small form-actions">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+                 </form>
                     <script>
                             jQuery(document).ready(function ($) {
                                 // Toggle individual checkboxes when the batch checkbox is changed
                                 $('#list_batch_checkbox').on('ifChanged change', function () {
-                                    var checkboxes = $(this)
-                            .closest('table')
-                            .find('td.sonata-ba-list-field-batch input[type="checkbox"], div.sonata-ba-list-field-batch input[type="checkbox"]')
-                        ;
-
+                                    var checkboxes = $(this).closest('table').find('td.sonata-ba-list-field-batch input[type="checkbox"], div.sonata-ba-list-field-batch input[type="checkbox"]');
                                     if (Admin.get_config('USE_ICHECK')) {
                                         checkboxes.iCheck($(this).is(':checked') ? 'check' : 'uncheck');
                                     } else {
                                         checkboxes.prop('checked', this.checked);
                                     }
                                 });
-
-                        // Add a CSS class to rows when they are selected
-                    $('td.sonata-ba-list-field-batch input[type="checkbox"], div.sonata-ba-list-field-batch input[type="checkbox"]')
-                    .on('ifChanged change', function () {
-                        $(this)
-                        .closest('tr, div.sonata-ba-list-field-batch')
-                        .toggleClass('sonata-ba-list-row-selected', $(this).is(':checked'))
-                        ;
-                    })
-                    .trigger('ifChanged')
-                    ;
-                    });
+                                // Add a CSS class to rows when they are selected
+                                $('td.sonata-ba-list-field-batch input[type="checkbox"], div.sonata-ba-list-field-batch input[type="checkbox"]').on('ifChanged change', function () {
+                                    $(this).closest('tr, div.sonata-ba-list-field-batch').toggleClass('sonata-ba-list-row-selected', $(this).is(':checked'));
+                                }).trigger('ifChanged');
+                                });
                     </script> 
 EOF;
-
         return new JsonResponse($html);
     }
 
     public function saveitemsAction(Request $request) : Response
     {
-        return new JsonResponse('123456789');
+        $em = $this->getDoctrine()->getManager();
+        $idhospital = $request->get('idhospital');
+        $idpago = $request->get('idpago');
+        $idfactura = $request->get('idfactura');
+        $checked = $request->get('idx');
+        $montoFact = 0;
+        $uncheck = $em->getRepository(ItemPrefacturacion::class)->updateUncheckItems($idfactura, $idpago);
+        if(isset($checked)):
+            $check = $em->getRepository(ItemPrefacturacion::class)->updateCheckItems($checked, $idfactura, $idpago);
+        endif;
+        $this->addFlash('sonata_flash_error', $idhospital.'solo id[]'.$idpago.'- monto:'.$montoFact);
+        return $this->redirectToRoute('admin_app_pago_list');
     }
 
 

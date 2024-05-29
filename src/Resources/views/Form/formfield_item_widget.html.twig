@@ -1,38 +1,30 @@
 {% block formfield_item_widget %}
     {{ block('hidden_widget') }}
     {% for factura in form.vars.facturas %}
-        <a href="#" data-toggle="modal" data-target="#modal" onclick="procItems({{factura.idFactura}},{{factura.pago.id}})">{{ factura.numeroCompleto }}</a><br>
+        <a href="#" data-toggle="modal" data-target="#modal" onclick="procItems({{factura.idFactura}},{{factura.pago.id}},{{form.vars.idCuota}})">{{ factura.numeroCompleto }}</a><br>
     {% endfor %}
     <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <form action="{{ path('admin_app_factura_saveitems') }}" method="post" >
-                <div class="modal-body" id="{{ form.vars.id }}_listitems">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-                </form>
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createModalLabel"><i class="ti-marker-alt m-r-10"></i></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                        <div class="modal-body" id="{{ form.vars.id }}_listitems"></div>
             </div>
         </div>
     </div>
     <script type="text/javascript">
-            function procItems(idfactura,idpago) {
+            function procItems(idfactura,idpago,idCuota) {
                 formId = '{{ form.vars.id }}';
                 $.ajax({
                     url: '{{ path('admin_app_factura_listitems') }}',
                     method: 'POST',
                     processData: false,
                     contentType: "application/json; charset=utf-8",
-                    data: JSON.stringify({ "idfactura": idfactura, "idpago": idpago }),
+                    data: JSON.stringify({ "idfactura": idfactura, "idpago": idpago, "idCuota": idCuota }),
                     dataType: "json",
                     success: function (data) {
                         $('#'+formId+'_listitems').html(data);
