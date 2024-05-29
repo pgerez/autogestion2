@@ -70,6 +70,7 @@ class FacturacionController extends AbstractController
         $fechaf = $request->get('fechafin');
         $check = $request->get('idx');
         $em = $this->getDoctrine()->getManager();
+        $os = $em->getRepository(ObrasSociales::class)->find($osid);
         if(isset($check)):
             $error = 0;
             ##calculo total a facturar#####
@@ -116,7 +117,7 @@ class FacturacionController extends AbstractController
             /**
              * Numero de documento del comprador (0 para consumidor final) CUIT OS
              **/
-            $numero_de_documento = 0;
+            $numero_de_documento = $os->getCuit();
 
             /**
              * Numero de comprobante
