@@ -111,10 +111,10 @@ class FacturacionController extends AbstractController
              * 96 = DNI
              * 99 = Consumidor Final
              **/
-            $tipo_de_documento = 99;
+            $tipo_de_documento = 80;
 
             /**
-             * Numero de documento del comprador (0 para consumidor final)
+             * Numero de documento del comprador (0 para consumidor final) CUIT OS
              **/
             $numero_de_documento = 0;
 
