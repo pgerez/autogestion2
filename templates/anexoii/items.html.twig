@@ -56,6 +56,22 @@
             <td>{{ total }}</td>
         </tr>
     </table>
+    <div class="box-header"><h6 class="box-title"><strong>DIAGNOSTICOS</strong></h6></div>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>ID</th>
+            <th>Codigo</th>
+            <th>Descripcion</th>
+        </tr>
+        {% set total = 0 %}
+        {% for item in object.cie10 %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.codCie10Id.cod3 }}</td>
+                <td>{{ item.codCie10Id.descripcion }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock field%}
 
     <style>

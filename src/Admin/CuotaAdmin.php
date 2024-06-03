@@ -60,13 +60,19 @@ final class CuotaAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $facturas = [];
+        $idCuota = '';
+        $id = false;
         if($this->getSubject()->getId()):
             $facturas = $this->getSubject()->getPago()->getFacturas();
             $idCuota = $this->getSubject()->getId();
+            $id = true;
         endif;
 
         $form
             #->add('id')
+                ->ifTrue($id)
+                    ->add('id', null, ['disabled' => true])
+                ->ifEnd()
                 ->add('fechaPago', DatePickerType::class, Array('label'=>'Pago', 'format'=>'d/M/y'))
                 ->add('fechaLiquidacion', DatePickerType::class, Array('label'=>'Liquidacion', 'format'=>'d/M/y'))
                 ->add('tipopago')

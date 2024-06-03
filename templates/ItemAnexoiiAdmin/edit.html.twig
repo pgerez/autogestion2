@@ -1,0 +1,6 @@
+{% if object.cerrado != 1 %}
+<a href="{{ path('admin_app_anexoii_edit', {'id': object.NumAnexo}) }}" class="btn btn-sm btn-default view_link" title="{{ 'Editar'|trans({}, 'SonataAdminBundle') }}">
+        <i class="fa fa-edit"></i>
+        {{ 'Editar' }}
+</a>
+{% endif %}

@@ -6,7 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-
 /**
  * Anexoii
  *
@@ -164,7 +163,10 @@ class Anexoii
     private $sfGuardUserId;
 
     /**
-     *
+     * @Assert\Count(
+     *        min = 1,
+     *        minMessage = "Debe cargar al menos un Item de Prefacturacion",
+     *      )
      * @Assert\Valid
      * @ORM\OneToMany(targetEntity=ItemPrefacturacion::class, mappedBy="Num_Anexo", cascade={"persist"})
      */
@@ -178,6 +180,10 @@ class Anexoii
     private $cerrado = '0';
 
     /**
+     * @Assert\Count(
+     *       min = 1,
+     *       minMessage = "Debe cargar al menos un Diagnostico Cie10",
+     *     )
      * @ORM\OneToMany(targetEntity=AuditoriaAdministrativaCodCie10::class, mappedBy="auditoriaAdministrativaNumAnexo", cascade={"persist"})
      */
     private $cie10;

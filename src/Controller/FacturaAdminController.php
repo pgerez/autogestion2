@@ -23,7 +23,7 @@ final class FacturaAdminController extends CRUDController{
         $data = json_decode($data1);
         $idfactura = $data->idfactura;
         $idpago = $data->idpago;
-        $idCuota = $data->idCuota;
+        $idcuota = $data->idcuota;
         $items = $em->getRepository(Factura::class)->find($idfactura)->getItemPrefacturacions();
         $url = $this->generateUrl(
             'admin_app_factura_saveitems',
@@ -34,11 +34,11 @@ final class FacturaAdminController extends CRUDController{
                 <div class="box box-primary">
                 <input type="hidden" name="idfactura" value="'.$idfactura.'" />
                 <input type="hidden" name="idpago" value="'.$idpago.'" />
-                <input type="hidden" name="idCuota" value="'.$idCuota.'" />
+                <input type="hidden" name="idcuota" value="'.$idcuota.'" />
 
                 <table class="table table-bordered table-striped"> 
                     <tr>
-                        <td colspan="7" style="text-align: center">Factura: '.$em->getRepository(Factura::class)->find($idfactura)->getNumeroCompleto().'</td>
+                        <td colspan="7" style="text-align: center">Factura: '.$em->getRepository(Factura::class)->find($idfactura)->getNumeroCompleto().'<br> ID:'.$idcuota.'</td>
                     </tr>
                     <tr>
                         <th>
@@ -55,11 +55,14 @@ final class FacturaAdminController extends CRUDController{
                     </tr>
                 </thead>';
                 foreach ($items as $item):
+                    $checked = $item->getEstadoPago() == 1 ? 'checked' : '';
                     $html .='<tr>
-                                <td class="sonata-ba-list-field sonata-ba-list-field-batch" objectid="'.$item->getId().'">
-                                    <div class="icheckbox_square-blue" style="position: relative;">
-                                        <input type="checkbox" name="idx[]" value="'.$item->getId().'" style="position: absolute; opacity: 0;">
-                                    </div>
+                                <td class="sonata-ba-list-field sonata-ba-list-field-batch" objectid="'.$item->getId().'">';
+                    if($item->getCuotaId() == $idcuota or $item->getCuotaId() == 0):
+                        $html .= '<div class="icheckbox_square-blue" style="position: relative;">
+                                    <input type="checkbox" '.$checked.' name="idx[]" value="'.$item->getId().'" style="position: absolute; opacity: 0;">';
+                    endif;
+                    $html .='</div>
                                 </td>
                                 <td>'.$item->getNumAnexo().'</td>
                                 <td>'.$item->getNumAnexo()->getApeynom().'</td>
@@ -92,7 +95,8 @@ final class FacturaAdminController extends CRUDController{
                                     $(this).closest('tr, div.sonata-ba-list-field-batch').toggleClass('sonata-ba-list-row-selected', $(this).is(':checked'));
                                 }).trigger('ifChanged');
                                 });
-                    </script> 
+                    </script>
+                     
 EOF;
         return new JsonResponse($html);
     }
@@ -103,14 +107,15 @@ EOF;
         $idhospital = $request->get('idhospital');
         $idpago = $request->get('idpago');
         $idfactura = $request->get('idfactura');
+        $idcuota = $request->get('idcuota');
         $checked = $request->get('idx');
         $montoFact = 0;
-        $uncheck = $em->getRepository(ItemPrefacturacion::class)->updateUncheckItems($idfactura, $idpago);
+        $uncheck = $em->getRepository(ItemPrefacturacion::class)->updateUncheckItems($idfactura, $idcuota);
         if(isset($checked)):
-            $check = $em->getRepository(ItemPrefacturacion::class)->updateCheckItems($checked, $idfactura, $idpago);
+            $check = $em->getRepository(ItemPrefacturacion::class)->updateCheckItems($checked, $idcuota);
         endif;
-        $this->addFlash('sonata_flash_error', $idhospital.'solo id[]'.$idpago.'- monto:'.$montoFact);
-        return $this->redirectToRoute('admin_app_pago_list');
+        $this->addFlash('sonata_flash_success', 'Los itemas de las facturas asociadas al pago: '.$idpago.' Se guardaron exitosamenete.');
+        return $this->redirectToRoute('admin_app_pago_edit',['id' => $idpago]);
     }
 
 

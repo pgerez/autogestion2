@@ -114,7 +114,7 @@ final class AnexoiiAdmin extends AbstractAdmin
                 'actions' => [
                     #'items' => ['template' => 'ItemAnexoiiAdmin/items.html.twig'],
                     'show' => [],
-                    'edit' => [],
+                    'edit' => ['template' => 'ItemAnexoiiAdmin/edit.html.twig'],
                     'delete' => ['template' => 'ItemAnexoiiAdmin/delete.html.twig'],
                 ],
             ]);
@@ -179,7 +179,8 @@ final class AnexoiiAdmin extends AbstractAdmin
                                                 'by_reference' => false,
                                                 'label' => 'Prefacturacion',
                                                 'disabled' => $disabled,
-                                                'btn_add' => $btn
+                                                'btn_add' => $btn,
+                                                'required'   => true,
 
                                             ],
                                                 [
@@ -189,9 +190,10 @@ final class AnexoiiAdmin extends AbstractAdmin
                                                 ])
             ->add('cie10', CollectionType::class, [
                                                 'by_reference' => false,
-                                                'label' => 'Cie10',
+                                                'label' => 'Diagnostico Cie10',
                                                 'disabled' => $disabled,
-                                                'btn_add' => $btn
+                                                'btn_add' => $btn,
+                                                'required' => true,
                                             ],
                                                 [
                                                     'edit' => 'inline',

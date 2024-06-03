@@ -86,9 +86,9 @@ final class PagoAdmin extends AbstractAdmin
         $form
             ->with('Pago', ['class' => 'col-md-4', 'box_class' => 'box box-solid box-primary'])
             ->end()
-            ->with('Facturas', ['class' => 'col-md-8', 'box_class' => 'box box-solid box-info'])
+            ->with('Facturas', ['class' => 'col-md-8', 'box_class' => 'box box-solid box-primary'])
             ->end()
-            ->with('Cuotas', ['class' => 'col-md-8', 'box_class' => 'box box-solid box-info'])
+            ->with('Cuotas', ['class' => 'col-md-8', 'box_class' => 'box box-solid box-primary'])
             ->end();
 
         $form
@@ -115,6 +115,7 @@ final class PagoAdmin extends AbstractAdmin
                         'by_reference' => false,
                         'multiple' => true,
                         'disabled' => $disabled,
+                        'label' => false,
                         #'expanded' => true,
                         'query_builder' => function (EntityRepository $er) use ($sql) : QueryBuilder {
                             if(!$sql):
@@ -145,7 +146,7 @@ final class PagoAdmin extends AbstractAdmin
                 ->ifTrue($trueFacturas)
                     ->add('cuotas', CollectionType::class, [
                         'by_reference' => false,
-                        'label' => 'Cuotas',
+                        'label' => false,
                         #'disabled' => $disabled,
                         #'btn_add' => $btn
 

@@ -103,11 +103,12 @@ class ItemPrefacturacionRepository extends ServiceEntityRepository
     /**
      * @return ItemPrefacturacion[] Returns an array of ItemPrefacturacion objects
      */
-    public function updateCheckItems($array)
+    public function updateCheckItems($array, $idc)
     {
         return $this->createQueryBuilder('i')
             ->update(ItemPrefacturacion::class, 'i')
             ->set('i.estadoPago', 1)
+            ->set('i.cuotaId', $idc)
             ->where('i.id IN (:array)')
             ->setParameter('array', $array)
             ->getQuery()
@@ -123,6 +124,7 @@ class ItemPrefacturacionRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('i')
             ->update(ItemPrefacturacion::class, 'i')
             ->set('i.estadoPago', 0)
+            ->set('i.cuotaId', 0)
             ->where('i.id_factura_FK = (:idf)')
             ->andwhere('i.cuotaId = (:idc)')
             ->setParameter('idc', $idc)
