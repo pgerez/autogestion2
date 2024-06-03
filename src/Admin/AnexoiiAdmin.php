@@ -173,8 +173,8 @@ final class AnexoiiAdmin extends AbstractAdmin
                 'Ambulatorio' => 1,
                 'Internacion' => 2,
             ], 'label' => 'Tipo', 'disabled' => $disabled])
-            ->add('fechaCarga', DatePickerType::class, Array('label'=>'Fecha Carga', 'format'=>'d/M/y', 'disabled' => $disabled))
-            #->add('mesFacturacion', DatePickerType::class, Array('label'=>'Facturacion', 'format'=>'d/M/y'))
+            ->add('fechaCarga', DatePickerType::class, Array('label'=>'Carga', 'format'=>'d/M/y', 'disabled' => $disabled))
+            ->add('mesFacturacion', DatePickerType::class, Array('label'=>'Fecha Anexo', 'format'=>'d/M/y', 'disabled' => $disabled))
             ->add('itemPrefacturacions', CollectionType::class, [
                                                 'by_reference' => false,
                                                 'label' => 'Prefacturacion',
