@@ -57,7 +57,7 @@ class ObrasSocialesRepository extends ServiceEntityRepository
             ->andWhere('o.codobra = :val')
             ->setParameter('val', $value)
             ->getQuery()
-            ->getResult()
+            ->getOneOrNullResult()
         ;
     }
 
