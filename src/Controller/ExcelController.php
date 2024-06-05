@@ -33,6 +33,47 @@ class ExcelController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/processexcelos", name="process_excelos")
+     * @return Response
+     */
+    public function excelos(Request $request): Response
+    {
+        $inputFileName = $request->files->get('excelfile');
+
+
+        #$helper->log('Loading file ' . pathinfo($inputFileName, PATHINFO_BASENAME) . ' using IOFactory to identify the format');
+        $spreadsheet = IOFactory::load($inputFileName);
+        $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+        unset($sheetData[1]);
+        $sheetData = array_reverse($sheetData);
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $error = false;
+        foreach ($sheetData as $fila):
+            if($fila['C'] != null):
+                $obrasocial = $entityManager->getRepository(ObrasSociales::class)->findByRnos($fila['A']);
+                if($obrasocial):
+                    foreach ($obrasocial as $os):
+                            $os->setCuit($fila['C']);
+                            $entityManager->persist($os);
+                            $entityManager->flush();
+                    endforeach;
+                else:
+                    $error .= 'rnos no encontrado: '.$fila['A'].'<br>';
+                endif;
+            else:
+                $error.= 'Rnos sin Cuit:'.$fila['A'].'<br>';
+            endif;
+        endforeach;
+
+        if($error):
+            $this->addFlash('sonata_flash_error', $error);
+        endif;
+        return $this->redirectToRoute('admin_app_obrassociales_list');
+    }
+
      /**
      * @Route("/processexcel", name="process_excel")
      * @return Response

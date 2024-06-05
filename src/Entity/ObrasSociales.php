@@ -100,7 +100,7 @@ class ObrasSociales
     private $estado;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      */
     private $cuit;
 
@@ -246,12 +246,12 @@ class ObrasSociales
         return $this;
     }
 
-    public function getCuit(): ?int
+    public function getCuit(): ?string
     {
         return $this->cuit;
     }
 
-    public function setCuit(int $cuit): self
+    public function setCuit(string $cuit): self
     {
         $this->cuit = $cuit;
 
