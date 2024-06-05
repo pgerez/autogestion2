@@ -24,6 +24,14 @@ final class PagoAdmin extends AbstractAdmin
         $this->setTemplate('edit', '/PagoAdmin/edit.html.twig');
     }
 
+    public function getBatchActions()
+    {
+        $actions = parent::getBatchActions();
+        unset($actions['delete']);
+
+        return $actions;
+    }
+
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter

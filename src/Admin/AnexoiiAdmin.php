@@ -28,6 +28,14 @@ final class AnexoiiAdmin extends AbstractAdmin
         #'_sort_by' => 'foo',
     );
 
+    public function getBatchActions()
+    {
+        $actions = parent::getBatchActions();
+        unset($actions['delete']);
+
+        return $actions;
+    }
+
     public function createQuery($context = 'list')
     {
         $query = parent::createQuery($context);

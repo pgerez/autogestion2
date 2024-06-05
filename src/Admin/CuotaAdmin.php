@@ -19,8 +19,13 @@ use App\Form\Type\FormFieldItemType;
 
 final class CuotaAdmin extends AbstractAdmin
 {
+    public function getBatchActions()
+    {
+        $actions = parent::getBatchActions();
+        unset($actions['delete']);
 
-
+        return $actions;
+    }
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter

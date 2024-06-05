@@ -106,7 +106,7 @@ class ObrasSociales
 
     public function __toString()
     {
-        return (string) '('.$this->getCodobra().') '.$this->getDenomina();
+        return (string) '('.$this->getCodobra().') '.utf8_encode($this->getDenomina());
     }
 
     public function getRowId(): ?int
