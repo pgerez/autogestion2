@@ -115,7 +115,7 @@ services:
         class: App\Admin\CuotaAdmin
         arguments: [~, App\Entity\Cuota, App\Controller\CuotaAdminController]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Cuota }
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Cuota, show_in_dashboard: false}
         public: true
 
     admin.tipopago:
