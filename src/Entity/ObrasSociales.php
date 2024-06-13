@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ObrasSocialesRepository;
 
@@ -103,6 +105,22 @@ class ObrasSociales
      * @ORM\Column(type="string")
      */
     private $cuit;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Liquidacion::class, mappedBy="obrasocial")
+     */
+    private $liquidacions;
+
+    /**
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="obrasocial")
+     */
+    private $users;
+
+    public function __construct()
+    {
+        $this->liquidacions = new ArrayCollection();
+        $this->users = new ArrayCollection();
+    }
 
     public function __toString()
     {
@@ -254,6 +272,66 @@ class ObrasSociales
     public function setCuit(string $cuit): self
     {
         $this->cuit = $cuit;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Liquidacion>
+     */
+    public function getLiquidacions(): Collection
+    {
+        return $this->liquidacions;
+    }
+
+    public function addLiquidacion(Liquidacion $liquidacion): self
+    {
+        if (!$this->liquidacions->contains($liquidacion)) {
+            $this->liquidacions[] = $liquidacion;
+            $liquidacion->setObrasocial($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLiquidacion(Liquidacion $liquidacion): self
+    {
+        if ($this->liquidacions->removeElement($liquidacion)) {
+            // set the owning side to null (unless already changed)
+            if ($liquidacion->getObrasocial() === $this) {
+                $liquidacion->setObrasocial(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setObrasocial($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getObrasocial() === $this) {
+                $user->setObrasocial(null);
+            }
+        }
 
         return $this;
     }

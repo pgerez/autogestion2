@@ -182,6 +182,7 @@ class Cuenta
      */
     private $idFacturaFk;
 
+
     public function getId(): ?int
     {
         return $this->id;
@@ -462,6 +463,7 @@ class Cuenta
 
         return $this;
     }
+
 
 
 }

@@ -64,9 +64,15 @@ class Hospital
      */
     private $users;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Liquidacion::class, mappedBy="hospital")
+     */
+    private $liquidacions;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->liquidacions = new ArrayCollection();
     }
 
     public function __toString()
@@ -163,6 +169,36 @@ class Hospital
             // set the owning side to null (unless already changed)
             if ($user->getHospital() === $this) {
                 $user->setHospital(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Liquidacion>
+     */
+    public function getLiquidacions(): Collection
+    {
+        return $this->liquidacions;
+    }
+
+    public function addLiquidacion(Liquidacion $liquidacion): self
+    {
+        if (!$this->liquidacions->contains($liquidacion)) {
+            $this->liquidacions[] = $liquidacion;
+            $liquidacion->setHospital($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLiquidacion(Liquidacion $liquidacion): self
+    {
+        if ($this->liquidacions->removeElement($liquidacion)) {
+            // set the owning side to null (unless already changed)
+            if ($liquidacion->getHospital() === $this) {
+                $liquidacion->setHospital(null);
             }
         }
 

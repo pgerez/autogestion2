@@ -26,7 +26,15 @@ class User extends BaseUser
      */
     private $hospital;
 
-		
+    /**
+     * @var \ObrasSociales
+     *
+     * @ORM\ManyToOne(targetEntity="ObrasSociales")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="obrasocial_id", referencedColumnName="row_id")
+     * })
+     */
+    private $obrasocial;
     
     public function getId(): ?int
     {
@@ -46,6 +54,18 @@ class User extends BaseUser
     public function setHospital(?Hospital $hospital): self
     {
         $this->hospital = $hospital;
+
+        return $this;
+    }
+
+    public function getObrasocial(): ?ObrasSociales
+    {
+        return $this->obrasocial;
+    }
+
+    public function setObrasocial(?ObrasSociales $obrasocial): self
+    {
+        $this->obrasocial = $obrasocial;
 
         return $this;
     }

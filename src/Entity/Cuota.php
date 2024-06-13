@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -106,6 +108,16 @@ class Cuota
      * })
      */
     private $tipopago;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ItemPrefacturacion::class, mappedBy="cuota")
+     */
+    private $itemPrefacturacions;
+
+    public function __construct()
+    {
+        $this->itemPrefacturacions = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -241,6 +253,36 @@ class Cuota
     public function setPago(?Pago $pago): self
     {
         $this->pago = $pago;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ItemPrefacturacion>
+     */
+    public function getItemPrefacturacions(): Collection
+    {
+        return $this->itemPrefacturacions;
+    }
+
+    public function addItemPrefacturacion(ItemPrefacturacion $itemPrefacturacion): self
+    {
+        if (!$this->itemPrefacturacions->contains($itemPrefacturacion)) {
+            $this->itemPrefacturacions[] = $itemPrefacturacion;
+            $itemPrefacturacion->setCuota($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItemPrefacturacion(ItemPrefacturacion $itemPrefacturacion): self
+    {
+        if ($this->itemPrefacturacions->removeElement($itemPrefacturacion)) {
+            // set the owning side to null (unless already changed)
+            if ($itemPrefacturacion->getCuota() === $this) {
+                $itemPrefacturacion->setCuota(null);
+            }
+        }
 
         return $this;
     }

@@ -35,8 +35,8 @@ final class FacturaAdminController extends CRUDController{
                 <input type="hidden" name="idfactura" value="'.$idfactura.'" />
                 <input type="hidden" name="idpago" value="'.$idpago.'" />
                 <input type="hidden" name="idcuota" value="'.$idcuota.'" />
-
-                <table class="table table-bordered table-striped"> 
+                <div class="box-body table-responsive no-padding">
+                <table class="table table-bordered table-striped table-hover sonata-ba-list"> 
                     <tr>
                         <td colspan="7" style="text-align: center">Factura: '.$em->getRepository(Factura::class)->find($idfactura)->getNumeroCompleto().'<br> ID:'.$idcuota.'</td>
                     </tr>
@@ -74,6 +74,7 @@ final class FacturaAdminController extends CRUDController{
                 endforeach;
          $html .= <<<EOF
                  </table>
+                 </div>
                  </div>
                  <div   class="sonata-ba-form-actions well well-small form-actions">
                     <button type="submit" class="btn btn-primary">Guardar</button>

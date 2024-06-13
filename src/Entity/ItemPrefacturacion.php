@@ -85,13 +85,6 @@ class ItemPrefacturacion
     private $montoPago = '0';
 
     /**
-     * @var int|null
-     *
-     * @ORM\Column(name="cuota_id", type="integer", nullable=true)
-     */
-    private $cuotaId = '0';
-
-    /**
      * @var string|null
      *
      * @ORM\Column(name="codserv_FKM", type="string", length=10, nullable=true, options={"fixed"=true})
@@ -139,6 +132,16 @@ class ItemPrefacturacion
      * })
      */
     private $nomencla;
+
+    /**
+     * @var \Cuota
+     *
+     * @ORM\ManyToOne(targetEntity="Cuota")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="cuota_id", referencedColumnName="id")
+     * })
+     */
+    private $cuota;
 
 
     public function __construct()
@@ -321,6 +324,18 @@ class ItemPrefacturacion
     public function setNomencla(?Nomencla $nomencla): self
     {
         $this->nomencla = $nomencla;
+
+        return $this;
+    }
+
+    public function getCuota(): ?Cuota
+    {
+        return $this->cuota;
+    }
+
+    public function setCuota(?Cuota $cuota): self
+    {
+        $this->cuota = $cuota;
 
         return $this;
     }

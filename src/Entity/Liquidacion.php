@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -42,19 +44,6 @@ class Liquidacion
      */
     private $observacion;
 
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="obras_sociales_row_id", type="integer", nullable=true)
-     */
-    private $obrasSocialesRowId;
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="hospital_id", type="integer", nullable=true)
-     */
-    private $hospitalId;
 
     /**
      * @var bool
@@ -83,6 +72,36 @@ class Liquidacion
      * @ORM\Column(name="expediente_anio", type="integer", nullable=true)
      */
     private $expedienteAnio;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Cuota::class, mappedBy="liquidacion")
+     */
+    private $cuotas;
+
+    /**
+     * @var \Hospital
+     *
+     * @ORM\ManyToOne(targetEntity="Hospital")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="hospital_id", referencedColumnName="id")
+     * })
+     */
+    private $hospital;
+
+    /**
+     * @var \ObrasSociales
+     *
+     * @ORM\ManyToOne(targetEntity="ObrasSociales")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="obras_sociales_row_id", referencedColumnName="row_id")
+     * })
+     */
+    private $obrasocial;
+
+    public function __construct()
+    {
+        $this->cuotas = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -121,30 +140,6 @@ class Liquidacion
     public function setObservacion(?string $observacion): self
     {
         $this->observacion = $observacion;
-
-        return $this;
-    }
-
-    public function getObrasSocialesRowId(): ?int
-    {
-        return $this->obrasSocialesRowId;
-    }
-
-    public function setObrasSocialesRowId(?int $obrasSocialesRowId): self
-    {
-        $this->obrasSocialesRowId = $obrasSocialesRowId;
-
-        return $this;
-    }
-
-    public function getHospitalId(): ?int
-    {
-        return $this->hospitalId;
-    }
-
-    public function setHospitalId(?int $hospitalId): self
-    {
-        $this->hospitalId = $hospitalId;
 
         return $this;
     }
@@ -196,6 +191,62 @@ class Liquidacion
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Cuenta>
+     */
+    public function getCuotas(): Collection
+    {
+        return $this->cuotas;
+    }
+
+    public function addCuota(Cuenta $cuota): self
+    {
+        if (!$this->cuotas->contains($cuota)) {
+            $this->cuotas[] = $cuota;
+            $cuota->setLiquidacion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCuota(Cuenta $cuota): self
+    {
+        if ($this->cuotas->removeElement($cuota)) {
+            // set the owning side to null (unless already changed)
+            if ($cuota->getLiquidacion() === $this) {
+                $cuota->setLiquidacion(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getHospital(): ?Hospital
+    {
+        return $this->hospital;
+    }
+
+    public function setHospital(?Hospital $hospital): self
+    {
+        $this->hospital = $hospital;
+
+        return $this;
+    }
+
+    public function getObrasocial(): ?ObrasSociales
+    {
+        return $this->obrasocial;
+    }
+
+    public function setObrasocial(?ObrasSociales $obrasocial): self
+    {
+        $this->obrasocial = $obrasocial;
+
+        return $this;
+    }
+
+
 
 
 }

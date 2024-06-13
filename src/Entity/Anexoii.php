@@ -6,9 +6,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
+
 /**
  * Anexoii
- *
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Table(name="anexoii", indexes={@ORM\Index(name="Cod_H", columns={"Cod_H"}), @ORM\Index(name="Cod_OS", columns={"Cod_OS"}), @ORM\Index(name="id_entrada", columns={"id_entrada"})})
  * @ORM\Entity
  */
@@ -200,6 +202,16 @@ class Anexoii
      */
     private $tipoAtencion = null;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $documentacion;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $fecha_documentacion;
+
 
     public function __toString()
     {
@@ -216,6 +228,16 @@ class Anexoii
         $this->setSexo(0);
         $this->setCerrado(0);
         $this->cie10 = new ArrayCollection();
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function setFechaValue(PreUpdateEventArgs $eventArgs)
+    {
+        if($eventArgs->hasChangedField('documentacion')):
+            $this->fecha_documentacion = new \DateTimeImmutable();
+        endif;
     }
 
     public function getNumAnexo(): ?int
@@ -544,6 +566,30 @@ class Anexoii
     public function setTipoAtencion(?int $tipoAtencion): self
     {
         $this->tipoAtencion = $tipoAtencion;
+
+        return $this;
+    }
+
+    public function getDocumentacion(): ?bool
+    {
+        return $this->documentacion;
+    }
+
+    public function setDocumentacion(?bool $documentacion): self
+    {
+        $this->documentacion = $documentacion;
+
+        return $this;
+    }
+
+    public function getFechaDocumentacion(): ?\DateTimeInterface
+    {
+        return $this->fecha_documentacion;
+    }
+
+    public function setFechaDocumentacion(?\DateTimeInterface $fecha_documentacion): self
+    {
+        $this->fecha_documentacion = $fecha_documentacion;
 
         return $this;
     }

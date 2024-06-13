@@ -47,6 +47,11 @@ class MenuBuilderListener
 				'route' => 'app_facturacion',
 			]);
 
+            $child->addChild('Liquidacion', [
+                'label' => 'Liquidacion',
+                'route' => 'admin_app_liquidacion_list',
+            ]);
+
             $child->addChild('Facturas', [
                 'label' => 'Facturas',
                 'route' => 'admin_app_factura_list',

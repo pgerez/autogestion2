@@ -1,0 +1,28 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+{% set editable = false %}
+    {% if is_granted('ROLE_USER_OS') %}
+        {% if object.documentacion == 1 %}
+            {% set editable = false %}
+        {% endif %}
+        {% if object.documentacion == 0 %}
+            {% set editable = true %}
+        {% endif %}
+    {% endif %}
+
+{% set x_editable_type = field_description.type|sonata_xeditable_type %}
+
+{% block field_span_attributes %}
+    {% if editable and x_editable_type and admin.hasAccess('edit', object) %}
+        {% apply spaceless %}
+            {{ parent() }}
+            data-source="[{value: 0, text: '{%- trans from 'SonataAdminBundle' %}label_type_no{% endtrans -%}'},{value: 1, text: '{%- trans from 'SonataAdminBundle' %}label_type_yes{% endtrans -%}'}]"
+        {% endapply %}
+    {% endif %}
+{% endblock %}
+
+{% block field %}
+    {%- include '@SonataAdmin/CRUD/display_boolean.html.twig' with {
+        value: value,
+        inverse: field_description.option('inverse'),
+    } only -%}
+{% endblock %}

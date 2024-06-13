@@ -19,6 +19,7 @@ final class Builder implements ContainerAwareInterface
 
         $menu->addChild('Pago', [
             'route' => 'facturacion',
+            'route' => 'liquidacion',
             #'routeParameters' => ['id' => $blog->getId()]
         ]);
 
