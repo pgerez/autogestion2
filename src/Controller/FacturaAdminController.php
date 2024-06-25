@@ -58,7 +58,7 @@ final class FacturaAdminController extends CRUDController{
                         <th>Precio</th>
                     </tr>';
                 foreach ($items as $item):
-                    $cid = is_array($item->getCuota()) ? $item->getCuota()->getId() : 0;
+                    $cid = $item->getCuota() ? $item->getCuota()->getId() : 0;
                     $checked = $item->getEstadoPago() == 1 ? 'checked' : '';
                     $html .='<tr>
                                 <td class="sonata-ba-list-field sonata-ba-list-field-batch" objectid="'.$item->getId().'">';
