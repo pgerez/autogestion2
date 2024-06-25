@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Cuota;
 use App\Entity\Factura;
 use App\Entity\ItemPrefacturacion;
 use Sonata\AdminBundle\Controller\CRUDController;
@@ -25,6 +26,7 @@ final class FacturaAdminController extends CRUDController{
         $idpago = $data->idpago;
         $idcuota = $data->idcuota;
         $items = $em->getRepository(Factura::class)->find($idfactura)->getItemPrefacturacions();
+        $cuota = $em->getRepository(Cuota::class)->find($idcuota);
         $url = $this->generateUrl(
             'admin_app_factura_saveitems',
             array(),
@@ -36,7 +38,8 @@ final class FacturaAdminController extends CRUDController{
                 <input type="hidden" name="idpago" value="'.$idpago.'" />
                 <input type="hidden" name="idcuota" value="'.$idcuota.'" />
                 <div class="box-body table-responsive no-padding">
-                <table class="table table-bordered table-striped table-hover sonata-ba-list"> 
+                <table class="table table-bordered table-striped table-hover sonata-ba-list">
+                <thead>
                     <tr>
                         <td colspan="7" style="text-align: center">Factura: '.$em->getRepository(Factura::class)->find($idfactura)->getNumeroCompleto().'<br> ID:'.$idcuota.'</td>
                     </tr>
@@ -55,15 +58,20 @@ final class FacturaAdminController extends CRUDController{
                     </tr>
                 </thead>';
                 foreach ($items as $item):
+                    $cid = is_array($item->getCuota()) ? $item->getCuota()->getId() : 0;
                     $checked = $item->getEstadoPago() == 1 ? 'checked' : '';
                     $html .='<tr>
                                 <td class="sonata-ba-list-field sonata-ba-list-field-batch" objectid="'.$item->getId().'">';
-                    if($item->getCuotaId() == $idcuota or $item->getCuotaId() == 0):
-                        $html .= '<div class="icheckbox_square-blue" style="position: relative;">
-                                    <input type="checkbox" '.$checked.' name="idx[]" value="'.$item->getId().'" style="position: absolute; opacity: 0;">';
+                    if($cuota->getLiquidacion() == null):
+                        if($cid == $idcuota or $cid == 0):
+                            $html .= '<div class="icheckbox_square-blue" style="position: relative;">
+                                        <input type="checkbox" '.$checked.' name="idx[]" value="'.$item->getId().'" style="position: absolute; opacity: 0;">
+                                      </div>';
+                        endif;
+                    else:
+                        $html .=$cuota->getLiquidacion()->getId();
                     endif;
-                    $html .='</div>
-                                </td>
+                    $html .='</td>
                                 <td>'.$item->getNumAnexo().'</td>
                                 <td>'.$item->getNumAnexo()->getApeynom().'</td>
                                 <td>'.$item->getCodservFK()->getDescripcionServicio().'</td>

@@ -4,15 +4,23 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Entity\Cuota;
+use App\Entity\Liquidacion;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\DatePickerType;
 
 final class LiquidacionAdmin extends AbstractAdmin
 {
+
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->add('listitems');
+    }
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
@@ -36,16 +44,16 @@ final class LiquidacionAdmin extends AbstractAdmin
             ->add('id')
             ->add('fechaDesde')
             ->add('fechaHasta')
-            ->add('observacion')
-            ->add('obrasocial')
-            ->add('hospital')
-            ->add('acreditar')
+            #->add('observacion')
+            #->add('obrasocial')
+            #->add('hospital')
+            #->add('acreditar')
             ->add('expedienteNum')
             ->add('expedienteCod')
             ->add('expedienteAnio')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
-                    'show' => [],
+                    'show' => ['template' => 'liquidacion/cuotas.html.twig'],
                     'edit' => [],
                     'delete' => [],
                 ],
@@ -75,16 +83,25 @@ final class LiquidacionAdmin extends AbstractAdmin
     protected function configureShowFields(ShowMapper $show): void
     {
         $show
-            #->add('id')
-            #->add('fechaDesde')
-            #->add('fechaHasta')
-            #->add('observacion')
-            #->add('obrasocial')
-            #->add('hospital')
-            #->add('acreditar')
-            #->add('expedienteNum')
-            #->add('expedienteCod')
-            ->add('expedienteAnio', null, array('template' => 'liquidacion/cuotas.html.twig', 'label' => false))
+            ->add('id')
+            ->add('fechaDesde')
+            ->add('fechaHasta')
+            ->add('observacion')
+            ->add('obrasocial')
+            ->add('hospital')
+            ->add('acreditar')
+            ->add('expedienteNum')
+            ->add('expedienteCod')
+            ->add('expedienteAnio')
             ;
     }
+
+    public function postPersist($object)
+    {
+        $fd = $object->getFechaDesde('Y-m-d');
+        $fh = $object->getFechaHasta('Y-m-d');
+        $em = $this->getModelManager()->getEntityManager(Cuota::class);
+        $r = $em->getRepository(Cuota::class)->updateByFechaLiquidacion($fd,$fh,$object->getId());
+    }
+
 }

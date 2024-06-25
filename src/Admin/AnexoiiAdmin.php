@@ -257,8 +257,6 @@ final class AnexoiiAdmin extends AbstractAdmin
 
     public function preUpdate($object)
     {
-        #$response = $this->traerOs(26586321,1);
-        #echo var_dump($response);exit;
         $items = $object->getItemPrefacturacions();
         foreach ($items as $item):
             $value = $item->getNomencla()->getArancel();

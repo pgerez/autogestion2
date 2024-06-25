@@ -129,7 +129,7 @@ final class FacturaAdmin extends AbstractAdmin
             #->add('cae_vto')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
-                    #'items' => ['template' => 'ItemPrefacturacionAdmin/cuotas.html.twig'],
+                    #'items' => ['template' => 'ItemPrefacturacionAdmin/list.html.twig'],
                     'show' => [],
                     'edit' => [],
                     'delete' => [],
@@ -191,7 +191,7 @@ final class FacturaAdmin extends AbstractAdmin
     protected function configureShowFields(ShowMapper $show): void
     {
         $show
-            ->add('itemPrefacturacions', null, array('template' => 'factura/cuotas.html.twig', 'label' => false))
+            ->add('itemPrefacturacions', null, array('template' => 'factura/items.html.twig', 'label' => false))
             ;
     }
 

@@ -5,12 +5,13 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CuotaRepository;
 
 /**
  * Cuota
  *
  * @ORM\Table(name="cuota", indexes={@ORM\Index(name="fk_cuota_pago1", columns={"pago_id"}), @ORM\Index(name="fk_cuota_tipopago1", columns={"tipopago_id"}), @ORM\Index(name="liquidacion_id", columns={"liquidacion_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass=CuotaRepository::class)
  */
 class Cuota
 {
@@ -84,7 +85,7 @@ class Cuota
      *
      * @ORM\ManyToOne(targetEntity="Liquidacion")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="liquidacion_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="liquidacion_id", referencedColumnName="id", onDelete={"restrict"})
      * })
      */
     private $liquidacion;
@@ -257,6 +258,7 @@ class Cuota
         return $this;
     }
 
+ 
     /**
      * @return Collection<int, ItemPrefacturacion>
      */

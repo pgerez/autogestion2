@@ -271,7 +271,7 @@ class Anexoii
 
     public function getApeynom(): ?string
     {
-        return $this->apeynom;
+        return utf8_encode($this->apeynom);
     }
 
     public function setApeynom(string $apeynom): self

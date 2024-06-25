@@ -2,7 +2,8 @@
 
 namespace App\Repository;
 
-use App\Entity\App\Entity\Cuota;
+use App\Entity\Cuota;
+use App\Entity\Liquidacion;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -45,6 +46,22 @@ class CuotaRepository extends ServiceEntityRepository
         if ($flush) {
             $this->_em->flush();
         }
+    }
+
+    /**
+     * @return Cuota[] Returns an array of Cuota objects
+     */
+    public function updateByFechaLiquidacion($fd,$fh,$idl)
+    {
+        return $this->createQueryBuilder('c')
+            ->update(Cuota::class, 'c')
+            ->set('c.liquidacion', $idl)
+            ->andWhere('c.fechaLiquidacion between :fd and :fh')
+            ->setParameter('fd', $fd)
+            ->setParameter('fh', $fh)
+            ->getQuery()
+            ->getResult()
+            ;
     }
 
     // /**

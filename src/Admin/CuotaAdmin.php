@@ -100,4 +100,16 @@ final class CuotaAdmin extends AbstractAdmin
             ->add('numeroPago')
             ;
     }
+
+    public function preRemove($object)
+    {
+        if(count($object->getLiquidacion()) > 0):
+            $this->addFlash(
+                'sonata_flash_error',
+                'No se puede borrar'
+            );
+            return $this->redirectTo($object);
+        endif;
+        return null;
+    }
 }

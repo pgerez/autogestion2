@@ -16,6 +16,7 @@ use Sonata\Form\Type\DatePickerType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 final class PagoAdmin extends AbstractAdmin
 {
@@ -76,21 +77,21 @@ final class PagoAdmin extends AbstractAdmin
 
     protected function configureFormFields(FormMapper $form): void
     {
+        $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
         $true = false;
         $trueFacturas = false;
         $disabled = false;
-
+        $sql = false;
         if($this->getSubject()->getId()):
             $true = true;
             $sql = $this->getSubject()->getHospitalId() ? true : false;
+            if(count($this->getSubject()->getFacturas()) > 0):
+                $trueFacturas = true;
+            endif;
+            if(count($this->getSubject()->getCuotas()) > 0):
+                $disabled = true;
+            endif;
         endif;
-        if(count($this->getSubject()->getFacturas()) > 0):
-            $trueFacturas = true;
-        endif;
-        if(count($this->getSubject()->getCuotas()) > 0):
-            $disabled = true;
-        endif;
-
         $form
             ->with('Pago', ['class' => 'col-md-4', 'box_class' => 'box box-solid box-primary'])
             ->end()
@@ -108,7 +109,7 @@ final class PagoAdmin extends AbstractAdmin
                 ->add('fecha', DatePickerType::class, Array('label'=>'Fecha Carga', 'format'=>'d/M/y'))
                 ->add('cantidad')
                 ->add('observacion')
-                #->add('sfGuardUserId')
+                ->add('sfGuardUserId', HiddenType::class, ['attr' => ['value' => $user->getId()]])
                 ->add('monto')
                 ->add('isSuperIntendencia', null, ['label' => 'Superintendencia'])
                 ->add('notaCredito', null, ['label' => 'Nota de Credito'])

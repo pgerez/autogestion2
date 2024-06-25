@@ -5,12 +5,15 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\LiquidacionRepository;
+use Doctrine\ORM\Repository;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Liquidacion
  *
  * @ORM\Table(name="liquidacion", indexes={@ORM\Index(name="hospital_id", columns={"hospital_id"}), @ORM\Index(name="obras_sociales_row_id", columns={"obras_sociales_row_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass=LiquidacionRepository::class)
  */
 class Liquidacion
 {

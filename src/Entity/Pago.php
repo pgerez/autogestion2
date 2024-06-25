@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 /**
  * Pago
@@ -36,6 +37,7 @@ class Pago
      * @ORM\Column(name="fecha", type="date", nullable=true)
      */
     private $fecha;
+
 
     /**
      * @var int|null
@@ -117,11 +119,12 @@ class Pago
      */
     private $facturas;
 
-    public function __construct()
+    private $flash;
+    public function __construct(FlashBagInterface $flash)
     {
+        $this->flash = $flash;
         $this->cuotas = new ArrayCollection();
         $this->facturas = new ArrayCollection();
-        $this->setSfGuardUserId(1);
     }
 
     public function getId(): ?int
@@ -258,12 +261,17 @@ class Pago
 
     public function removeCuota(Cuota $cuota): self
     {
-        if ($this->cuotas->removeElement($cuota)) {
-            // set the owning side to null (unless already changed)
-            if ($cuota->getPago() === $this) {
-                $cuota->setPago(null);
+        #if($cuota->getLiquidacion()):
+        #    throw new \Exception('No se Puede', 440);
+        #else:
+            if ($this->cuotas->removeElement($cuota)) {
+                // set the owning side to null (unless already changed)
+                if ($cuota->getPago() === $this) {
+                    $cuota->setPago(null);
+                }
             }
-        }
+        #endif;
+
 
         return $this;
     }

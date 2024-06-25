@@ -1,0 +1,45 @@
+{% extends "standard_layout.html.twig" %}
+{% block title %}Facturacion{% endblock %}
+
+{% block sonata_admin_content %}
+    <div class="box box-primary">
+        <div class="box-body table-responsive no-padding">
+            <table class="table table-bordered table-striped table-hover sonata-ba-list">
+                <tbody>
+                {% set total = 0 %}
+                {% set header = '' %}
+                {% set t = 1 %}
+                {% for item in listado %}
+                    {% if header != item['hospital'] %}
+                        {% if t == 0 %}
+                            <tr>
+                                <th style="text-align: right">TOTAL</th>
+                                <th>{{ total }}</th>
+                                {% set total = 0 %}
+                            </tr>
+                        {% endif %}
+                        {% set t = 0 %}
+                        <thead><tr><th colspan="2" style="text-align: center">{{ item['hospital'] }}</th></tr></thead>
+                        <thead>
+                        <tr>
+                            <th>Servicio</th>
+                            <th>Monto</th>
+                        </tr>
+                        </thead>
+                        {% set header = item['hospital'] %}
+                    {% endif %}
+                    <tr>
+                        <td>{{ item['servicio'] }}</td>
+                        <td>{{ item['suma'] }}</td>
+                            {% set total = total + item['suma'] %}
+                    </tr>
+                {% endfor %}
+                    <tr>
+                        <th style="text-align: right">TOTAL</th>
+                        <th>{{ total }}</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock%}

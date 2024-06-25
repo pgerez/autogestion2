@@ -244,18 +244,6 @@ class ItemPrefacturacion
         return $this;
     }
 
-    public function getCuotaId(): ?int
-    {
-        return $this->cuotaId;
-    }
-
-    public function setCuotaId(?int $cuotaId): self
-    {
-        $this->cuotaId = $cuotaId;
-
-        return $this;
-    }
-
     public function getCodservFkm(): ?string
     {
         return $this->codservFkm;
