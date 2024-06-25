@@ -19,12 +19,13 @@
     <script type="text/javascript">
             function procItems{{ form.vars.id }}(idfactura,idpago,idcuota) {
                 formId = '{{ form.vars.id }}';
+                id     = '{{ form.vars.id }}_listitems';
                 $.ajax({
                     url: '{{ path('admin_app_factura_listitems') }}',
                     method: 'POST',
                     processData: false,
                     contentType: "application/json; charset=utf-8",
-                    data: JSON.stringify({ "idfactura": idfactura, "idpago": idpago, "idcuota": idcuota }),
+                    data: JSON.stringify({ "idfactura": idfactura, "idpago": idpago, "idcuota": idcuota, "id": id  }),
                     dataType: "json",
                     success: function (data) {
                         $('#'+formId+'_listitems').html(data);
