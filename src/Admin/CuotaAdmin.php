@@ -64,13 +64,17 @@ final class CuotaAdmin extends AbstractAdmin
 
     protected function configureFormFields(FormMapper $form): void
     {
-        $facturas = [];
-        $idCuota = '';
-        $id = false;
+        $facturas   = [];
+        $idCuota    = '';
+        $id         = false;
+        $disabled   = false;
         if($this->getSubject()->getId()):
             $facturas = $this->getSubject()->getPago()->getFacturas();
             $idCuota = $this->getSubject()->getId();
             $id = true;
+            if($this->getSubject()->getLiquidacion()):
+                $disabled = true;
+            endif;
         endif;
 
         $form
@@ -78,8 +82,8 @@ final class CuotaAdmin extends AbstractAdmin
                 ->ifTrue($id)
                     ->add('id', null, ['disabled' => true])
                 ->ifEnd()
-                ->add('fechaPago', DatePickerType::class, Array('label'=>'Pago', 'format'=>'d/M/y'))
-                ->add('fechaLiquidacion', DatePickerType::class, Array('label'=>'Liquidacion', 'format'=>'d/M/y'))
+                ->add('fechaPago', DatePickerType::class, Array('label'=>'Pago', 'format'=>'d/M/y', 'disabled' => $disabled))
+                ->add('fechaLiquidacion', DatePickerType::class, Array('label'=>'Liquidacion', 'format'=>'d/M/y', 'disabled' => $disabled))
                 ->add('tipopago')
                 ->add('numeroComprobante')
                 ->add('facturas', FormFieldItemType::class, ['mapped' => false, 'facturas' => $facturas, 'idCuota' => $idCuota])
