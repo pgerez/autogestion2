@@ -20,6 +20,7 @@ final class LiquidacionAdmin extends AbstractAdmin
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->add('listitems');
+        $collection->add('procItems');
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
@@ -54,6 +55,7 @@ final class LiquidacionAdmin extends AbstractAdmin
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => ['template' => 'liquidacion/cuotas.html.twig'],
+                    'estimulo' => ['template' => 'liquidacion/estimulo.html.twig'],
                     'edit' => [],
                     'delete' => [],
                 ],
@@ -102,6 +104,8 @@ final class LiquidacionAdmin extends AbstractAdmin
         $fh = $object->getFechaHasta('Y-m-d');
         $em = $this->getModelManager()->getEntityManager(Cuota::class);
         $r = $em->getRepository(Cuota::class)->updateByFechaLiquidacion($fd,$fh,$object->getId());
+
+
     }
 
 }

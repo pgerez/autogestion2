@@ -48,6 +48,26 @@ class LiquidacionRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @return Liquidacion[] Returns an array of Liquidacion objects
+     */
+
+    public function findByIdLiquidacionByEstimulo($id)
+    {
+        return $this->createQueryBuilder('l')
+            ->select('sum(ip.cantidad * ip.precio) as suma, h.id as hospital')
+            ->join('l.cuotas', 'c')
+            ->join('c.itemPrefacturacions', 'ip')
+            ->join('ip.codserv_FK', 's')
+            ->join('ip.Num_Anexo', 'a')
+            ->join('a.codH', 'h')
+            ->where('l.id = :val')
+            ->setParameter('val', $id)
+            ->groupBy('a.codH')
+            ->getQuery()
+            ->getScalarResult();
+    }
+
      /**
       * @return Liquidacion[] Returns an array of Liquidacion objects
       */
@@ -56,9 +76,7 @@ class LiquidacionRepository extends ServiceEntityRepository
     {
         if($hospitalid == null):
             return $this->createQueryBuilder('l')
-                ->select('sum(ip.cantidad * ip.precio) as suma, h.descriph as hospital')
-                //->addselect( '')
-                ->addselect( 's.descripcionServicio as servicio')
+                ->select('sum(ip.cantidad * ip.precio) as suma, h.descriph as hospital, h.id as id, s.descripcionServicio as servicio')
                 ->join('l.cuotas', 'c')
                 ->join('c.itemPrefacturacions', 'ip')
                 ->join('ip.codserv_FK', 's')
@@ -66,15 +84,12 @@ class LiquidacionRepository extends ServiceEntityRepository
                 ->join('a.codH', 'h')
                 ->where('l.id = :val')
                 ->setParameter('val', $id)
-                ->groupBy('a.codH')
-                ->groupBy('ip.codserv_FK')
+                ->groupBy('h.id','s.codserv')
                 ->getQuery()
                 ->getScalarResult();
         else:
             return $this->createQueryBuilder('l')
-                ->select('sum(ip.cantidad * ip.precio) as suma, h.descriph as hospital')
-                //->addselect( '')
-                ->addselect( 's.descripcionServicio as servicio')
+                ->select('sum(ip.cantidad * ip.precio) as suma, h.descriph as hospital, h.id as id, s.descripcionServicio as servicio')
                 ->join('l.cuotas', 'c')
                 ->join('c.itemPrefacturacions', 'ip')
                 ->join('ip.codserv_FK', 's')
@@ -84,8 +99,7 @@ class LiquidacionRepository extends ServiceEntityRepository
                 ->andWhere('h.id = :hosp')
                 ->setParameter('val', $id)
                 ->setParameter('hosp', $hospitalid)
-                ->groupBy('a.codH')
-                ->groupBy('ip.codserv_FK')
+                ->groupBy('h.id','s.codserv')
                 ->getQuery()
                 ->getScalarResult();
         endif;

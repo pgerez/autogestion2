@@ -101,9 +101,15 @@ class Liquidacion
      */
     private $obrasocial;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Estimulo::class, mappedBy="liquidacion")
+     */
+    private $estimulos;
+
     public function __construct()
     {
         $this->cuotas = new ArrayCollection();
+        $this->estimulos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -245,6 +251,36 @@ class Liquidacion
     public function setObrasocial(?ObrasSociales $obrasocial): self
     {
         $this->obrasocial = $obrasocial;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Estimulo>
+     */
+    public function getEstimulos(): Collection
+    {
+        return $this->estimulos;
+    }
+
+    public function addEstimulo(Estimulo $estimulo): self
+    {
+        if (!$this->estimulos->contains($estimulo)) {
+            $this->estimulos[] = $estimulo;
+            $estimulo->setLiquidacion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEstimulo(Estimulo $estimulo): self
+    {
+        if ($this->estimulos->removeElement($estimulo)) {
+            // set the owning side to null (unless already changed)
+            if ($estimulo->getLiquidacion() === $this) {
+                $estimulo->setLiquidacion(null);
+            }
+        }
 
         return $this;
     }

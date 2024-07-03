@@ -3,12 +3,14 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\EstimuloRepository;
+use Doctrine\ORM\Repository;
 
 /**
  * Estimulo
  *
  * @ORM\Table(name="estimulo", indexes={@ORM\Index(name="hospital_id", columns={"hospital_id"}), @ORM\Index(name="liquidacion_id", columns={"liquidacion_id"}), @ORM\Index(name="recibo_id", columns={"recibo_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass=EstimuloRepository::class)
  */
 class Estimulo
 {
@@ -43,12 +45,16 @@ class Estimulo
     private $estado;
 
     /**
-     * @var int
+     * @var \Hospital
      *
-     * @ORM\Column(name="hospital_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Hospital")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="hospital_id", referencedColumnName="id")
+     * })
      */
     private $hospitalId;
 
+   
     /**
      * @var \DateTime|null
      *
@@ -130,18 +136,7 @@ class Estimulo
 
         return $this;
     }
-
-    public function getHospitalId(): ?int
-    {
-        return $this->hospitalId;
-    }
-
-    public function setHospitalId(int $hospitalId): self
-    {
-        $this->hospitalId = $hospitalId;
-
-        return $this;
-    }
+    
 
     public function getFecha(): ?\DateTimeInterface
     {
@@ -199,6 +194,18 @@ class Estimulo
     public function setRecibo(?Recibo $recibo): self
     {
         $this->recibo = $recibo;
+
+        return $this;
+    }
+
+    public function getHospitalId(): ?Hospital
+    {
+        return $this->hospitalId;
+    }
+
+    public function setHospitalId(?Hospital $hospitalId): self
+    {
+        $this->hospitalId = $hospitalId;
 
         return $this;
     }

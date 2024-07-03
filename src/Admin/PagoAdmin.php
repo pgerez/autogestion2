@@ -158,7 +158,6 @@ final class PagoAdmin extends AbstractAdmin
                         'label' => false,
                         #'disabled' => $disabled,
                         #'btn_add' => $btn
-
                         ],
                         [
                             'edit' => 'inline',

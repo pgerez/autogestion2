@@ -131,3 +131,17 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Liquidacion }
         public: true
+
+    admin.estimulo:
+        class: App\Admin\EstimuloAdmin
+        arguments: [~, App\Entity\Estimulo, App\Controller\EstimuloAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Estimulo }
+        public: true
+
+    admin.recibo:
+        class: App\Admin\ReciboAdmin
+        arguments: [~, App\Entity\Recibo, App\Controller\ReciboAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Recibo }
+        public: true

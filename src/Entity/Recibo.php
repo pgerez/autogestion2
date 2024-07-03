@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -38,7 +40,7 @@ class Recibo
     /**
      * @var string
      *
-     * @ORM\Column(name="cheque", type="string", length=100, nullable=false)
+     * @ORM\Column(name="cheque", type="string", length=100, nullable=true)
      */
     private $cheque;
 
@@ -73,7 +75,7 @@ class Recibo
     /**
      * @var float
      *
-     * @ORM\Column(name="monto_foresu", type="float", precision=10, scale=0, nullable=false)
+     * @ORM\Column(name="monto_foresu", type="float", precision=10, scale=0, nullable=true)
      */
     private $montoForesu;
 
@@ -87,7 +89,7 @@ class Recibo
     /**
      * @var string
      *
-     * @ORM\Column(name="cheque_anses", type="string", length=100, nullable=false)
+     * @ORM\Column(name="cheque_anses", type="string", length=100, nullable=true)
      */
     private $chequeAnses;
 
@@ -101,14 +103,14 @@ class Recibo
     /**
      * @var string
      *
-     * @ORM\Column(name="expediente", type="string", length=100, nullable=false)
+     * @ORM\Column(name="expediente", type="string", length=100, nullable=true)
      */
     private $expediente;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="orden_pago", type="string", length=100, nullable=false)
+     * @ORM\Column(name="orden_pago", type="string", length=100, nullable=true)
      */
     private $ordenPago;
 
@@ -131,6 +133,24 @@ class Recibo
      * })
      */
     private $sfGuardUser;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Estimulo::class, mappedBy="recibo")
+     */
+    private $estimulos;
+
+    public function __construct()
+    {
+        $this->setPtoVta('1');
+        $this->setFechaEmicion(new \DateTime());
+        $this->setFechaCobro(new \DateTime());
+        $this->estimulos = new ArrayCollection();
+
+    }
+    public function __toString()
+    {
+        return $this->getPtoVta().'-'.$this->getNumero();
+    }
 
     public function getId(): ?int
     {
@@ -313,6 +333,36 @@ class Recibo
     public function setSfGuardUser(?SfGuardUser $sfGuardUser): self
     {
         $this->sfGuardUser = $sfGuardUser;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Estimulo>
+     */
+    public function getEstimulos(): Collection
+    {
+        return $this->estimulos;
+    }
+
+    public function addEstimulo(Estimulo $estimulo): self
+    {
+        if (!$this->estimulos->contains($estimulo)) {
+            $this->estimulos[] = $estimulo;
+            $estimulo->setRecibo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEstimulo(Estimulo $estimulo): self
+    {
+        if ($this->estimulos->removeElement($estimulo)) {
+            // set the owning side to null (unless already changed)
+            if ($estimulo->getRecibo() === $this) {
+                $estimulo->setRecibo(null);
+            }
+        }
 
         return $this;
     }
