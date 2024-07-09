@@ -194,7 +194,7 @@ class FacturacionController extends AbstractController
             $object->setDigitalPv($punto_de_venta);
             $object->setTipoFact('C');
             $object->setDigitalMonto($montoFact);
-            $object->setCodOs($osid);
+            $object->setCodOs($os);
             $object->setHospitalId($hospital);
             $object->setMontoReal($montoFact);
             $object->setMontoFact($montoFact);

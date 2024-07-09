@@ -155,16 +155,7 @@ final class FacturaAdmin extends AbstractAdmin
             ->add('periodo', DatePickerType::class, Array('label'=>'Periodo', 'format'=>'d/M/y'))
             ->add('usuarioFacturacion')#, ['hidden' => true])
             ->add('horaFactura', DateTimePickerType::class, [ 'format' => 'H:m'])
-            ->add('codOs', EntityType::class, [
-                'class' => ObrasSociales::class,
-                #'choice_label' => 'codobra',
-                'choice_value' => 'row_id',
-                'choice_label' => function (ObrasSociales $os = null) {
-                    return null === $os ? '': $os->getCodobra().'-'.$os->getDenomina();
-                },
-  
-
-            ])
+            ->add('codOs', null, ['disabled' => $disabled])
             ->add('montoFact', null, ['required' => true])
             #->add('montoReal', null, ['required' => true])
             #->add('codEstadofacturaFk')
@@ -195,130 +186,6 @@ final class FacturaAdmin extends AbstractAdmin
             ;
     }
 
-    public function prePersist($object)
-     {
-
-        $afip = new Afip(array('CUIT' => $_ENV['CUIT'], 'production' => $_ENV['PRODUCCION'])); //Reemplazar el CUIT
-        /**
-         * Numero del punto de venta
-         **/
-        $punto_de_venta = $_ENV['PTO_VTA'];
-
-        /**
-         * Tipo de factura
-         **/
-        $tipo_de_comprobante = 11; // 11 = Factura C
-
-        /**
-         * Número de la ultima Factura C
-         **/
-        $last_voucher = $afip->ElectronicBilling->GetLastVoucher($punto_de_venta, $tipo_de_comprobante);
-
-        /**
-         * Concepto de la factura
-         *
-         * Opciones:
-         *
-         * 1 = Productos
-         * 2 = Servicios
-         * 3 = Productos y Servicios
-         **/
-        $concepto = 2;
-
-        /**
-         * Tipo de documento del comprador
-         *
-         * Opciones:
-         *
-         * 80 = CUIT
-         * 86 = CUIL
-         * 96 = DNI
-         * 99 = Consumidor Final
-         **/
-        $tipo_de_documento = 99;
-
-        /**
-         * Numero de documento del comprador (0 para consumidor final)
-         **/
-        $numero_de_documento = 0;
-
-        /**
-         * Numero de comprobante
-         **/
-        $numero_de_factura = $last_voucher+1;
-
-        /**
-         * Fecha de la factura en formato aaaa-mm-dd (hasta 10 dias antes y 10 dias despues)
-         **/
-        $fecha = date('Y-m-d');
-
-        /**
-         * Importe de la Factura
-         **/
-        $importe_total = $object->getMontoFact();
-
-        /**
-         * Los siguientes campos solo son obligatorios para los conceptos 2 y 3
-         **/
-        if ($concepto === 2 || $concepto === 3) {
-            /**
-             * Fecha de inicio de servicio en formato aaaammdd
-             **/
-            $fecha_servicio_desde = intval(date('Ymd'));
-
-            /**
-             * Fecha de fin de servicio en formato aaaammdd
-             **/
-            $fecha_servicio_hasta = intval(date('Ymd'));
-
-            /**
-             * Fecha de vencimiento del pago en formato aaaammdd
-             **/
-            $fecha_vencimiento_pago = intval(date('Ymd'));
-        }
-        else {
-            $fecha_servicio_desde = null;
-            $fecha_servicio_hasta = null;
-            $fecha_vencimiento_pago = null;
-        }
-
-
-        $data = array(
-            'CantReg' 	=> 1, // Cantidad de facturas a registrar
-            'PtoVta' 	=> $punto_de_venta,
-            'CbteTipo' 	=> $tipo_de_comprobante,
-            'Concepto' 	=> $concepto,
-            'DocTipo' 	=> $tipo_de_documento,
-            'DocNro' 	=> $numero_de_documento,
-            'CbteDesde' => $numero_de_factura,
-            'CbteHasta' => $numero_de_factura,
-            'CbteFch' 	=> intval(str_replace('-', '', $fecha)),
-            'FchServDesde'  => $fecha_servicio_desde,
-            'FchServHasta'  => $fecha_servicio_hasta,
-            'FchVtoPago'    => $fecha_vencimiento_pago,
-            'ImpTotal' 	=> $importe_total,
-            'ImpTotConc'=> 0, // Importe neto no gravado
-            'ImpNeto' 	=> $importe_total, // Importe neto
-            'ImpOpEx' 	=> 0, // Importe exento al IVA
-            'ImpIVA' 	=> 0, // Importe de IVA
-            'ImpTrib' 	=> 0, //Importe total de tributos
-            'MonId' 	=> 'PES', //Tipo de moneda usada en la factura ('PES' = pesos argentinos)
-            'MonCotiz' 	=> 1, // Cotización de la moneda usada (1 para pesos argentinos)
-        );
-
-
-        /** 
-         * Creamos la Factura 
-         **/
-        $res = $afip->ElectronicBilling->CreateVoucher($data);
-        $object->setDigitalNum($afip->ElectronicBilling->GetLastVoucher($punto_de_venta, $tipo_de_comprobante));
-        $object->setDigitalPv($punto_de_venta);
-
-        $object->setDigitalMonto($object->getMontoFact());
-        $object->setMontoReal($object->getMontoFact());
-        #$object->setCae('CAE-MODIFICAR');
-        $object->setCae($res['CAE']);
-     }
 
     public function postPersist($object)
      {
@@ -371,7 +238,7 @@ final class FacturaAdmin extends AbstractAdmin
          $itemPrefac->setEstadoPago(0);
          $itemPrefac->setEstadoItem(0);
          $itemPrefac->setMontoPago(0);
-         $itemPrefac->setCuotaId(0);
+         #$itemPrefac->setCuota(0);
          $itemPrefac->setCodservFKM('');
          $itemPrefac->setEstadoDebito(0);
          $itemPrefacturacionManager->persist($itemPrefac);

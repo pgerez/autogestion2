@@ -69,10 +69,13 @@ class Factura
      */
     private $horaFactura = null;
 
-     /**
+    /**
      * @var \ObrasSociales
      *
-     * @ORM\Column(name="Cod_OS", type="string", nullable=true)
+     * @ORM\ManyToOne(targetEntity="ObrasSociales")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="Cod_OS", referencedColumnName="row_id")
+     * })
      */
     private $codOs;
 
@@ -369,18 +372,6 @@ class Factura
     public function setHoraFactura(?\DateTimeInterface $horaFactura): self
     {
         $this->horaFactura = $horaFactura;
-
-        return $this;
-    }
-
-    public function getCodOs(): ?string
-    {
-        return $this->codOs;
-    }
-
-    public function setCodOs(?string $codOs): self
-    {
-        $this->codOs = $codOs;
 
         return $this;
     }
@@ -711,6 +702,18 @@ class Factura
     public function setPago(?Pago $pago): self
     {
         $this->pago = $pago;
+
+        return $this;
+    }
+
+    public function getCodOs(): ?ObrasSociales
+    {
+        return $this->codOs;
+    }
+
+    public function setCodOs(?ObrasSociales $codOs): self
+    {
+        $this->codOs = $codOs;
 
         return $this;
     }
