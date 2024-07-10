@@ -133,7 +133,7 @@ EOF;
     public function pdfAction(Request $request) : Response
     {
 
-        $recibo  = $this->admin->getSubject();
+        $factura  = $this->admin->getSubject();
         $pdf = new ReportPDF('P', 'mm', 'LEGAL', true, 'UTF-8', false, false, false,false);       //set document information
 
         //$pdf = $this->get('white_october.tcpdf')->create();       //set document information
@@ -156,7 +156,7 @@ EOF;
 
         $pdf->AddPage();
         $html = <<<EOF
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Factura</title>
@@ -469,7 +469,9 @@ EOF;
 EOF;
 
         $pdf->writeHTML($html, true, false, true, false, '');
-        exit;#return $this->redirectToRoute('admin_app_recibo_list');
+        $pdf->Output('factura'.$factura->getDigitalNum().'-'.$factura->getDigitalPv().'pdf');
+        return sfView::NONE;
+        exit;
 
     }
 
