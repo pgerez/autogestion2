@@ -1,6 +1,8 @@
+{% if 'ROLE_SUPER_ADMIN' in app.user.roles %}
 {% if object.estimulos|length == 0 %}
 <a href="{{ path('admin_app_liquidacion_procItems', {'id': object.id}) }}" class="btn btn-sm btn-default view_link" title="{{ 'Estimulo'|trans({}, 'SonataAdminBundle') }}">
     <i class="glyphicon glyphicon-list"></i>
     Estimulo
 </a>
+{% endif %}
 {% endif %}
