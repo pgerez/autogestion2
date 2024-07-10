@@ -59,7 +59,7 @@ final class ReciboAdmin extends AbstractAdmin
             ->add('ordenPago')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
-                    'pdf' => ['template' => 'ReciboAdmin/pdf_action.html.twig'],
+                    'pdf' => ['template' => 'ReciboAdmin/pdf.html.twig'],
                     #'show' => [],
                     'edit' => [],
                     #'delete' => [],

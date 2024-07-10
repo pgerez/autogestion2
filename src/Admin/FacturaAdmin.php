@@ -57,6 +57,7 @@ final class FacturaAdmin extends AbstractAdmin
     {
         $collection->add('listitems');
         $collection->add('saveitems');
+        $collection->add('pdf');
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
@@ -129,10 +130,10 @@ final class FacturaAdmin extends AbstractAdmin
             #->add('cae_vto')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
-                    #'items' => ['template' => 'ItemPrefacturacionAdmin/list.html.twig'],
+                    'PDF' => ['template' => 'FacturaAdmin/pdf.html.twig'],
                     'show' => [],
                     'edit' => [],
-                    'delete' => [],
+                    #'delete' => [],
                 ],
             ]);
     }
