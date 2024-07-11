@@ -125,7 +125,7 @@ final class PagoAdmin extends AbstractAdmin
                         'multiple' => true,
                         'disabled' => $disabled,
                         'label' => false,
-                        #'expanded' => true,
+                        'expanded' => true,
                         'query_builder' => function (EntityRepository $er) use ($sql) : QueryBuilder {
                             if(!$sql):
                             return $er->createQueryBuilder('f')
