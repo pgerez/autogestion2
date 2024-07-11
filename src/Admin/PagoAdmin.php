@@ -133,7 +133,7 @@ final class PagoAdmin extends AbstractAdmin
                                 ->andWhere('f.pago is null')
                                 ->orWhere('f.pago = :pid')
                                 ->setParameter('pid', $this->getSubject()->getId())
-                                ->setParameter('osid', $this->getSubject()->getObrasSocialesCodOs()->getCodobra());
+                                ->setParameter('osid', $this->getSubject()->getObrasSocialesCodOs()->getRowId());
                             else:
                             return $er->createQueryBuilder('f')
                                 ->where('f.hospitalId = :hid')
