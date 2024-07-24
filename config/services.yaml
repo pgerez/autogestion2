@@ -145,3 +145,24 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Recibo }
         public: true
+
+    admin.certificado:
+        class: App\Admin\CertificadoAdmin
+        arguments: [~, App\Entity\Certificado, App\Controller\CertificadoAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Certificado }
+        public: true
+
+    admin.estado:
+        class: App\Admin\EstadoAdmin
+        arguments: [~, App\Entity\Estado, App\Controller\EstadoAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Estado }
+        public: true
+
+    admin.certificado_factura:
+        class: App\Admin\CertificadoFacturaAdmin
+        arguments: [~, App\Entity\CertificadoFactura, App\Controller\CertificadoFacturaAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: CertificadoFactura }
+        public: true

@@ -116,10 +116,16 @@ class ObrasSociales
      */
     private $users;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Certificado::class, mappedBy="obraSocial")
+     */
+    private $certificados;
+
     public function __construct()
     {
         $this->liquidacions = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->certificados = new ArrayCollection();
     }
 
     public function __toString()
@@ -330,6 +336,36 @@ class ObrasSociales
             // set the owning side to null (unless already changed)
             if ($user->getObrasocial() === $this) {
                 $user->setObrasocial(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Certificado>
+     */
+    public function getCertificados(): Collection
+    {
+        return $this->certificados;
+    }
+
+    public function addCertificado(Certificado $certificado): self
+    {
+        if (!$this->certificados->contains($certificado)) {
+            $this->certificados[] = $certificado;
+            $certificado->setObraSocial($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCertificado(Certificado $certificado): self
+    {
+        if ($this->certificados->removeElement($certificado)) {
+            // set the owning side to null (unless already changed)
+            if ($certificado->getObraSocial() === $this) {
+                $certificado->setObraSocial(null);
             }
         }
 

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Estado;
 use App\Entity\ItemPrefacturacion;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -188,10 +189,12 @@ class FacturacionController extends AbstractController
              * Creamos la Factura
              **/
             $hospital = $em->getRepository(Hospital::class)->find($hospitalid);
+            $estado = $em->getRepository(Estado::class)->find(1);
             $object = new Factura();
             $res = $afip->ElectronicBilling->CreateVoucher($data);
             $object->setDigitalNum($afip->ElectronicBilling->GetLastVoucher($punto_de_venta, $tipo_de_comprobante));
             $object->setDigitalPv($punto_de_venta);
+            $object->setEstadoId($estado);
             $object->setTipoFact('C');
             $object->setDigitalMonto($montoFact);
             $object->setCodOs($os);

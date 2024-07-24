@@ -120,6 +120,11 @@ class Pago
     private $facturas;
 
     private $flash;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $judicial;
     public function __construct(FlashBagInterface $flash)
     {
         $this->flash = $flash;
@@ -326,6 +331,18 @@ class Pago
                 $factura->setPago(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getJudicial(): ?bool
+    {
+        return $this->judicial;
+    }
+
+    public function setJudicial(?bool $judicial): self
+    {
+        $this->judicial = $judicial;
 
         return $this;
     }

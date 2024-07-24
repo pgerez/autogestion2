@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Entity\Estado;
 use App\Entity\Factura;
 use App\Entity\ObrasSociales;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -113,6 +114,7 @@ final class PagoAdmin extends AbstractAdmin
                 ->add('monto')
                 ->add('isSuperIntendencia', null, ['label' => 'Superintendencia'])
                 ->add('notaCredito', null, ['label' => 'Nota de Credito'])
+                ->add('judicial', null, ['label' => 'Por via Judicial'])
                 #->add('descripcion')
             ->end()
             ->with('Facturas')
@@ -125,7 +127,7 @@ final class PagoAdmin extends AbstractAdmin
                         'multiple' => true,
                         'disabled' => $disabled,
                         'label' => false,
-                        'expanded' => true,
+                        'expanded' => false,
                         'query_builder' => function (EntityRepository $er) use ($sql) : QueryBuilder {
                             if(!$sql):
                             return $er->createQueryBuilder('f')
@@ -185,5 +187,18 @@ final class PagoAdmin extends AbstractAdmin
             ->add('hospitalId')
             ->add('descripcion')
             ;
+    }
+
+    public function preUpdate($object)
+    {
+        $f = $this->getModelManager()->getEntityManager(Factura::class);
+        $estado = $this->getModelManager()->getEntityManager(Estado::class)->getRepository(Estado::class)->find(3);
+        if($object->getFacturas()):
+            foreach ($object->getFacturas() as $factura):
+                $factura->setEstadoId($estado);
+                $f->persist($factura);
+                $f->flush();
+            endforeach;
+        endif;
     }
 }

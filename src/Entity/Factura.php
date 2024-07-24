@@ -112,6 +112,14 @@ class Factura
      *
      * @ORM\Column(name="estado_id", type="integer", nullable=true, options={"default"="1"})
      */
+    /**
+     * @var \Estado
+     *
+     * @ORM\ManyToOne(targetEntity="Estado")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="estado_id", referencedColumnName="id")
+     * })
+     */
     private $estadoId = 1;
 
     /**
@@ -262,11 +270,26 @@ class Factura
      */
     private $pago;
 
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity=Certificado::class)
+     * @ORM\JoinColumns({
+     * @ORM\JoinColumn(name="certificado_id", referencedColumnName="id")
+     * })
+     */
+    private $certificado;
+
+    /**
+     * @ORM\OneToMany(targetEntity=CertificadoFactura::class, mappedBy="facturas",cascade={"persist"})
+     */
+    private $certificadoFacturas;
+
+
 
 
     public function __toString()
     {
-        return (string) $this->getIdFactura();
+        return (string) $this->getNumeroCompleto();
     }
     public function __construct()
     {
@@ -277,6 +300,7 @@ class Factura
         $this->setHoraFactura(new \DateTime());
         $this->setUsuarioFacturacion('SISTEMA');
         $this->itemPrefacturacions = new ArrayCollection();
+        $this->certificadoFacturas = new ArrayCollection();
         
 
     }
@@ -420,18 +444,6 @@ class Factura
     public function setTipoFact(string $tipoFact): self
     {
         $this->tipoFact = $tipoFact;
-
-        return $this;
-    }
-
-    public function getEstadoId(): ?int
-    {
-        return $this->estadoId;
-    }
-
-    public function setEstadoId(?int $estadoId): self
-    {
-        $this->estadoId = $estadoId;
 
         return $this;
     }
@@ -714,6 +726,60 @@ class Factura
     public function setCodOs(?ObrasSociales $codOs): self
     {
         $this->codOs = $codOs;
+
+        return $this;
+    }
+
+    public function getCertificado(): ?Certificado
+    {
+        return $this->certificado;
+    }
+
+    public function setCertificado(?Certificado $certificado): self
+    {
+        $this->certificado = $certificado;
+
+        return $this;
+    }
+
+    public function getEstadoId(): ?Estado
+    {
+        return $this->estadoId;
+    }
+
+    public function setEstadoId(?Estado $estadoId): self
+    {
+        $this->estadoId = $estadoId;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CertificadoFactura>
+     */
+    public function getCertificadoFacturas(): Collection
+    {
+        return $this->certificadoFacturas;
+    }
+
+    public function addCertificadoFactura(CertificadoFactura $certificadoFactura): self
+    {
+        if (!$this->certificadoFacturas->contains($certificadoFactura)) {
+            $this->certificadoFacturas[] = $certificadoFactura;
+            $certificadoFactura->setFacturas($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCertificadoFactura(CertificadoFactura $certificadoFactura): self
+    {
+        if ($this->certificadoFacturas->removeElement($certificadoFactura)) {
+            // set the owning side to null (unless already changed)
+            if ($certificadoFactura->getFacturas() === $this) {
+                $certificadoFactura->setFacturas(null);
+            }
+        }
 
         return $this;
     }

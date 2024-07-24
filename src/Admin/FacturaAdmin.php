@@ -75,7 +75,7 @@ final class FacturaAdmin extends AbstractAdmin
             #->add('montoReal')
             #->add('codEstadofacturaFk')
             #->add('tipoFact')
-            #->add('estadoId')
+            ->add('estadoId',null, ['label' => 'Estado'])
             #->add('fechaEnvio')
             #->add('fechaAcuse')
             #->add('pagoId')
@@ -84,8 +84,8 @@ final class FacturaAdmin extends AbstractAdmin
             ->add('hospitalId')
             #->add('cartaDocumento')
             #->add('fechaCarta')
-            #->add('digitalPv')
-            #->add('digitalNum')
+            ->add('digitalPv')
+            ->add('digitalNum')
             #->add('digitalFecha')
             #->add('digitalMonto')
             #->add('fechaEnvioSuper')
@@ -112,7 +112,7 @@ final class FacturaAdmin extends AbstractAdmin
             #->add('montoReal')
             #->add('codEstadofacturaFk')
             #->add('tipoFact')
-            #->add('estadoId')
+
             #->add('fechaEnvio')
             #->add('fechaAcuse')
             #->add('pagoId')
@@ -128,6 +128,7 @@ final class FacturaAdmin extends AbstractAdmin
             #->add('fechaEnvioSuper')
             ->add('cae')
             #->add('cae_vto')
+            ->add('estadoId', null,['label' => 'Estado'])
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'PDF' => ['template' => 'FacturaAdmin/pdf.html.twig'],
@@ -161,7 +162,7 @@ final class FacturaAdmin extends AbstractAdmin
             #->add('montoReal', null, ['required' => true])
             #->add('codEstadofacturaFk')
             #->add('tipoFact')
-            #->add('estadoId')
+            #->add('estadoId',null, ['label' => 'Estado'])
             #->add('fechaEnvio')
             #->add('fechaAcuse')
             #->add('pagoId')
@@ -185,6 +186,11 @@ final class FacturaAdmin extends AbstractAdmin
         $show
             ->add('itemPrefacturacions', null, array('template' => 'factura/items.html.twig', 'label' => false))
             ;
+    }
+
+    public function prePersist($object)
+    {
+        $object->setMontoReal($object->getMontoFact());
     }
 
 
@@ -211,7 +217,7 @@ final class FacturaAdmin extends AbstractAdmin
          $anexoii->setFechaNac($object->getFechaEmision());
          $anexoii->setSexo('M');    
          $anexoii->setCodH($object->getHospitalId());
-         $anexoii->setCodOs($osRepo->findByRnos($object->getCodOs()));
+         $anexoii->setCodOs($object->getCodOs());
          $anexoii->setNumAfil('99999999');
          $anexoii->setTipoBenef('Titular');
          $anexoii->setParentesco('Otro');

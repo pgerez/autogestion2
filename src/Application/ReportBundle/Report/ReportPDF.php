@@ -11,7 +11,7 @@ class ReportPDF extends TCPDF {
     protected function setupReport() {
         // set document information
         $this->SetCreator(PDF_CREATOR);
-        $this->SetAuthor('PROTE SALUD');
+        $this->SetAuthor('AUTOGESTION HOSPITALARIA');
         $this->SetSubject('PDF Report');
         $this->SetKeywords('report, sgrt');
        
@@ -34,7 +34,7 @@ class ReportPDF extends TCPDF {
         // Logo
 		$image_file = __DIR__.'/logo_title.png';
         //$this->setHeaderData($image_file, 150, '', '');// 10, 10, 15, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-        $this->Image($image_file, 30, 20, 65, 0, '', '', '', true, 150);// 10, 10, 15, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        $this->Image($image_file, 20, 20, 170, 0, '', '', '', true, 150);// 10, 10, 15, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         //
         // Set font
         //$this->SetFont('helvetica', '', 8);
@@ -52,7 +52,7 @@ class ReportPDF extends TCPDF {
         // Page number
         $pages_txt = 'Página '.$this->getAliasNumPage().'/'.$this->getAliasNbPages();
         $today = new \DateTime();
-        $txt = sprintf('PROTE SALUD - %s - %s',
+        $txt = sprintf('AUTOGESTION HOSPITALARIA - %s - %s',
             $today->format('d/m/Y h:i'), $pages_txt);
         $this->Cell(0, 10, $txt, 0, false, 'C', 0, '', 0, false, 'T', 'M');
     }
