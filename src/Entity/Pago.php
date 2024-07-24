@@ -325,10 +325,18 @@ class Pago
 
     public function removeFactura(Factura $factura): self
     {
+        global $kernel;
+        if ( 'AppCache' == get_class($kernel) )
+        {
+            $kernel = $kernel->getKernel();
+        }
+        $em = $kernel->getContainer()->get( 'doctrine.orm.entity_manager' );
+        $estado = $em->getRepository(Estado::class)->find(1);
         if ($this->facturas->removeElement($factura)) {
             // set the owning side to null (unless already changed)
             if ($factura->getPago() === $this) {
                 $factura->setPago(null);
+                $factura->setEstadoId($estado);
             }
         }
 

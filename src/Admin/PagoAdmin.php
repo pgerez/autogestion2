@@ -133,6 +133,8 @@ final class PagoAdmin extends AbstractAdmin
                             return $er->createQueryBuilder('f')
                                 ->Where('f.codOs = :osid')
                                 ->andWhere('f.pago is null')
+                                ->andWhere('f.estadoId = 1')
+                                ->orWhere('f.estadoId = 13')
                                 ->orWhere('f.pago = :pid')
                                 ->setParameter('pid', $this->getSubject()->getId())
                                 ->setParameter('osid', $this->getSubject()->getObrasSocialesCodOs()->getRowId());
@@ -141,6 +143,8 @@ final class PagoAdmin extends AbstractAdmin
                                 ->where('f.hospitalId = :hid')
                                 ->andWhere('f.codOs = :osid')
                                 ->andWhere('f.pago is null')
+                                ->andWhere('f.estadoId = 1')
+                                ->orWhere('f.estadoId = 13')
                                 ->orWhere('f.pago = :pid')
                                 ->setParameter('hid', $this->getSubject()->getHospitalId()->getId())
                                 ->setParameter('pid', $this->getSubject()->getId())
@@ -201,4 +205,5 @@ final class PagoAdmin extends AbstractAdmin
             endforeach;
         endif;
     }
+
 }
