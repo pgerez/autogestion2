@@ -178,6 +178,7 @@ final class CertificadoAdminController extends CRUDController{
     {
 
         $certificado  = $this->admin->getSubject();
+        $os = $certificado->getObrasocial();
         $pdf = new ReportPDF('P', 'mm', 'LEGAL', true, 'UTF-8', false, false, false,false);       //set document information
 
         //$pdf = $this->get('white_october.tcpdf')->create();       //set document information
@@ -211,11 +212,11 @@ final class CertificadoAdminController extends CRUDController{
                 <p align="rigth">Santiago del Estero,   {$certificado->getFecha()->format('d M Y')} </p>
                 
                 <p><strong>CERTIFICASE POR EL MINISTERIO DE SALUD DE LA PROVINCIA DE SANTIAGO DEL ESTERO</strong></p>
-                <span>RAZON SOCIAL: ………………………………………</span><br>
-                <span>C.U.I.T.N°…………………………………………………</span><br>
-                <span>DOMICILIO FISCAL: ………………………………</span><br>
-                <span>LOCALIDAD:……………………………………………</span><br>
-                <span>PROVINCIA:……………………………………………</span><br><br>
+                <span>RAZON SOCIAL: <strong>{$os->getDenomina()}</strong></span><br>
+                <span>C.U.I.T.N°: <strong>{$os->getCuit()}</strong></span><br>
+                <span>DOMICILIO FISCAL: <strong>{$os->getDomicilio()}</strong></span><br>
+                <span>LOCALIDAD: <strong>{$os->getLocalidad()}</strong></span><br>
+                <span>PROVINCIA: <strong>{$os->getLocalidad()}</strong></span><br><br>
                 
                 <strong>ADEUDA AL FISCO SEGÚN DETALLE  QUE A CONTINUACIÓN SE EXPRESA:</strong><br><br>
 EOF;
