@@ -1,0 +1,20 @@
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+{% block field %}
+    {% set tope = 0 %}
+    {% if object.estadoId.codEstado == 1 or object.estadoId.codEstado == 13 %}
+        {% if object.fechaEmision %}
+            {% set modify = '+ 60 day' %}
+            {% set dias = object.fechaEmision | date_modify(modify) %}
+            {% set tope = dias.diff(date('now')).days + 1 %}
+            {% if dias.diff(date('now')).days > 0 and dias.diff(date('now')).invert == 0 %}
+                <div class="progress">
+                    <div class="progress-bar bg-red-gradient" role="progressbar"  style="width: 100%" aria-valuenow="10" aria-valuemin="100" aria-valuemax="100" title="PLAZO VENCIDO">{{ tope }}</div>
+                </div>
+            {% else %}
+                <div class="progress">
+                    <div class="progress-bar bg-blue-gradient" role="progressbar" style="width: {{ tope }}%" aria-valuenow="10" aria-valuemin="100" aria-valuemax="100" title="TE QUEDAN {{ tope }} DIAS">{{ tope }}</div>
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% endblock %}

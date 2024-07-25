@@ -83,7 +83,13 @@ final class PagoAdmin extends AbstractAdmin
         $trueFacturas = false;
         $disabled = false;
         $sql = false;
+        $estadoId = '';
         if($this->getSubject()->getId()):
+            if($this->getSubject()->getJudicial()):
+                $estadoId = 13;
+            else:
+                $estadoId = 1;
+            endif;
             $true = true;
             $sql = $this->getSubject()->getHospitalId() ? true : false;
             if(count($this->getSubject()->getFacturas()) > 0):
@@ -105,7 +111,7 @@ final class PagoAdmin extends AbstractAdmin
             ->with('Pago')
                 #->add('id')
                 ->add('hospitalId', null, ['label' => 'Hospital'])
-                ->add('obrasSocialesCodOs', null, ['label' => 'Obra Social'])
+                ->add('obrasSocialesCodOs', null, ['label' => 'Obra Social', 'required' => true])
                 ->add('debito')
                 ->add('fecha', DatePickerType::class, Array('label'=>'Fecha Carga', 'format'=>'d/M/y'))
                 ->add('cantidad')
@@ -128,31 +134,33 @@ final class PagoAdmin extends AbstractAdmin
                         'disabled' => $disabled,
                         'label' => false,
                         'expanded' => false,
-                        'query_builder' => function (EntityRepository $er) use ($sql) : QueryBuilder {
+                        'query_builder' => function (EntityRepository $er) use ($sql,$estadoId) : QueryBuilder {
                             if(!$sql):
                             return $er->createQueryBuilder('f')
                                 ->Where('f.codOs = :osid')
                                 ->andWhere('f.pago is null')
-                                ->andWhere('f.estadoId = 1')
-                                ->orWhere('f.estadoId = 13')
+                                ->andWhere('f.estadoId = :estadoId')
+                                #->orWhere('f.estadoId = 13')
                                 ->orWhere('f.pago = :pid')
                                 ->setParameter('pid', $this->getSubject()->getId())
+                                ->setParameter('estadoId', $estadoId)
                                 ->setParameter('osid', $this->getSubject()->getObrasSocialesCodOs()->getRowId());
                             else:
                             return $er->createQueryBuilder('f')
                                 ->where('f.hospitalId = :hid')
                                 ->andWhere('f.codOs = :osid')
                                 ->andWhere('f.pago is null')
-                                ->andWhere('f.estadoId = 1')
-                                ->orWhere('f.estadoId = 13')
+                                ->andWhere('f.estadoId = :estadoId')
+                                #->orWhere('f.estadoId = 13')
                                 ->orWhere('f.pago = :pid')
+                                ->setParameter('estadoId', $estadoId)
                                 ->setParameter('hid', $this->getSubject()->getHospitalId()->getId())
                                 ->setParameter('pid', $this->getSubject()->getId())
                                 ->setParameter('osid', $this->getSubject()->getObrasSocialesCodOs()->getCodobra());
                             endif;
                         },
                         'choice_label' => function (Factura $f = null) {
-                            return null === $f ? '': $f->getDigitalPv().'-'.$f->getDigitalNum();
+                            return null === $f ? '': $f->getNumeroCompleto();
                         },
                     ])
                 ->ifEnd()

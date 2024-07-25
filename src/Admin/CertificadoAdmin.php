@@ -9,6 +9,7 @@ use App\Entity\Estado;
 use App\Entity\Factura;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -120,7 +121,15 @@ final class CertificadoAdmin extends AbstractAdmin
                                     ->addOrderBy('f.fechaEmision', 'asc');
                                 },
                         'choice_label' => function (Factura $f = null) {
-                            return null === $f ? '': $f->getNumeroCompleto().' ('.$f->getFechaEmision()->format('d/m/Y').') - $'.$f->getMontoFact();
+                            $dias = date('d-m-Y',strtotime( $f->getFechaEmision()->format('d-m-Y')."+ 60 day"));
+                            $dias =  date_diff(date_create($dias),date_create())->days;
+                            if($dias >= 60):
+                                $dias = ' =>'.$dias.' Dias';
+                            else:
+                                $dias = '';
+                            endif;
+                            #$cantd = $f->getFechaEmision()->diff(date('now'));
+                            return null === $f ? '': $f->getNumeroCompleto().' ('.$f->getFechaEmision()->format('d/m/Y').' '.$dias.') - $'.$f->getMontoFact();
                         },
                     ])
                 ->ifEnd()

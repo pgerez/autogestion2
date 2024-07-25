@@ -111,7 +111,7 @@ final class FacturaAdmin extends AbstractAdmin
             ->add('montoFact',null,['label' => 'Monto'])
             #->add('montoReal')
             #->add('codEstadofacturaFk')
-            #->add('tipoFact')
+
 
             #->add('fechaEnvio')
             #->add('fechaAcuse')
@@ -129,6 +129,7 @@ final class FacturaAdmin extends AbstractAdmin
             ->add('cae')
             #->add('cae_vto')
             ->add('estadoId', null,['label' => 'Estado'])
+            ->add('tipoFact', null, ['label' => 'Cert Deuda', 'template' => 'factura/progress.html.twig'])
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'PDF' => ['template' => 'FacturaAdmin/pdf.html.twig'],

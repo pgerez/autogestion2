@@ -311,7 +311,7 @@ EOF;
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor(PDF_AUTHOR);
         $pdf->SetTitle('Factura');
-        $pdf->setPrintHeader(true);
+        $pdf->setPrintHeader(false);
 
         // set default monospaced font
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
