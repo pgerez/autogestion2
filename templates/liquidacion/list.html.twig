@@ -30,8 +30,8 @@
                     {% endif %}
                     <tr>
                         <td>{{ item['servicio'] }}</td>
-                        <td>{{ item['suma'] }}</td>
-                            {% set total = total + item['suma'] %}
+                        <td>{{ item['suma']/2 }}</td>
+                            {% set total = total + (item['suma']/2) %}
                     </tr>
                 {% endfor %}
                     <tr>
