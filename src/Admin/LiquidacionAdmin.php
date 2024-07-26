@@ -43,8 +43,8 @@ final class LiquidacionAdmin extends AbstractAdmin
     {
         $list
             ->add('id')
-            ->add('fechaDesde')
-            ->add('fechaHasta')
+            ->add('fechaDesde', null, Array('label'=>'Desde', 'format'=>'d/m/y'))
+            ->add('fechaHasta',null, Array('label'=>'Hasta', 'format'=>'d/m/y'))
             #->add('observacion')
             #->add('obrasocial')
             #->add('hospital')
