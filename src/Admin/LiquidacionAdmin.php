@@ -24,7 +24,7 @@ final class LiquidacionAdmin extends AbstractAdmin
             $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
             $query
                 #->join($query->getRootAlias()[0].'.hospitalId', 'h', 'WITH', $query->getRootAlias()[0].'.hospitalId = h.id')
-                ->where($query->getRootAlias()[0].".fechaDesde >= '2024-01-01'");
+                ->where($query->getRootAlias()[0].".fechaDesde >= '2023-12-30'");
         endif;
 
         return $query;
