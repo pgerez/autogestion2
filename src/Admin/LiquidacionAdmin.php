@@ -17,6 +17,19 @@ use Sonata\Form\Type\DatePickerType;
 final class LiquidacionAdmin extends AbstractAdmin
 {
 
+    public function createQuery($context = 'list')
+    {
+        $query = parent::createQuery($context);
+        if (!$this->isGranted('ROLE_AUTOGESTION') and !$this->isGranted('ROLE_SUPER_ADMIN')):
+            $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
+            $query
+                #->join($query->getRootAlias()[0].'.hospitalId', 'h', 'WITH', $query->getRootAlias()[0].'.hospitalId = h.id')
+                ->where($query->getRootAlias()[0].".fechaDesde >= '2024-01-01'");
+        endif;
+
+        return $query;
+    }
+
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->add('listitems');
