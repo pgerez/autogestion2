@@ -160,7 +160,7 @@ final class PagoAdmin extends AbstractAdmin
                             endif;
                         },
                         'choice_label' => function (Factura $f = null) {
-                            return null === $f ? '': $f->getNumeroCompleto();
+                            return null === $f ? '': $f->getNumeroCompleto().' - $'.$f->getMontoFact();
                         },
                     ])
                 ->ifEnd()
