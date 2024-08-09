@@ -244,7 +244,7 @@ final class FacturaAdminController extends CRUDController{
                                 <td>'.$item->getCantidad().'</td>
                                 <td>'.$item->getPrecio().'</td>';
                     if($cuota->getLiquidacion() == null):
-                        $html .='<td><input type="text" name="monto_pago_'.$item->getId().'" id="monto_pago_'.$item->getId().'" value="0" size="5" readonly="readonly"></td>';
+                        $html .='<td><input type="text" name="monto_pago_'.$item->getId().'" id="monto_pago_'.$item->getId().'" value="'.$item->getMontoPago().'" size="5"></td>';
                     else:
                         $html .= '<td>'.$item->getMontoPago().'</td>';
                     endif;
@@ -294,7 +294,10 @@ EOF;
         $montoFact = 0;
         $uncheck = $em->getRepository(ItemPrefacturacion::class)->updateUncheckItems($idfactura, $idcuota);
         if(isset($checked)):
-            $check = $em->getRepository(ItemPrefacturacion::class)->updateCheckItems($checked, $idcuota);
+            foreach ($checked as $ch):
+                $array[$ch] = $request->get('monto_pago_'.$ch);
+            endforeach;
+            $check = $em->getRepository(ItemPrefacturacion::class)->updateCheckItems($array, $idcuota);
         endif;
         $this->addFlash('sonata_flash_success', 'Los itemas de las facturas asociadas al pago: '.$idpago.' Se guardaron exitosamenete.');
         return $this->redirectToRoute('admin_app_pago_edit',['id' => $idpago]);
