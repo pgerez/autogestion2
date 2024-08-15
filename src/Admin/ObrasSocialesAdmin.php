@@ -53,11 +53,13 @@ final class ObrasSocialesAdmin extends AbstractAdmin
             ->add('domicilio')
             ->add('codPostal')
             ->add('localidad')
+            ->add('provincia')
             ->add('telefono')
             ->add('cuit')
             ->add('codsuc')
             ->add('ctabanc')
             ->add('estado')
+            ->add('email')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
@@ -77,10 +79,12 @@ final class ObrasSocialesAdmin extends AbstractAdmin
             ->add('domicilio')
             ->add('codPostal')
             ->add('localidad')
+            ->add('provincia')
             ->add('telefono')
             ->add('codbco')
             ->add('codsuc')
             ->add('cuit')
+            ->add('email')
             ->add('estado')
             ;
     }

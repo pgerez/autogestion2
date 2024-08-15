@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ObrasSocialesRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * ObrasSociales
@@ -79,6 +80,23 @@ class ObrasSociales
      * @ORM\Column(name="codbco", type="string", length=2, nullable=true, options={"fixed"=true})
      */
     private $codbco;
+
+    /**
+     * @var string|null
+     * @Assert\Email(
+     *      message = "El email '{{ value }}' no es valido.",
+     *      checkMX = true
+     *  )
+     * @ORM\Column(name="email", type="string", length=100, nullable=true, options={"fixed"=true})
+     */
+    private $email;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="provincia", type="string", length=200, nullable=true, options={"fixed"=true})
+     */
+    private $provincia;
 
     /**
      * @var string|null
@@ -368,6 +386,30 @@ class ObrasSociales
                 $certificado->setObraSocial(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getProvincia(): ?string
+    {
+        return $this->provincia;
+    }
+
+    public function setProvincia(?string $provincia): self
+    {
+        $this->provincia = $provincia;
 
         return $this;
     }

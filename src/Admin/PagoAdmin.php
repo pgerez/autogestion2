@@ -201,6 +201,13 @@ final class PagoAdmin extends AbstractAdmin
             ;
     }
 
+    public function preRemove($object)
+    {
+        if($object->getFacturas()):
+
+        endif;
+    }
+
     public function preUpdate($object)
     {
         $f = $this->getModelManager()->getEntityManager(Factura::class);
