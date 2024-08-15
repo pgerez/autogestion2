@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Admin;
 
 
+use App\Entity\Estado;
 use App\Entity\Nomencla;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
@@ -194,7 +195,9 @@ final class FacturaAdmin extends AbstractAdmin
 
     public function prePersist($object)
     {
+        $estado = $this->getModelManager()->getEntityManager(Estado::class)->getRepository(Estado::class)->find(1);
         $object->setMontoReal($object->getMontoFact());
+        $object->setEstadoId($estado);
     }
 
 
