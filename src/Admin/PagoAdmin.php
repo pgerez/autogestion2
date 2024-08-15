@@ -204,7 +204,7 @@ final class PagoAdmin extends AbstractAdmin
     public function preRemove($object)
     {
         if($object->getFacturas()):
-
+            $value = 0;
         endif;
     }
 
