@@ -180,6 +180,9 @@ final class FacturaAdminController extends CRUDController{
         return $xsub;
     }
 
+    /**
+     * @Route(schemes={"https"})
+     */
     public function listitemsAction(Request $request) : Response
     {
         $em         = $this->getDoctrine()->getManager();
@@ -194,7 +197,7 @@ final class FacturaAdminController extends CRUDController{
         $cuota      = $em->getRepository(Cuota::class)->find($idcuota);
         $url        = $this->generateUrl(
             'admin_app_factura_saveitems',
-            array(),
+            [],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
         $html = '<form action="'.$url.'" method="post" enctype="multipart/form-data">

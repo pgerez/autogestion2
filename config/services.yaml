@@ -9,6 +9,8 @@ parameters:
     upload_dir: '%kernel.project_dir%/public/uploads/images'
     sonata.user.admin.user.class: App\Admin\UserAdmin
     container.dumper.inline_factories: true
+    router.request_context.scheme: 'https'
+    router.request_context.http_port: 443
 
 services:
     app.menu_listener:
