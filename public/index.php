@@ -25,7 +25,7 @@ $request = Request::createFromGlobals();
 // tell Symfony about your reverse proxy
 Request::setTrustedProxies(
 // the IP address (or range) of your proxy
-    ['10.1.1.5'],
+    ['10.1.1.5', '10.1.1.254' ],
 
     // trust *all* "X-Forwarded-*" headers
     Request::HEADER_X_FORWARDED_ALL
