@@ -19,7 +19,8 @@ class FormFieldItemType extends HiddenType
 
         $resolver->setRequired(array(
             'facturas',
-            'idCuota'
+            'idCuota',
+            'total'
         ));
     }
 
@@ -44,6 +45,7 @@ class FormFieldItemType extends HiddenType
 
         $builder->setAttribute("facturas", $options['facturas']);
         $builder->setAttribute("idCuota", $options['idCuota']);
+        $builder->setAttribute("total", $options['total']);
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)
@@ -51,9 +53,11 @@ class FormFieldItemType extends HiddenType
         $options = array(
             'facturas'=> $form->getConfig()->getAttribute('facturas'),
             'idCuota'=> $form->getConfig()->getAttribute('idCuota'),
+            'total'=> $form->getConfig()->getAttribute('total'),
         );
         $view->vars['facturas'] = $form->getConfig()->getAttribute('facturas');
         $view->vars['idCuota'] = $form->getConfig()->getAttribute('idCuota');
+        $view->vars['total'] = $form->getConfig()->getAttribute('total');
     }
 
 }

@@ -120,6 +120,14 @@ class Cuota
         $this->itemPrefacturacions = new ArrayCollection();
     }
 
+    public function getTotal()
+    {
+        $total = 0;
+        foreach ($this->getItemPrefacturacions() as $item):
+            $total += ($item->getPrecio()*$item->getCantidad()) - $item->getMontoPago();
+        endforeach;
+        return $total;
+    }
 
     public function getId(): ?int
     {

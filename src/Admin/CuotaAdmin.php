@@ -66,11 +66,13 @@ final class CuotaAdmin extends AbstractAdmin
     {
         $facturas   = [];
         $idCuota    = '';
+        $total      = 0;
         $id         = false;
         $disabled   = false;
         if($this->getSubject()->getId()):
             $facturas = $this->getSubject()->getPago()->getFacturas();
             $idCuota = $this->getSubject()->getId();
+            $total = $this->getSubject()->getTotal();
             $id = true;
             if($this->getSubject()->getLiquidacion()):
                 $disabled = true;
@@ -86,7 +88,7 @@ final class CuotaAdmin extends AbstractAdmin
                 ->add('fechaLiquidacion', DatePickerType::class, Array('label'=>'Liquidacion', 'format'=>'d/M/y', 'disabled' => $disabled))
                 ->add('tipopago')
                 ->add('numeroComprobante')
-                ->add('facturas', FormFieldItemType::class, ['mapped' => false, 'facturas' => $facturas, 'idCuota' => $idCuota])
+                ->add('facturas', FormFieldItemType::class, ['mapped' => false, 'facturas' => $facturas, 'idCuota' => $idCuota, 'total' => $total])
             ;
     }
 
