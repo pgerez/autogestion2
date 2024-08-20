@@ -96,6 +96,11 @@ class Estimulo
      */
     private $recibo;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $sistema = 1;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -206,6 +211,18 @@ class Estimulo
     public function setHospitalId(?Hospital $hospitalId): self
     {
         $this->hospitalId = $hospitalId;
+
+        return $this;
+    }
+
+    public function getSistema(): ?int
+    {
+        return $this->sistema;
+    }
+
+    public function setSistema(int $sistema): self
+    {
+        $this->sistema = $sistema;
 
         return $this;
     }

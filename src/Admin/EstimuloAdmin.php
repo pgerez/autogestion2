@@ -14,6 +14,20 @@ use Sonata\Form\Type\DatePickerType;
 final class EstimuloAdmin extends AbstractAdmin
 {
 
+    public function createQuery($context = 'list')
+    {
+        $query = parent::createQuery($context);
+        if (!$this->isGranted('ROLE_AUTOGESTION') and !$this->isGranted('ROLE_SUPER_ADMIN')):
+            $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
+            $query
+                #->join($query->getRootAlias()[0].'.hospitalId', 'h', 'WITH', $query->getRootAlias()[0].'.hospitalId = h.id')
+                ->where($query->getRootAlias()[0].'.hospitalId = '.$user->getHospital()->getId() )
+                ->andWhere($query->getRootAlias()[0].'.sistema = 1');
+        endif;
+
+        return $query;
+    }
+
     public function getBatchActions()
     {
         $actions = [];

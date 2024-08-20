@@ -55,7 +55,7 @@ class LiquidacionRepository extends ServiceEntityRepository
     public function findByIdLiquidacionByEstimulo($id)
     {
         return $this->createQueryBuilder('l')
-            ->select('sum(ip.cantidad * ip.precio) as suma, h.id as hospital')
+            ->select('sum((ip.cantidad * ip.precio) - ip.montoPago) as suma, h.id as hospital')
             ->join('l.cuotas', 'c')
             ->join('c.itemPrefacturacions', 'ip')
             ->join('ip.codserv_FK', 's')
