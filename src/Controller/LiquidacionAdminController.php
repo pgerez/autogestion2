@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\Estimulo;
 use App\Entity\Hospital;
 use App\Entity\Liquidacion;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,6 +45,7 @@ final class LiquidacionAdminController extends CRUDController{
             $estimulo = new Estimulo();
             $estimulo->setHospitalId($em->getRepository(Hospital::class)->findOneBy(['id' => $item['hospital']]));
             $estimulo->setMonto($item['suma']/2);
+            $estimulo->setFecha(new \DateTime());
             $estimulo->setLiquidacion($liquidacion);
             $em->persist($estimulo);
             $em->flush();

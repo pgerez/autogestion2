@@ -7,9 +7,11 @@ namespace App\Admin;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\DatePickerType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 
 final class EstimuloAdmin extends AbstractAdmin
 {
@@ -69,9 +71,9 @@ final class EstimuloAdmin extends AbstractAdmin
             #->add('detalle')
             #->add('estado')
             ->add('hospitalId')
-            ->add('fecha')
+            ->add('fecha', null, ['format' => 'd-m-y'])
             ->add('pagado', null, ['editable' => true])
-            ->add('monto')
+            ->add('monto',null, ['template' => 'EstimuloAdmin/currency.html.twig'])
             ->add('recibo')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
