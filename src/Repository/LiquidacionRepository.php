@@ -76,30 +76,34 @@ class LiquidacionRepository extends ServiceEntityRepository
     {
         if($hospitalid == null):
             return $this->createQueryBuilder('l')
-                ->select('sum(ip.cantidad * ip.precio) as suma, h.descriph as hospital, h.id as id, s.descripcionServicio as servicio')
+                ->select('sum(ip.cantidad * ip.precio) as suma, ip.montoPago as deb, o.denomina as os, h.descriph as hospital, h.id as id, s.descripcionServicio as servicio, f.digitalPv as pv, f.digitalNum as num')
                 ->join('l.cuotas', 'c')
                 ->join('c.itemPrefacturacions', 'ip')
                 ->join('ip.codserv_FK', 's')
+                ->join('ip.id_factura_FK', 'f')
                 ->join('ip.Num_Anexo', 'a')
+                ->join('a.codOs', 'o')
                 ->join('a.codH', 'h')
                 ->where('l.id = :val')
                 ->setParameter('val', $id)
-                ->groupBy('h.id','s.codserv')
+                ->groupBy('h.id','o.rowId','f.idFactura','s.codserv')
                 ->getQuery()
                 ->getScalarResult();
         else:
             return $this->createQueryBuilder('l')
-                ->select('sum(ip.cantidad * ip.precio) as suma, h.descriph as hospital, h.id as id, s.descripcionServicio as servicio')
+                ->select('sum(ip.cantidad * ip.precio) as suma, ip.montoPago as deb, o.denomina as os, h.descriph as hospital, h.id as id, s.descripcionServicio as servicio, f.digitalPv as pv, f.digitalNum as num')
                 ->join('l.cuotas', 'c')
                 ->join('c.itemPrefacturacions', 'ip')
                 ->join('ip.codserv_FK', 's')
+                ->join('ip.id_factura_FK', 'f')
                 ->join('ip.Num_Anexo', 'a')
+                ->join('a.codOs', 'o')
                 ->join('a.codH', 'h')
                 ->where('l.id = :val')
                 ->andWhere('h.id = :hosp')
                 ->setParameter('val', $id)
                 ->setParameter('hosp', $hospitalid)
-                ->groupBy('h.id','s.codserv')
+                ->groupBy('h.id','o.rowId','f.idFactura','s.codserv')
                 ->getQuery()
                 ->getScalarResult();
         endif;

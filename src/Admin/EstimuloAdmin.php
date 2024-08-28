@@ -77,7 +77,7 @@ final class EstimuloAdmin extends AbstractAdmin
             ->add('recibo')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
-                    'show' => [],
+                    'show' => ['template' => 'EstimuloAdmin/cuotas.html.twig'],
                     'edit' => [],
                     'delete' => [],
                 ],

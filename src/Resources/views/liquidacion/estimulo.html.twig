@@ -1,6 +1,6 @@
 {% if 'ROLE_SUPER_ADMIN' in app.user.roles %}
 {% if object.estimulos|length == 0 %}
-<a href="{{ path('admin_app_liquidacion_procItems', {'id': object.id}) }}" class="btn btn-sm btn-warning view_link" title="{{ 'Estimulo'|trans({}, 'SonataAdminBundle') }}">
+<a href="{{ path('admin_app_liquidacion_procItems', {'id': object.id}) }}" class="btn btn-sm btn-warning view_link" title="{{ 'Estimulo'|trans({}, 'SonataAdminBundle') }}" onclick="return confirm('Esta seguro de generar los Estimulos?')">
     <i class="glyphicon glyphicon-list"></i>
     Estimulo
 </a>
