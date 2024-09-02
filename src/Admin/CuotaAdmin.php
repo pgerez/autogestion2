@@ -19,6 +19,7 @@ use App\Form\Type\FormFieldItemType;
 
 final class CuotaAdmin extends AbstractAdmin
 {
+
     public function getBatchActions()
     {
         $actions = parent::getBatchActions();
@@ -87,7 +88,7 @@ final class CuotaAdmin extends AbstractAdmin
                 ->add('fechaPago', DatePickerType::class, Array('label'=>'Pago', 'format'=>'d/M/y', 'disabled' => $disabled))
                 ->add('fechaLiquidacion', DatePickerType::class, Array('label'=>'Liquidacion', 'format'=>'d/M/y', 'disabled' => $disabled))
                 ->add('tipopago')
-                ->add('numeroComprobante')
+                ->add('numeroComprobante', null, ['label' => 'Comprobante'])
                 ->add('facturas', FormFieldItemType::class, ['mapped' => false, 'facturas' => $facturas, 'idCuota' => $idCuota, 'total' => $total])
             ;
     }
@@ -107,15 +108,4 @@ final class CuotaAdmin extends AbstractAdmin
             ;
     }
 
-    public function preRemove($object)
-    {
-        if(count($object->getLiquidacion()) > 0):
-            $this->addFlash(
-                'sonata_flash_error',
-                'No se puede borrar'
-            );
-            return $this->redirectTo($object);
-        endif;
-        return null;
-    }
 }

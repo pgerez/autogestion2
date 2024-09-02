@@ -172,8 +172,8 @@ final class PagoAdmin extends AbstractAdmin
                     ->add('cuotas', CollectionType::class, [
                         'by_reference' => false,
                         'label' => false,
-                        #'disabled' => $disabled,
-                        #'btn_add' => $btn
+                        #'disabled' => $trueFacturas,
+                        #'btn_delete' => false
                         ],
                         [
                             'edit' => 'inline',

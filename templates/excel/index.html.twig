@@ -6,7 +6,7 @@
             {% include ['@SonataCore/FlashMessage/render.html.twig', '@SonataTwig/FlashMessage/render.html.twig'] %}
           {% endblock notice %}
   <h3>Carga de Archivo Excel</h3>
-  <form action="{{ path('process_excelos') }}" method="post" enctype="multipart/form-data">
+  <form action="{{ path('process_excel') }}" method="post" enctype="multipart/form-data">
 
         <input type="hidden" name="token" value="{{ csrf_token('upload') }}" />
 

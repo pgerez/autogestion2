@@ -63,5 +63,15 @@ class HospitalRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByCodigoh($value)
+    {
+        return $this->createQueryBuilder('h')
+            ->andWhere('h.codigoh = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
+
 
 }

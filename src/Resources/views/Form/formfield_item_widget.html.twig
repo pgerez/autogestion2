@@ -1,6 +1,6 @@
 {% block formfield_item_widget %}
     {{ block('hidden_widget') }}
-    <div id="{{ form.vars.id }}_total" style="text-align: center" class="alert-info">${{form.vars.total}}</div>
+    <div id="{{ form.vars.id }}_total" style="text-align: center; width: 100px" class="alert-info">${{form.vars.total}}</div>
     {% for factura in form.vars.facturas %}
         <a href="#" data-toggle="modal" data-target="#modal{{ form.vars.id }}" onclick="procItems{{ form.vars.id }}({{factura.idFactura}},{{factura.pago.id}},{{form.vars.idCuota}})">{{ factura.numeroCompleto }}</a><br>
     {% endfor %}
