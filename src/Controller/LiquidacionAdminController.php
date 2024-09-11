@@ -44,7 +44,7 @@ final class LiquidacionAdminController extends CRUDController{
         foreach ($items as $item):
             $estimulo = new Estimulo();
             $estimulo->setHospitalId($em->getRepository(Hospital::class)->findOneBy(['id' => $item['hospital']]));
-            $estimulo->setMonto(($item['suma']-$item['debito'])/2);
+            $estimulo->setMonto(($item['suma'])/2);
             $estimulo->setFecha(new \DateTime());
             $estimulo->setLiquidacion($liquidacion);
             $em->persist($estimulo);

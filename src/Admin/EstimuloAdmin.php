@@ -67,11 +67,11 @@ final class EstimuloAdmin extends AbstractAdmin
     {
         $list
             ->add('id')
-            ->add('numero')
+            #->add('numero')
             #->add('detalle')
             #->add('estado')
+            ->add('liquidacion')
             ->add('hospitalId')
-            ->add('fecha', null, ['format' => 'd-m-y'])
             ->add('pagado', null, ['editable' => true])
             ->add('monto',null, ['template' => 'EstimuloAdmin/currency.html.twig'])
             ->add('recibo')

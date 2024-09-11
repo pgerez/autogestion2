@@ -205,6 +205,7 @@ class FacturacionController extends AbstractController
             $object->setNumeroFactura($em->getRepository(Factura::class)->findById($hospital->getPtoVta())[0]['numeroFactura'] + 1);
             #$object->setCae('CAE-MODIFICAR');
             $object->setCae($res['CAE']);
+            $object->setCaeVto($res['CAEFchVto']);
             $em->persist($object);
             $em->flush();
             ###update id factura en items#####
@@ -233,6 +234,174 @@ class FacturacionController extends AbstractController
                 'error' => $error
             ]);
         endif;
+
+    }
+
+    /**
+     * @Route("/processNotaDeCredito", name="process_nota_de_credito")
+     * @return Response
+     */
+    public function generarNotaDeCredito(Request $request): Response
+    {
+        $fid = $request->get('id');
+        $em = $this->getDoctrine()->getManager();
+        $factura = $em->getRepository(Factura::class)->find($fid);
+
+        $afip = new Afip(array('CUIT' => $_ENV['CUIT'], 'production' => TRUE)); //Reemplazar el CUIT
+        /**
+         * Numero del punto de venta
+         **/
+        $punto_de_venta = $_ENV['PTO_VTA'];
+
+        /**
+         * Tipo de Nota de Crédito
+         **/
+        $tipo_de_nota = 13; // 13 = Nota de Crédito C
+
+        /**
+         * Número de la ultima Nota de Crédito C
+         **/
+        $last_voucher = $afip->ElectronicBilling->GetLastVoucher($punto_de_venta, $tipo_de_nota);
+
+        /**
+         * Numero del punto de venta de la Factura
+         * asociada a la Nota de Crédito
+         **/
+        $punto_factura_asociada = $_ENV['PTO_VTA'];
+
+        /**
+         * Tipo de Factura asociada a la Nota de Crédito
+         **/
+        $tipo_factura_asociada = 11; // 11 = Factura C
+
+        /**
+         * Numero de Factura asociada a la Nota de Crédito
+         **/
+        $numero_factura_asociada = $factura->getDigitalNum();
+
+        /**
+         * Concepto de la Nota de Crédito
+         *
+         * Opciones:
+         *
+         * 1 = Productos
+         * 2 = Servicios
+         * 3 = Productos y Servicios
+         **/
+        $concepto = 2;
+
+        /**
+         * Tipo de documento del comprador
+         *
+         * Opciones:
+         *
+         * 80 = CUIT
+         * 86 = CUIL
+         * 96 = DNI
+         * 99 = Consumidor Final
+         **/
+        $tipo_de_documento = 80;
+
+        /**
+         * Numero de documento del comprador (0 para consumidor final)
+         **/
+        $numero_de_documento = $_ENV['CUIT'];#cuit ministerio de salud
+
+        /**
+         * Numero de comprobante
+         **/
+        $numero_de_nota = $last_voucher+1;
+
+        /**
+         * Fecha de la Nota de Crédito en formato aaaa-mm-dd (hasta 10 dias antes y 10 dias despues)
+         **/
+        $fecha = date('Y-m-d');
+
+        /**
+         * Importe de la Nota de Crédito
+         **/
+        $importe_total = $factura->getMontoFact();
+
+        /**
+         * Los siguientes campos solo son obligatorios para los conceptos 2 y 3
+         **/
+        if ($concepto === 2 || $concepto === 3) {
+            /**
+             * Fecha de inicio de servicio en formato aaaammdd
+             **/
+            $fecha_servicio_desde = intval(date('Ymd'));
+
+            /**
+             * Fecha de fin de servicio en formato aaaammdd
+             **/
+            $fecha_servicio_hasta = intval(date('Ymd'));
+
+            /**
+             * Fecha de vencimiento del pago en formato aaaammdd
+             **/
+            $fecha_vencimiento_pago = intval(date('Ymd'));
+        }
+        else {
+            $fecha_servicio_desde = null;
+            $fecha_servicio_hasta = null;
+            $fecha_vencimiento_pago = null;
+        }
+
+
+        $data = array(
+            'CantReg' 	=> 1, // Cantidad de Notas de Crédito a registrar
+            'PtoVta' 	=> $punto_de_venta,
+            'CbteTipo' 	=> $tipo_de_nota,
+            'Concepto' 	=> $concepto,
+            'DocTipo' 	=> $tipo_de_documento,
+            'DocNro' 	=> $numero_de_documento,
+            'CbteDesde' => $numero_de_nota,
+            'CbteHasta' => $numero_de_nota,
+            'CbteFch' 	=> intval(str_replace('-', '', $fecha)),
+            'FchServDesde'  => $fecha_servicio_desde,
+            'FchServHasta'  => $fecha_servicio_hasta,
+            'FchVtoPago'    => $fecha_vencimiento_pago,
+            'ImpTotal' 	=> $importe_total,
+            'ImpTotConc'=> 0, // Importe neto no gravado
+            'ImpNeto' 	=> $importe_total, // Importe neto
+            'ImpOpEx' 	=> 0, // Importe exento al IVA
+            'ImpIVA' 	=> 0, // Importe de IVA
+            'ImpTrib' 	=> 0, //Importe total de tributos
+            'MonId' 	=> 'PES', //Tipo de moneda usada en el comprobante ('PES' = pesos argentinos)
+            'MonCotiz' 	=> 1, // Cotización de la moneda usada (1 para pesos argentinos)
+            'CbtesAsoc' => array( //Factura asociada
+                array(
+                    'Tipo' 		=> $tipo_factura_asociada,
+                    'PtoVta' 	=> $punto_factura_asociada,
+                    'Nro' 		=> $numero_factura_asociada,
+                )
+            )
+        );
+
+        /**
+         * Creamos la Nota de Crédito
+         **/
+        $estado = $em->getRepository(Estado::class)->find(1);
+        $res = $afip->ElectronicBilling->CreateVoucher($data);
+        $object = new Factura();
+        $object->setDigitalNum($afip->ElectronicBilling->GetLastVoucher($punto_de_venta, $tipo_de_nota));
+        $object->setDigitalPv($factura->getDigitalPv());
+        $object->setEstadoId($estado);
+        $object->setTipoFact('NC');
+        $object->setDigitalMonto($factura->getDigitalMonto());
+        $object->setCodOs($factura->getCodOs());
+        $object->setHospitalId($factura->getHospitalId());
+        $object->setMontoReal($factura->getMontoReal());
+        $object->setMontoFact($factura->getMontoFact());
+        $object->setPuntoVenta($factura->getPtoVta());
+        $object->setNumeroFactura($em->getRepository(Factura::class)->findById($factura->getHospitalId()->getPtoVta())[0]['numeroFactura'] + 1);
+        #$object->setCae('CAE-MODIFICAR');
+        $object->setCaeVto($res['CAEFchVto']);
+        $object->setCae($res['CAE']);
+        $em->persist($object);
+        $em->flush();
+
+
 
     }
 }

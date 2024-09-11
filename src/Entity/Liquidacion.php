@@ -112,6 +112,11 @@ class Liquidacion
         $this->estimulos = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->getFechaDesde()->format('d-m-Y').' | '.$this->getFechaHasta()->format('d-m-Y');
+    }
+
     public function getId(): ?int
     {
         return $this->id;

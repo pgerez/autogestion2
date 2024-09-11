@@ -213,13 +213,16 @@ final class PagoAdmin extends AbstractAdmin
     {
         $f = $this->getModelManager()->getEntityManager(Factura::class);
         $estado = $this->getModelManager()->getEntityManager(Estado::class)->getRepository(Estado::class)->find(3);
+        $total = 0;
         if($object->getFacturas()):
             foreach ($object->getFacturas() as $factura):
                 $factura->setEstadoId($estado);
                 $f->persist($factura);
                 $f->flush();
+                $total = $total + ($factura->getMontoFact() - $factura->getDebito());
             endforeach;
         endif;
+        $object->setMonto($total);
     }
 
 }
