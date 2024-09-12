@@ -72,7 +72,7 @@ final class ObrasSocialesAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form
-            ->add('rowId')
+            #->add('rowId')
             ->add('codobra')
             ->add('sigla')
             ->add('denomina')
