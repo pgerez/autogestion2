@@ -252,7 +252,7 @@ class Factura
     private $codigo;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="date", nullable=true)
      */
     private $cae_vto;
 
@@ -321,6 +321,28 @@ class Factura
         }
 
         return (string) $pv.'-'.$num;
+    }
+
+    public function getSoloNumeroCompleto()
+    {
+        $num = $this->getDigitalNum();
+        $long  = strlen($num);
+        $ceros = 8 - $long;
+        for ($i=1 ; $i <= $ceros ; $i++ ){
+            $num = '0'.$num;
+        }
+        return (string) $num;
+    }
+
+    public function getSoloPvCompleto()
+    {
+        $pv  = $this->getDigitalPv();
+        $long  = strlen($pv);
+        $ceros = 4 - $long;
+        for ($i=1 ; $i <= $ceros ; $i++ ){
+            $pv = '0'.$pv;
+        }
+        return (string) $pv;
     }
 
     public function getIdFactura(): ?int
@@ -682,18 +704,6 @@ class Factura
         return $this;
     }
 
-    public function getCaeVto(): ?string
-    {
-        return $this->cae_vto;
-    }
-
-    public function setCaeVto(?string $cae_vto): self
-    {
-        $this->cae_vto = $cae_vto;
-
-        return $this;
-    }
-
     public function getSistema(): ?int
     {
         return $this->sistema;
@@ -780,6 +790,18 @@ class Factura
                 $certificadoFactura->setFacturas(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCaeVto(): ?\DateTimeInterface
+    {
+        return $this->cae_vto;
+    }
+
+    public function setCaeVto(?\DateTimeInterface $cae_vto): self
+    {
+        $this->cae_vto = $cae_vto;
 
         return $this;
     }

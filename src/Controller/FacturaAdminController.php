@@ -362,7 +362,7 @@ EOF;
         border: 1.5px solid #333;
         padding: 5px;
     }
-
+ 
     .text-left {
         text-align: left;
     }
@@ -403,7 +403,7 @@ EOF;
 
     .floating-mid {
         left: 0;
-        right: 330px;
+        right: 335px;
         margin-left: auto;
         margin-right: auto;
         width: 75px;
@@ -413,19 +413,18 @@ EOF;
     }
     .floating-left {
         left: 0;
-        right: 0px;
+        right: 0;
         margin-left: 670px;
         margin-right: auto;
         width: 400px;
         position: absolute;
-        top: 1px;
+        top: 0;
         background: #fff;
         
     }
 
     .space-around {
         justify-content: space-around;
-    }
 
     .space-between {
         justify-content: space-between;
@@ -450,6 +449,7 @@ EOF;
     table {
         border-collapse: collapse;
         width: 100%;
+        ce
     }
 
     .text-20 {
@@ -464,26 +464,26 @@ EOF;
 
     <div class="flex relative">
         <div class="wrapper inline-block w50">
-            <h3 class="text-center" style="font-size:24px;margin-bottom: 3px">JOHN DOE de santiago del estero dpto rio hondo</h3>
+            <h3 class="text-center" style="font-size:24px;margin-bottom: 3px">SUBSECRETARIA DE <br> SALUD</h3>
             <p style="font-size: 13px;line-height: 1.5;margin-bottom: 0;align-self: flex-end;">
-                <b>Razón Social:</b> JOHN DOE
-                <br><b>Domicilio Comercial:</b> Not fake St. 123 - CABA
-                <br><b>Condición frente al IVA: Responsable Monotributo</b>
+                <b>Razón Social:</b> SUBSECRETARIA DE SALUD
+                <br><b>Domicilio Comercial:</b> Av Belgrano Sud 2050 - Santiago Del Estero, Santiago del Estero
+                <br><b>Condición frente al IVA: IVA Sujeto Exento</b>
                 <br>
             </p>
         </div>
         <div class="wrapper inline-block w50 floating-left">
             <h3 class="text-center" style="font-size:24px;margin-bottom: 3px;">FACTURA</h3>
             <p style="font-size: 13px;line-height: 1.5;margin-bottom: 0;">
-                <b>Punto de Venta: 00001 Comp. Nro: 00000111</b>
-                <br><b>Fecha de Emisión: 01/01/1930</b>
-                <br><b>CUIT:</b> 11234567899
-                <br><b>Ingresos Brutos:</b> exento
-                <br><b>Fecha de Inicio de Actividades:</b> 01/01/1930
+                <b>Punto de Venta: {$factura->getSoloPvCompleto()} Comp. Nro: {$factura->getSoloNumeroCompleto()}</b>
+                <br><b>Fecha de Emisión: {$factura->getFechaEmision()->format('d/m/Y')}</b>
+                <br><b>CUIT:</b> 30675068441
+                <br><b>Ingresos Brutos:</b> 30675068441
+                <br><b>Fecha de Inicio de Actividades:</b> 01/05/1994
             </p>
         </div>
         <div class="wrapper floating-mid">
-            <h3 class="no-margin text-center" style="font-size: 36px;">C</h3>
+            <h3 class="no-margin text-center" style="font-size: 38px;">C</h3>
             <h5 class="no-margin text-center">COD. 007</h5>
         </div>
     </div>
@@ -494,67 +494,74 @@ EOF;
         <span><b>Fecha de Vto. para el pago:</b> 01/01/1930</span>
     </div>
 
-    <div class="wrapper" style="margin-top: 2px;font-size: 12px;">
-        <div class="flex" style="margin-bottom: 15px;">
-            <span style="width:30%"><b>CUIT:</b> 11234567899</span>
-            <span><b>Apellido y Nombre / Razón Social:</b> JANE DOE</span>
-        </div>
-        <div class="flex" style="flex-wrap: nowrap;margin-bottom: 5px;">
-            <span style="width:70%"><b>Condición frente al IVA:</b> IVA Responsable Inscripto</span>
-            <span><b>Domicilio:</b> Totally not fake St. 123 - Capital Federal, Ciudad de Buenos Aires</span>
-        </div>
-        <div class="flex">
+    <div class="wrapper" style="margin-top: 2px">
+        <span>
+            <span style="width:20%"><b>CUIT:</b> {$factura->getCodOs()->getCuit()}</span>
+            <span><b>Apellido y Nombre / Razón Social:</b> {$factura->getCodOs()->getDenomina()}</span>
+        </span>
+        <br>
+        <span style="flex-wrap: nowrap;">
+            <span><b>Condición frente al IVA:</b> IVA Responsable Inscripto</span>
+            <span><b>Domicilio:</b> {$factura->getCodOs()->getDomicilio()}</span>
+        </span>
+        <br>
+        <span>
             <span><b>Condición de venta:</b> Otra</span>
-        </div>
+        </span>
     </div>
-
-    <table style="margin-top: 5px;">
-        <thead>
-            <tr>
-            <th class="text-left">Código</th>
-            <th class="text-left">Producto / Servicio</th>
-            <th>Cantidad</th>
-            <th>U. Medida</th>
-            <th>Precio Unit.</th>
-            <th>% Bonif</th>
-            <th>Subtotal</th>
-            <th>Alicuota IVA</th>
-            <th>Subtotal c/IVA</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="text-left">1</td>
-                <td class="text-left">Servicios Profesionales</td>
-                <td class="text-right">1,00</td>
-                <td class="text-center">otras unidades</td>
-                <td class="text-right">100,00</td>
-                <td class="text-center">0,00</td>
-                <td class="text-center">100,00</td>
-                <td class="text-right">1,21</td>
-                <td class="text-right">121,00</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="footer" style="margin-top: 300px;">
-        
-           
-        <div class="flex relative" style="margin-top: 20px;">
-            <div class="qr-container" style="padding: 0 20px 20px 20px;width: 20%;"></div>
-            <div style="padding-left: 10px;width: 45%;">
-                <h4 class="italic bold">Comprobante Autorizado</h4>
-                <p class="small italic bold" style="font-size: 9px;">Esta Administración Federal no se responsabiliza
-                    por los datos ingresados en el detalle de la operación</p>
+    <div class="wrapper" style="border:0px">
+        <table style="margin-top: 5px;">
+            <thead>
+                <tr>
+                <th class="text-left">Código</th>
+                <th class="text-left">Producto / Servicio</th>
+                <th>Cantidad</th>
+                <th>U. Medida</th>
+                <th>Precio Unit.</th>
+                <th>% Bonif</th>
+                <th>Subtotal</th>
+                <th>Alicuota IVA</th>
+                <th>Subtotal c/IVA</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-left">1</td>
+                    <td class="text-left">Texto para obras sociales</td>
+                    <td class="text-right">1,00</td>
+                    <td class="text-center">otras unidades</td>
+                    <td class="text-right">{$factura->getMontoFact()}</td>
+                    <td class="text-center">0,00</td>
+                    <td class="text-center">{$factura->getMontoFact()}</td>
+                    <td class="text-right">0,00</td>
+                    <td class="text-right">{$factura->getMontoFact()}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div  style="margin-top: 300px;">
+            <div style="width:100%; margin-top: 30px;padding-left: 500px " class="flex wrapper">
+               <table>
+               <tr>
+                   <td><span ><b>Subtotal: $</b></span></td>
+                   <td  class="text-right"  style="text-align: right; margin-right: 0;"><span ><b>0,00</b></span></td>
+               </tr>
+               <tr>
+                   <td><span class="text-right" style="text-align: left"><b>Importe Otros Tributos: $</b></span></td>
+                   <td><span class="text-right" style="text-align: right"><b>0,00</b></span></td>
+               </tr>
+               <tr>
+                   <td><span class="text-right" style=""><b>Importe Total:  $</b></span></td>
+                   <td><span class="text-right" style=""><b>{$factura->getMontoFact()}</b></span></td>
+               </tr>
+               </table> 
             </div>
-            <div class="flex" style="align-self: flex-start;width: 35%;">
+            <div class="flex" style="width:100%; height: 20%; margin-top: 10px;padding-left: 500px ">
                 <span class="text-right" style="width:50%"><b>CAE N°:</b></span><span class="text-left"
-                    style="padding-left: 10px;">12345678901234</span>
+                    style="padding-left: 10px;">{$factura->getCae()}</span><br>
                 <span class="text-right" style="width:50%"><b>Fecha de Vto. de CAE:</b></span><span class="text-left"
-                    style="padding-left: 10px;">01/01/1930</span>
+                    style="padding-left: 10px;">{$factura->getCaeVto()->format('d/m/Y')}</span>
             </div>
-            <span class="floating-mid bold">Pág 1/1</span>
-        </div>
     </div>
 </body>
 
@@ -570,7 +577,6 @@ EOF;
         #$pdf->writeHTML($html, true, false, true, false, '');
         #$pdf->Output('factura'.$factura->getDigitalNum().'-'.$factura->getDigitalPv().'pdf');
         return sfView::NONE;
-        exit;
 
     }
 
