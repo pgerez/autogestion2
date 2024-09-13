@@ -311,6 +311,7 @@ EOF;
     {
 
         $factura  = $this->admin->getSubject();
+        $fechaCae = $factura->getCaeVto() ? $factura->getCaeVto()->format('d/m/Y') : 'SIN FECHA';
         $pdf = new ReportPDF('P', 'mm', 'LEGAL', true, 'UTF-8', false, false, false,false);       //set document information
 
         //$pdf = $this->get('white_october.tcpdf')->create();       //set document information
@@ -560,7 +561,7 @@ EOF;
                 <span class="text-right" style="width:50%"><b>CAE N°:</b></span><span class="text-left"
                     style="padding-left: 10px;">{$factura->getCae()}</span><br>
                 <span class="text-right" style="width:50%"><b>Fecha de Vto. de CAE:</b></span><span class="text-left"
-                    style="padding-left: 10px;">{$factura->getCaeVto()->format('d/m/Y')}</span>
+                    style="padding-left: 10px;">{$fechaCae}</span>
             </div>
     </div>
 </body>
