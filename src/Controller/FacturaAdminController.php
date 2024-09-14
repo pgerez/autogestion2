@@ -510,19 +510,18 @@ EOF;
             <span><b>Condición de venta:</b> Otra</span>
         </span>
     </div>
-    <div class="wrapper" style="border:0px">
-        <table style="margin-top: 5px;">
+    <div class="wrapper " style="width:100%; margin-top: 10px;padding-left: 0px; border: 0px">
+        <table style="margin-left: 0px">
             <thead>
                 <tr>
                 <th class="text-left">Código</th>
-                <th class="text-left">Producto / Servicio</th>
+                <th class="text-left" style="width: 34%">Producto / Servicio</th>
                 <th>Cantidad</th>
                 <th>U. Medida</th>
                 <th>Precio Unit.</th>
                 <th>% Bonif</th>
+                <th>Imp. Bonif.</th>
                 <th>Subtotal</th>
-                <th>Alicuota IVA</th>
-                <th>Subtotal c/IVA</th>
                 </tr>
             </thead>
             <tbody>
@@ -533,8 +532,7 @@ EOF;
                     <td class="text-center">otras unidades</td>
                     <td class="text-right">{$factura->getMontoFact()}</td>
                     <td class="text-center">0,00</td>
-                    <td class="text-center">{$factura->getMontoFact()}</td>
-                    <td class="text-right">0,00</td>
+                    <td class="text-center">0,00</td>
                     <td class="text-right">{$factura->getMontoFact()}</td>
                 </tr>
             </tbody>
