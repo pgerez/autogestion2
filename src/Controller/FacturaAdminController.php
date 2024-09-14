@@ -485,14 +485,14 @@ EOF;
         </div>
         <div class="wrapper floating-mid">
             <h3 class="no-margin text-center" style="font-size: 38px;">C</h3>
-            <h5 class="no-margin text-center">COD. 007</h5>
+            <h5 class="no-margin text-center">COD. 011</h5>
         </div>
     </div>
 <br>
     <div class="wrapper flex space-around" style="margin-top: 1px;">
-        <span><b>Período Facturado Desde:</b> 01/01/1930</span>
-        <span><b>Hasta:</b> 01/01/1930</span>
-        <span><b>Fecha de Vto. para el pago:</b> 01/01/1930</span>
+        <span><b>Período Facturado Desde:</b> {$factura->getFechaEmision()->format('d/m/Y')}</span>
+        <span><b>Hasta:</b> {$factura->getFechaEmision()->format('d/m/Y')}</span>
+        <span><b>Fecha de Vto. para el pago:</b> {$factura->getFechaEmision()->format('d/m/Y')}</span>
     </div>
 
     <div class="wrapper" style="margin-top: 2px">
