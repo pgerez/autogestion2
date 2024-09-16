@@ -205,7 +205,7 @@ class FacturacionController extends AbstractController
             $object->setNumeroFactura($em->getRepository(Factura::class)->findById($hospital->getPtoVta())[0]['numeroFactura'] + 1);
             #$object->setCae('CAE-MODIFICAR');
             $object->setCae($res['CAE']);
-            $object->setCaeVto(\DateTime::createFromFormat('Ymd', $res['CAEFchVto']));
+            $object->setCaeVto(\DateTime::createFromFormat('yyyy-mm-dd', $res['CAEFchVto']));
             $em->persist($object);
             $em->flush();
             ###update id factura en items#####
@@ -397,7 +397,7 @@ class FacturacionController extends AbstractController
         $object->setPuntoVenta($factura->getPuntoVenta());
         $object->setNumeroFactura($em->getRepository(Factura::class)->findById($factura->getHospitalId()->getPtoVta())[0]['numeroFactura'] + 1);
         #$object->setCae('CAE-notacredito');
-        $object->setCaeVto(\DateTime::createFromFormat('Ymd', $res['CAEFchVto']));
+        $object->setCaeVto(\DateTime::createFromFormat('yyyy-mm-dd', $res['CAEFchVto']));
         #$object->setCaeVto(new \DateTime());
         $object->setCae($res['CAE']);
         $object->setFacturaIdFactura($factura);
