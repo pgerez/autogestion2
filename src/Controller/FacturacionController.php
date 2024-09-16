@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Estado;
 use App\Entity\ItemPrefacturacion;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat\Wizard\DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -205,7 +206,7 @@ class FacturacionController extends AbstractController
             $object->setNumeroFactura($em->getRepository(Factura::class)->findById($hospital->getPtoVta())[0]['numeroFactura'] + 1);
             #$object->setCae('CAE-MODIFICAR');
             $object->setCae($res['CAE']);
-            $object->setCaeVto(\DateTime::createFromFormat('yyyy-mm-dd', $res['CAEFchVto']));
+            $object->setCaeVto(new \DateTime($res['CAEFchVto']));
             $em->persist($object);
             $em->flush();
             ###update id factura en items#####
@@ -383,7 +384,6 @@ class FacturacionController extends AbstractController
          **/
         $estadoN = $em->getRepository(Estado::class)->find(14);
         $res = $afip->ElectronicBilling->CreateVoucher($data);
-        echo $res['CAEFchVto'];exit;
         $object = new Factura();
         $object->setDigitalNum($afip->ElectronicBilling->GetLastVoucher($punto_de_venta, $tipo_de_nota));
         #$object->setDigitalNum(1);
@@ -398,7 +398,7 @@ class FacturacionController extends AbstractController
         $object->setPuntoVenta($factura->getPuntoVenta());
         $object->setNumeroFactura($em->getRepository(Factura::class)->findById($factura->getHospitalId()->getPtoVta())[0]['numeroFactura'] + 1);
         #$object->setCae('CAE-notacredito');
-        $object->setCaeVto(\DateTime::createFromFormat('yyyy-mm-dd', $res['CAEFchVto']));
+        $object->setCaeVto(new \DateTime($res['CAEFchVto']));
         #$object->setCaeVto(new \DateTime());
         $object->setCae($res['CAE']);
         $object->setFacturaIdFactura($factura);
