@@ -1,7 +1,7 @@
 {% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
 {% block field %}
     {% set tope = 0 %}
-    {% if object.estadoId.codEstado == 1 or object.estadoId.codEstado == 13 %}
+    {% if (object.estadoId.codEstado == 1 or object.estadoId.codEstado == 13) and object.tipoFact == 'C' %}
         {% if object.fechaEmision %}
             {% set modify = '+ 60 day' %}
             {% set dias = object.fechaEmision | date_modify(modify) %}

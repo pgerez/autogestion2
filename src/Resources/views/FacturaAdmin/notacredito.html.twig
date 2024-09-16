@@ -1,0 +1,8 @@
+{% if 'ROLE_ADMIN_FACTURA_PDF' in app.user.roles %}
+        {% if object.estadoId.codEstado == 1 and object.tipoFact == 'C'%}
+                <a href="{{ path('process_nota_de_credito', {'id': object.idFactura}) }}" class="btn btn-sm btn-danger view_link" title="{{ 'Generar Nota de Credito'|trans({}, 'SonataAdminBundle') }}">
+                        <i class="glyphicon glyphicon-save-file"></i>
+                        Anular
+                </a>
+        {%  endif %}
+{% endif %}

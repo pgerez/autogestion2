@@ -381,27 +381,38 @@ class FacturacionController extends AbstractController
         /**
          * Creamos la Nota de Crédito
          **/
-        $estado = $em->getRepository(Estado::class)->find(1);
+        $estadoN = $em->getRepository(Estado::class)->find(14);
         $res = $afip->ElectronicBilling->CreateVoucher($data);
         $object = new Factura();
         $object->setDigitalNum($afip->ElectronicBilling->GetLastVoucher($punto_de_venta, $tipo_de_nota));
+        #$object->setDigitalNum(1);
         $object->setDigitalPv($factura->getDigitalPv());
-        $object->setEstadoId($estado);
+        $object->setEstadoId($estadoN);
         $object->setTipoFact('NC');
         $object->setDigitalMonto($factura->getDigitalMonto());
         $object->setCodOs($factura->getCodOs());
         $object->setHospitalId($factura->getHospitalId());
         $object->setMontoReal($factura->getMontoReal());
         $object->setMontoFact($factura->getMontoFact());
-        $object->setPuntoVenta($factura->getPtoVta());
+        $object->setPuntoVenta($factura->getPuntoVenta());
         $object->setNumeroFactura($em->getRepository(Factura::class)->findById($factura->getHospitalId()->getPtoVta())[0]['numeroFactura'] + 1);
-        #$object->setCae('CAE-MODIFICAR');
+        #$object->setCae('CAE-notacredito');
         $object->setCaeVto($res['CAEFchVto']);
+        #$object->setCaeVto(new \DateTime());
         $object->setCae($res['CAE']);
+        $object->setFacturaIdFactura($factura);
         $em->persist($object);
+        $estadoF = $em->getRepository(Estado::class)->find(6);
+        $factura->setEstadoId($estadoF);
+        $em->persist($factura);
+        ###vuelvo a estado de prefacturacion a los items
+        foreach ($factura->getItemPrefacturacions() as $i){
+            $i->setIdFacturaFK(null);
+            $em->persist($i);
+        }
         $em->flush();
-
-
+        $this->addFlash('sonata_flash_success', 'Nota de credito generada exitosamente.');
+        return $this->redirectToRoute('admin_app_factura_list');
 
     }
 }

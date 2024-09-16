@@ -312,29 +312,8 @@ EOF;
 
         $factura  = $this->admin->getSubject();
         $fechaCae = $factura->getCaeVto() ? $factura->getCaeVto()->format('d/m/Y') : 'SIN FECHA';
-        $pdf = new ReportPDF('P', 'mm', 'LEGAL', true, 'UTF-8', false, false, false,false);       //set document information
-
-        //$pdf = $this->get('white_october.tcpdf')->create();       //set document information
-
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor(PDF_AUTHOR);
-        $pdf->SetTitle('Factura');
-        $pdf->setPrintHeader(false);
-        $pdf->setPrintFooter(false);
-
-        // set default monospaced font
-        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-        //set margins
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-
-        //set auto page breaks
-        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-        #$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO); //set image scale factor
-        $pdf->AddPage();
-
+        $tipoF = $factura->getTipoFact() == 'C'? 'FACTURA' : 'NOTA DE CREDITO';
+        $texto = $factura->getTipoFact() == 'NC'? 'POR FACTURA '.$factura->getFacturaIdFactura()->getNumeroCompleto() :'TEXTO DE OBRA SACIAL';
         $html=<<<EOF
 <!DOCTYPE html>
 <html lang="en">
@@ -474,7 +453,7 @@ EOF;
             </p>
         </div>
         <div class="wrapper inline-block w50 floating-left">
-            <h3 class="text-center" style="font-size:24px;margin-bottom: 3px;">FACTURA</h3>
+            <h3 class="text-center" style="font-size:24px;margin-bottom: 3px;">{$tipoF}</h3>
             <p style="font-size: 13px;line-height: 1.5;margin-bottom: 0;">
                 <b>Punto de Venta: {$factura->getSoloPvCompleto()} Comp. Nro: {$factura->getSoloNumeroCompleto()}</b>
                 <br><b>Fecha de Emisión: {$factura->getFechaEmision()->format('d/m/Y')}</b>
@@ -527,7 +506,7 @@ EOF;
             <tbody>
                 <tr>
                     <td class="text-left">1</td>
-                    <td class="text-left">Texto para obras sociales</td>
+                    <td class="text-left">{$texto}</td>
                     <td class="text-right">1,00</td>
                     <td class="text-center">otras unidades</td>
                     <td class="text-right">{$factura->getMontoFact()}</td>
@@ -546,11 +525,11 @@ EOF;
                    <td  class="text-right"  style="text-align: right; margin-right: 0;"><span ><b>0,00</b></span></td>
                </tr>
                <tr>
-                   <td><span class="text-right" style="text-align: left"><b>Importe Otros Tributos: $</b></span></td>
+                   <td><span class="text-left" style="text-align: left"><b>Importe Otros Tributos: $</b></span></td>
                    <td><span class="text-right" style="text-align: right"><b>0,00</b></span></td>
                </tr>
                <tr>
-                   <td><span class="text-right" style=""><b>Importe Total:  $</b></span></td>
+                   <td><span class="text-left" style=""><b>Importe Total:  $</b></span></td>
                    <td><span class="text-right" style=""><b>{$factura->getMontoFact()}</b></span></td>
                </tr>
                </table> 

@@ -137,6 +137,7 @@ final class FacturaAdmin extends AbstractAdmin
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'PDF' => ['template' => 'FacturaAdmin/pdf.html.twig'],
+                    'Anular' => ['template' => 'FacturaAdmin/notacredito.html.twig'],
                     'show' => [],
                     'edit' => [],
                     #'delete' => [],
