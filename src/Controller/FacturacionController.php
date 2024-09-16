@@ -305,7 +305,7 @@ class FacturacionController extends AbstractController
         /**
          * Numero de documento del comprador (0 para consumidor final)
          **/
-        $numero_de_documento = $_ENV['CUIT'];#cuit ministerio de salud
+        $numero_de_documento = $factura->getCodOs()->getCuit();#cuit OS
 
         /**
          * Numero de comprobante
