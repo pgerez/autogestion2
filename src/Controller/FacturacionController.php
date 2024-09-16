@@ -383,6 +383,7 @@ class FacturacionController extends AbstractController
          **/
         $estadoN = $em->getRepository(Estado::class)->find(14);
         $res = $afip->ElectronicBilling->CreateVoucher($data);
+        echo $res['CAEFchVto'];exit;
         $object = new Factura();
         $object->setDigitalNum($afip->ElectronicBilling->GetLastVoucher($punto_de_venta, $tipo_de_nota));
         #$object->setDigitalNum(1);
