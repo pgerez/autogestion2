@@ -104,7 +104,7 @@ final class FacturaAdmin extends AbstractAdmin
             #->add('digitalPv',null,['label' => 'PV Digital'])
             #->add('digitalNum',null,['label' => 'Num Digital'])
             ->add('numeroCompleto', null, ['label' => 'Factura Digital'])
-            ->add('fechaEmision')
+            ->add('fechaEmision', null, ['label' => 'Emision','format'=>'d-m-y'])
             #->add('periodo')
             #->add('usuarioFacturacion')
             #->add('horaFactura')
@@ -128,7 +128,7 @@ final class FacturaAdmin extends AbstractAdmin
             #->add('digitalMonto')
             #->add('fechaEnvioSuper')
             ->add('cae')
-            ->add('cae_vto', null, ['format'=>'d/m/y'])
+            ->add('cae_vto', null, ['format'=>'d-m-y'])
             ->add('estadoId', null,['label' => 'Estado']);
         if ($this->isGranted('ROLE_AUTOGESTION') or $this->isGranted('ROLE_SUPER_ADMIN')):
             $list->add('tipoFact', null, ['label' => 'Cert Deuda', 'template' => 'factura/progress.html.twig']);
