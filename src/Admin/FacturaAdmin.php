@@ -112,8 +112,6 @@ final class FacturaAdmin extends AbstractAdmin
             ->add('montoFact',null,['label' => 'Monto'])
             #->add('montoReal')
             #->add('codEstadofacturaFk')
-
-
             #->add('fechaEnvio')
             #->add('fechaAcuse')
             #->add('pagoId')
@@ -123,7 +121,6 @@ final class FacturaAdmin extends AbstractAdmin
             #->add('itemPrefacturacions',null,['label' => 'Servicio'])
             #->add('cartaDocumento')
             #->add('fechaCarta')
-
             #->add('digitalFecha')
             #->add('digitalMonto')
             #->add('fechaEnvioSuper')

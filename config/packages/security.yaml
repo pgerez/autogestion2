@@ -18,6 +18,7 @@ security:
                 use_forward:    false
                 check_path:     /admin/login_check
                 failure_path:   null
+                default_target_path: /admin/dashboard
             logout:
                 path:           /admin/logout
                 target:         /admin/login
@@ -38,6 +39,7 @@ security:
                 use_forward:    false
                 check_path:     /login_check
                 failure_path:   null
+                default_target_path: /admin/dashboard
             logout:             true
             anonymous:          true
 

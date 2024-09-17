@@ -309,11 +309,12 @@ EOF;
 
     public function pdfAction(Request $request) : Response
     {
-
         $factura  = $this->admin->getSubject();
+        $em = $this->getDoctrine()->getManager();
+        $items = $em->getRepository(Factura::class)->findAnexoItems($factura->getIdFactura());
         $fechaCae = $factura->getCaeVto() ? $factura->getCaeVto()->format('d/m/Y') : 'SIN FECHA';
         $tipoF = $factura->getTipoFact() == 'C'? 'FACTURA' : 'NOTA DE CREDITO';
-        $texto = $factura->getTipoFact() == 'NC'? 'POR FACTURA '.$factura->getFacturaIdFactura()->getNumeroCompleto() :'TEXTO DE OBRA SACIAL';
+        $texto = $factura->getTipoFact() == 'NC'? 'POR FACTURA '.$factura->getFacturaIdFactura()->getNumeroCompleto() :'Prestaciones médicas realizadas a vuestros<br> afiliados según detalle adjunto.';
         $html=<<<EOF
 <!DOCTYPE html>
 <html lang="en">
@@ -521,8 +522,8 @@ EOF;
             <div style="width:100%; margin-top: 30px;padding-left: 500px " class="flex wrapper">
                <table>
                <tr>
-                   <td><span ><b>Subtotal: $</b></span></td>
-                   <td  class="text-right"  style="text-align: right; margin-right: 0;"><span ><b>0,00</b></span></td>
+                   <td><span class="text-left" style=""><b>Subtotal: $</b></span></td>
+                   <td  class="text-right"  style=""><span ><b>0,00</b></span></td>
                </tr>
                <tr>
                    <td><span class="text-left" style="text-align: left"><b>Importe Otros Tributos: $</b></span></td>
@@ -541,11 +542,24 @@ EOF;
                     style="padding-left: 10px;">{$fechaCae}</span>
             </div>
     </div>
-</body>
-
-</html>
+    <div style="page-break-after: always;"></div>
 EOF;
+        $html .= '
+                    <table style="margin-left: 0px">
+                    <tr>
+                        <td>Anexo</td>
+                        <td>Nombre y Apellido</td>
+                        <td>Dni</td>
+                    </tr>
+                ';
+        foreach ($items as $i){
+                $html .='<tr>'.$i['numAnexo'].'</tr>';
+                $html .='<tr>'.$i['apeynom'].'</tr>';
+                $html .='<tr>'.$i['documento'].'</tr>';
 
+
+        }
+        $html.='</table></body></html>';
 
         $html2pdf = new Html2Pdf();
         $html2pdf->writeHTML($html);

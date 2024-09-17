@@ -64,4 +64,22 @@ class FacturaRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * @return [] Returns an array of Anexo items objects
+     */
+    public function findAnexoItems($id)
+    {
+        return $this->createQueryBuilder('f')
+            ->select('a.numAnexo','a.documento','a.apeynom','i.cantidad','i.precio','s.descripcionServicio')
+            ->join('f.itemPrefacturacions', 'i')
+            ->join('i.Num_Anexo', 'a')
+            ->join('i.codserv_FK', 's')
+            ->andWhere('f.idFactura = :val')
+            ->setParameter('val', $id)
+            ->orderBy('i.Num_Anexo', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 }
