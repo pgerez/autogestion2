@@ -389,7 +389,7 @@ class FacturacionController extends AbstractController
         #$object->setDigitalNum(1);
         $object->setDigitalPv($factura->getDigitalPv());
         $object->setEstadoId($estadoN);
-        $object->setTipoFact('NC');
+        $object->setTipoFact('X');
         $object->setDigitalMonto($factura->getDigitalMonto());
         $object->setCodOs($factura->getCodOs());
         $object->setHospitalId($factura->getHospitalId());
