@@ -6,6 +6,7 @@ use App\Repository\CertificadoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Estado;
 
 /**
  * @ORM\Entity(repositoryClass=CertificadoRepository::class)
@@ -205,10 +206,18 @@ class Certificado
 
     public function removeFactura(Factura $factura): self
     {
+        global $kernel;
+        if ( 'AppCache' == get_class($kernel) )
+        {
+            $kernel = $kernel->getKernel();
+        }
+        $em = $kernel->getContainer()->get( 'doctrine.orm.entity_manager' );
+        $e = $em->getRepository(Estado::class)->find(1);
         if ($this->facturas->removeElement($factura)) {
             // set the owning side to null (unless already changed)
             if ($factura->getCertificado() === $this) {
                 $factura->setCertificado(null);
+                $factura->setEstadoId($e);
             }
         }
 
