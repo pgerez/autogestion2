@@ -1,0 +1,9 @@
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+{% block field %}
+    {% set badge = {1 : 'label label-primary', 2 : 'label label-secondary', 3 : 'label label-success', 6 : 'label label-danger', 13 : 'label label-info', 14 : 'label label-warning'} %}
+        {% if object.estadoId.codEstado == 14 %}
+            <span class="{{ badge[object.estadoId.codEstado] }}" title="{{ object.facturaIdFactura }}">{{ object.estadoId }}</span>
+        {% else %}
+            <span class="{{ badge[object.estadoId.codEstado] }}">{{ object.estadoId }}</span>
+        {% endif %}
+{% endblock %}

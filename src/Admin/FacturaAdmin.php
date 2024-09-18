@@ -126,7 +126,7 @@ final class FacturaAdmin extends AbstractAdmin
             #->add('fechaEnvioSuper')
             ->add('cae')
             ->add('cae_vto', null, ['format'=>'d-m-y'])
-            ->add('estadoId', null,['label' => 'Estado']);
+            ->add('estadoId', null,['label' => 'Estado', 'template' => 'factura/badge.html.twig']);
         if ($this->isGranted('ROLE_AUTOGESTION') or $this->isGranted('ROLE_SUPER_ADMIN')):
             $list->add('tipoFact', null, ['label' => 'Cert Deuda', 'template' => 'factura/progress.html.twig']);
         endif;
