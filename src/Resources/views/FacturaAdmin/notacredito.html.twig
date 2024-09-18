@@ -1,6 +1,6 @@
 {% if 'ROLE_ADMIN_FACTURA_PDF' in app.user.roles %}
         {% if object.estadoId.codEstado == 1 and object.tipoFact == 'C'%}
-                <a href="{{ path('process_nota_de_credito', {'id': object.idFactura}) }}" class="btn btn-sm btn-danger view_link" title="{{ 'Generar Nota de Credito'|trans({}, 'SonataAdminBundle') }}">
+                <a href="{{ path('process_nota_de_credito', {'id': object.idFactura}) }}" class="btn btn-sm btn-danger view_link" title="{{ 'Generar Nota de Credito'|trans({}, 'SonataAdminBundle') }}" onclick="return confirm('Esta seguro de Anular la Factura?')">
                         <i class="glyphicon glyphicon-list-alt"></i>
                         Anular
                 </a>
