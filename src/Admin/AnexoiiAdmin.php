@@ -127,6 +127,7 @@ final class AnexoiiAdmin extends AbstractAdmin
             #->add('codDev')
             #->add('estadoAnexo')
             ->add('fechaCarga', null, ['label' => 'Fecha de Carga', 'format'=>'d/m/y'])
+            ->add('fechaEgreso', null, ['label' => 'Fecha de Egreso', 'format'=>'d/m/y'])
             #->add('horaCarga')
             #->add('idEntrada')
             #->add('sfGuardUserId')
@@ -208,6 +209,7 @@ final class AnexoiiAdmin extends AbstractAdmin
             ], 'label' => 'Tipo', 'disabled' => $disabled])
             #->add('fechaCarga', DatePickerType::class, Array('label'=>'Carga', 'format'=>'d/M/y', 'disabled' => $disabled))
             ->add('mesFacturacion', DatePickerType::class, Array('label'=>'Fecha Anexo', 'format'=>'d/M/y', 'disabled' => $disabled))
+            ->add('fechaEgreso', DatePickerType::class, Array('label'=>'Fecha Egreso', 'format'=>'d/M/y', 'disabled' => $disabled, 'required' => false))
             ->add('itemPrefacturacions', CollectionType::class, [
                                                 'by_reference' => false,
                                                 'label' => 'Prefacturacion',

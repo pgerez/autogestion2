@@ -212,6 +212,11 @@ class Anexoii
      */
     private $fecha_documentacion;
 
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $fecha_egreso;
+
 
     public function __toString()
     {
@@ -590,6 +595,18 @@ class Anexoii
     public function setFechaDocumentacion(?\DateTimeInterface $fecha_documentacion): self
     {
         $this->fecha_documentacion = $fecha_documentacion;
+
+        return $this;
+    }
+
+    public function getFechaEgreso(): ?\DateTimeInterface
+    {
+        return $this->fecha_egreso;
+    }
+
+    public function setFechaEgreso(?\DateTimeInterface $fecha_egreso): self
+    {
+        $this->fecha_egreso = $fecha_egreso;
 
         return $this;
     }
