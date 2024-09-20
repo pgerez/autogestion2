@@ -86,14 +86,11 @@
                 data: JSON.stringify({ "hospitalId": hospitalId }),
                 dataType: "json",
                 success: function (data) {
+                    var row_id = $('#obrasocialid').find(":selected").val();
                     $('#obrasocialid').append(':option').empty();
                     $('#obrasocialid').append(data);
-                    jQuery("#spinneros").hide();
-
-                    var row_id = $('#obrasocialid').find(":selected").val();
+                    $("#spinneros").hide();
                     $("#obrasocialid").select2("val", row_id);
-
-
                 }
             });
         }
