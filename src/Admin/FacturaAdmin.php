@@ -59,6 +59,7 @@ final class FacturaAdmin extends AbstractAdmin
         $collection->add('listitems');
         $collection->add('saveitems');
         $collection->add('pdf');
+        $collection->add('selectOs');
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter): void

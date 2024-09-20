@@ -20,18 +20,21 @@
 
         <div>
             <label for="myfile">Hospital:</label>
-            <select name="hospitalid">
+            <select id="hospitalid" name="hospitalid" onchange="buscarOs(this.value)">
+                <option value="">Seleccione un Hospital</option>
                 {% for hospital in hospitals %}
                     <option value="{{hospital.id}}">{{hospital.codigoh}} - {{hospital.descriph}}</option><br />
                 {% endfor %}
             </select>
         </div>
-        <div>
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Cargando...</span>
+                </div>
+                <div>
             <label for="myfile">Obra Social:</label>
-            <select name="obrasocialid">
-                {% for os in oss %}
-                    <option value="{{os.rowId}}">({{os.codobra}}) {{os.denomina}}</option><br />
-                {% endfor %}
+            <img src='{{ asset('ajax-loader.gif' ) }}' id='spinneros' style='display: none;'>
+            <select id="obrasocialid" name="obrasocialid">
+
             </select>
         </div>
 
@@ -76,5 +79,22 @@
          </div>
         </div>
     </form>
-
+    <script type="text/javascript">
+        function buscarOs(hospitalId) {
+            jQuery("#spinneros").show();
+            $.ajax({
+                url: '{{ path('admin_app_factura_selectOs') }}',
+                method: 'POST',
+                processData: false,
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({ "hospitalId": hospitalId }),
+                dataType: "json",
+                success: function (data) {
+                    $('#obrasocialid').append(':option').empty();
+                    $('#obrasocialid').append(data);
+                    jQuery("#spinneros").hide();
+                }
+            });
+        }
+    </script>
 {% endblock %}

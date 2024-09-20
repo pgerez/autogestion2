@@ -587,6 +587,23 @@ EOF;
 
     }
 
+    public function selectOsAction(Request $request) : Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data1      = $request->getContent();
+        $data       = json_decode($data1);
+        $hospitalId = $data->hospitalId;
+        $obrasocials = $em->getRepository(ItemPrefacturacion::class)->findByFact($hospitalId);
+        $select = '';
+        if(isset($obrasocials)):
+            foreach ($obrasocials as $o):
+
+                $select .= '<option value="'.$o['id'].'">'.$o['codobra'].'-'.$o['denomina'].'</option>';
+            endforeach;
+        endif;
+        #$this->addFlash('sonata_flash_success', 'Los itemas de las facturas asociadas al pago: '.$idpago.' Se guardaron exitosamenete.');
+        return new JsonResponse($select);
+    }
 
 
 }

@@ -73,6 +73,25 @@ class ItemPrefacturacionRepository extends ServiceEntityRepository
     /**
      * @return ItemPrefacturacion[] Returns an array of ItemPrefacturacion objects
      */
+    public function findByFact($hospitalId)
+    {
+        return $this->createQueryBuilder('i')
+            ->select('os.rowId as id, os.denomina as denomina, os.codobra as codobra')
+            ->join('i.Num_Anexo', 'a')
+            ->join('a.codOs', 'os')
+            ->where('a.codH = :h')
+            ->andWhere('i.id_factura_FK is NULL')
+            ->setParameter('h', $hospitalId)
+            ->groupBy('os.codobra')
+            ->orderBy('os.codobra', 'ASC')
+            ->getQuery()
+            ->getScalarResult()
+            ;
+    }
+
+    /**
+     * @return ItemPrefacturacion[] Returns an array of ItemPrefacturacion objects
+     */
     public function findTotalItems($array)
     {
         return $this->createQueryBuilder('i')
