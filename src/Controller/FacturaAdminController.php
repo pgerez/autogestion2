@@ -595,10 +595,14 @@ EOF;
         $hospitalId = $data->hospitalId;
         $obrasocials = $em->getRepository(ItemPrefacturacion::class)->findByFact($hospitalId);
         $select = '';
+
         if(isset($obrasocials)):
             foreach ($obrasocials as $o):
-
-                $select .= '<option value="'.$o['id'].'">'.$o['codobra'].'-'.$o['denomina'].'</option>';
+                if($select == '') {
+                    $select .= '<option value="' . $o['id'] . '" selected>' . $o['codobra'] . '-' . $o['denomina'] . '</option>';
+                }else{
+                    $select .= '<option value="' . $o['id'] . '">' . $o['codobra'] . '-' . $o['denomina'] . '</option>';
+                }
             endforeach;
         endif;
         #$this->addFlash('sonata_flash_success', 'Los itemas de las facturas asociadas al pago: '.$idpago.' Se guardaron exitosamenete.');

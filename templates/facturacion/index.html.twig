@@ -27,14 +27,10 @@
                 {% endfor %}
             </select>
         </div>
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Cargando...</span>
-                </div>
-                <div>
+        <div>
             <label for="myfile">Obra Social:</label>
-            <img src='{{ asset('ajax-loader.gif' ) }}' id='spinneros' style='display: none;'>
+            <img src='{{ asset('ajax-loader.gif') }}' id='spinneros' style='display: none;'>
             <select id="obrasocialid" name="obrasocialid">
-
             </select>
         </div>
 
@@ -93,6 +89,11 @@
                     $('#obrasocialid').append(':option').empty();
                     $('#obrasocialid').append(data);
                     jQuery("#spinneros").hide();
+
+                    var row_id = $('#obrasocialid').find(":selected").val();
+                    $("#obrasocialid").select2("val", row_id);
+
+
                 }
             });
         }
