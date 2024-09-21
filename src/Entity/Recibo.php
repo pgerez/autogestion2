@@ -147,6 +147,14 @@ class Recibo
         $this->estimulos = new ArrayCollection();
 
     }
+    public function getHospital()
+    {
+        $h = false;
+        foreach ($this->estimulos as $e){
+            $h = $e->getHospitalId();
+        }
+        return $h ? $h : 'SIN HOSPITAL';
+    }
     public function __toString()
     {
         return $this->getPtoVta().'-'.$this->getNumero();

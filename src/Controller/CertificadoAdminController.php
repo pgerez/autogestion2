@@ -185,7 +185,7 @@ final class CertificadoAdminController extends CRUDController{
 
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor(PDF_AUTHOR);
-        $pdf->SetTitle('Factura');
+        $pdf->SetTitle('Certificado');
         // set default monospaced font
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 

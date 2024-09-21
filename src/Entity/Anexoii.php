@@ -37,7 +37,7 @@ class Anexoii
      *
      * @ORM\Column(name="documento", type="integer", nullable=false)
      */
-    private $documento = '0';
+    private $documento;
 
     /**
      * @var string
