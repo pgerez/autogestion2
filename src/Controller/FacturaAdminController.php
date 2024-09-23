@@ -885,7 +885,7 @@ EOF;
         $fpdf = $html2pdf->output("","S");
 
         $email = (new Email())
-            ->from('pgerez@mpfsde.gob.ar')
+            ->from($_ENV['EMAIL'])
             ->to($factura->getCodOs()->getEmail())
             //->cc('cc@example.com')
             //->bcc('bcc@example.com')
