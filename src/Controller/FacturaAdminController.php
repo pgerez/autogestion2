@@ -13,8 +13,10 @@ use Spipu\Html2Pdf\Html2Pdf;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Mailer\MailerInterface;
 
 final class FacturaAdminController extends CRUDController{
 
@@ -314,7 +316,7 @@ EOF;
         $items = $em->getRepository(Factura::class)->findAnexoItems($factura->getIdFactura());
         $fechaCae = $factura->getCaeVto() ? $factura->getCaeVto()->format('d/m/Y') : 'SIN FECHA';
         $tipoF = $factura->getTipoFact() == 'C'? 'FACTURA' : 'NOTA DE CREDITO';
-        $texto = $factura->getTipoFact() == 'NC'? 'POR FACTURA '.$factura->getFacturaIdFactura()->getNumeroCompleto() :'Prestaciones médicas realizadas a vuestros<br> afiliados según detalle adjunto.';
+        $texto = $factura->getTipoFact() == 'X'? 'POR FACTURA '.$factura->getFacturaIdFactura()->getNumeroCompleto() :'Prestaciones médicas realizadas a vuestros<br> afiliados según detalle adjunto.';
         $html=<<<EOF
 <!DOCTYPE html>
 <html lang="en">
@@ -607,6 +609,302 @@ EOF;
         endif;
         #$this->addFlash('sonata_flash_success', 'Los itemas de las facturas asociadas al pago: '.$idpago.' Se guardaron exitosamenete.');
         return new JsonResponse($select);
+    }
+
+    public function mailAction(MailerInterface $mailer): Response
+    {
+        $factura  = $this->admin->getSubject();
+        $em = $this->getDoctrine()->getManager();
+        $items = $em->getRepository(Factura::class)->findAnexoItems($factura->getIdFactura());
+        $fechaCae = $factura->getCaeVto() ? $factura->getCaeVto()->format('d/m/Y') : 'SIN FECHA';
+        $tipoF = $factura->getTipoFact() == 'C'? 'FACTURA' : 'NOTA DE CREDITO';
+        $texto = $factura->getTipoFact() == 'X'? 'POR FACTURA '.$factura->getFacturaIdFactura()->getNumeroCompleto() :'Prestaciones médicas realizadas a vuestros<br> afiliados según detalle adjunto.';
+        $html=<<<EOF
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        width: 21cm;
+        min-height: 27cm;
+        max-height: 29.7cm;
+        font-size: 13px;
+    }
+
+    .wrapper {
+        border: 1.5px solid #333;
+        padding: 5px;
+    }
+ 
+    .text-left {
+        text-align: left;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+
+    .italic {
+        font-style: italic;
+    }
+
+    .inline-block {
+        display: inline-block;
+    }
+
+    .flex {
+        display: flex;
+        flex-wrap: wrap;
+        height: auto;
+    }
+
+    .no-margin {
+        margin: 0;
+    }
+
+    .relative {
+        position: relative;
+    }
+
+    .floating-mid {
+        left: 0;
+        right: 335px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 75px;
+        position: absolute;
+        top: 1px;
+        background: #fff;
+    }
+    .floating-left {
+        left: 0;
+        right: 0;
+        margin-left: 670px;
+        margin-right: auto;
+        width: 400px;
+        position: absolute;
+        top: 0;
+        background: #fff;
+        
+    }
+
+    .space-around {
+        justify-content: space-around;
+
+    .space-between {
+        justify-content: space-between;
+    }
+
+    .w50 {
+        width: 50%;
+        height: 170px;
+    }
+
+    th {
+        border: 1px solid #000;
+        background: #ccc;
+        padding: 5px;
+    }
+
+    td {
+        padding: 5px;
+        font-size: 11px;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        ce
+    }
+
+    .text-20 {
+        font-size: 20px;
+    }
+</style>
+
+<body>
+    <div class="wrapper text-center bold text-20" style="width:100%;border-bottom: 0;">
+        ORIGINAL
+    </div>
+
+    <div class="flex relative">
+        <div class="wrapper inline-block w50">
+            <h3 class="text-center" style="font-size:24px;margin-bottom: 3px">SUBSECRETARIA DE <br> SALUD</h3>
+            <p style="font-size: 13px;line-height: 1.5;margin-bottom: 0;align-self: flex-end;">
+                <b>Razón Social:</b> SUBSECRETARIA DE SALUD
+                <br><b>Domicilio Comercial:</b> Av Belgrano Sud 2050 - Santiago Del Estero, Santiago del Estero
+                <br><b>Condición frente al IVA: IVA Sujeto Exento</b>
+                <br>
+            </p>
+        </div>
+        <div class="wrapper inline-block w50 floating-left">
+            <h3 class="text-center" style="font-size:24px;margin-bottom: 3px;">{$tipoF}</h3>
+            <p style="font-size: 13px;line-height: 1.5;margin-bottom: 0;">
+                <b>Punto de Venta: {$factura->getSoloPvCompleto()} Comp. Nro: {$factura->getSoloNumeroCompleto()}</b>
+                <br><b>Fecha de Emisión: {$factura->getFechaEmision()->format('d/m/Y')}</b>
+                <br><b>CUIT:</b> 30675068441
+                <br><b>Ingresos Brutos:</b> 30675068441
+                <br><b>Fecha de Inicio de Actividades:</b> 01/05/1994
+            </p>
+        </div>
+        <div class="wrapper floating-mid">
+            <h3 class="no-margin text-center" style="font-size: 38px;">C</h3>
+            <h5 class="no-margin text-center">COD. 011</h5>
+        </div>
+    </div>
+<br>
+    <div class="wrapper flex space-around" style="margin-top: 1px;">
+        <span><b>Período Facturado Desde:</b> {$factura->getFechaEmision()->format('d/m/Y')}</span>
+        <span><b>Hasta:</b> {$factura->getFechaEmision()->format('d/m/Y')}</span>
+        <span><b>Fecha de Vto. para el pago:</b> {$factura->getFechaEmision()->format('d/m/Y')}</span>
+    </div>
+
+    <div class="wrapper" style="margin-top: 2px">
+        <span>
+            <span style="width:20%"><b>CUIT:</b> {$factura->getCodOs()->getCuit()}</span>
+            <span><b>Apellido y Nombre / Razón Social:</b> {$factura->getCodOs()->getDenomina()}</span>
+        </span>
+        <br>
+        <span style="flex-wrap: nowrap;">
+            <span><b>Condición frente al IVA:</b> IVA Responsable Inscripto</span>
+            <span><b>Domicilio:</b> {$factura->getCodOs()->getDomicilio()}</span>
+        </span>
+        <br>
+        <span>
+            <span><b>Condición de venta:</b> Otra</span>
+        </span>
+    </div>
+    <div class="wrapper " style="width:100%; margin-top: 10px;padding-left: 0px; border: 0px">
+        <table style="margin-left: 0px">
+            <thead>
+                <tr>
+                <th class="text-left">Código</th>
+                <th class="text-left" style="width: 34%">Producto / Servicio</th>
+                <th>Cantidad</th>
+                <th>U. Medida</th>
+                <th>Precio Unit.</th>
+                <th>% Bonif</th>
+                <th>Imp. Bonif.</th>
+                <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-left">1</td>
+                    <td class="text-left">{$texto}</td>
+                    <td class="text-right">1,00</td>
+                    <td class="text-center">otras unidades</td>
+                    <td class="text-right">{$factura->getMontoFact()}</td>
+                    <td class="text-center">0,00</td>
+                    <td class="text-center">0,00</td>
+                    <td class="text-right">{$factura->getMontoFact()}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div  style="margin-top: 300px;">
+            <div style="width:100%; margin-top: 30px;padding-left: 500px " class="flex wrapper">
+               <table>
+               <tr>
+                   <td><span class="text-left" style=""><b>Subtotal: $</b></span></td>
+                   <td  class="text-right"  style=""><span ><b>0,00</b></span></td>
+               </tr>
+               <tr>
+                   <td><span class="text-left" style="text-align: left"><b>Importe Otros Tributos: $</b></span></td>
+                   <td><span class="text-right" style="text-align: right"><b>0,00</b></span></td>
+               </tr>
+               <tr>
+                   <td><span class="text-left" style=""><b>Importe Total:  $</b></span></td>
+                   <td><span class="text-right" style=""><b>{$factura->getMontoFact()}</b></span></td>
+               </tr>
+               </table> 
+            </div>
+            <div class="flex" style="width:100%; height: 20%; margin-top: 10px;padding-left: 500px ">
+                <span class="text-right" style="width:50%"><b>CAE N°:</b></span><span class="text-left"
+                    style="padding-left: 10px;">{$factura->getCae()}</span><br>
+                <span class="text-right" style="width:50%"><b>Fecha de Vto. de CAE:</b></span><span class="text-left"
+                    style="padding-left: 10px;">{$fechaCae}</span>
+            </div>
+    </div>
+    <div style="page-break-after: always;"></div>
+EOF;
+        $html .= '<div class="wrapper " style="width:100%; margin-top: 10px;padding-left: 0px; border: 0px">
+                  <table style="margin-left: 0px">
+                    <tr>
+                        <th>Anexo</th>
+                        <th>Nombre y Apellido</th>
+                        <th>Dni</th>
+                        <th>Practica</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Total</th>
+                    </tr>
+                ';
+        $t = 0;
+        foreach ($items as $i){
+
+            $html .='<tr>';
+            $html .='<td>'.$i['numAnexo'].'</td>';
+            $html .='<td>'.$i['apeynom'].'</td>';
+            $html .='<td>'.$i['documento'].'</td>';
+            $html .='<td>'.$i['descripcionServicio'].'</td>';
+            $html .='<td>'.$i['cantidad'].'</td>';
+            $html .='<td>'.$i['precio'].'</td>';
+            $html .='<td>'.$i['precio']*$i['cantidad'].'</td>';
+            $html .='</tr>';
+            $t = $t + ($i['precio']*$i['cantidad']);
+
+
+        }
+        $html .='<tr><td colspan="6" style="text-align: right"><strong>TOTAL:</strong></td>';
+        $html .='<td><strong>'.$t.'</strong></td></tr>';
+        $html.='</table></div></body></html>';
+
+        $html2pdf = new Html2Pdf();
+        $html2pdf->writeHTML($html);
+        $fpdf = $html2pdf->output("","S");
+
+        $email = (new Email())
+            ->from('pgerez@mpfsde.gob.ar')
+            ->to($factura->getCodOs()->getEmail())
+            //->cc('cc@example.com')
+            //->bcc('bcc@example.com')
+            //->replyTo('fabien@example.com')
+            //->priority(Email::PRIORITY_HIGH)
+            ->subject('Factura '.$factura)
+            ->text('Factura enviada y generada por sistema...')
+            ->html('<p>Factura generada y enviada por sistema...</p>')
+            ->attach($fpdf, 'factura'.$factura.'.pdf');
+        $mailer->send($email);
+
+        #guardo fecha de envio#####
+        $factura->setFechaEnvio(new \DateTime());
+        $em->persist($factura);
+        $em->flush();
+        #####flash exito#######
+        $this->addFlash('sonata_flash_success', 'Envio de factura '.$factura.' por Mail de manera exitosa.');
+        return $this->redirectToRoute('admin_app_factura_list');
+
     }
 
 

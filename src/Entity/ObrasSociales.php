@@ -89,7 +89,7 @@ class ObrasSociales
      *  )
      * @ORM\Column(name="email", type="string", length=100, nullable=true, options={"fixed"=true})
      */
-    private $email;
+    private $email = null;
 
     /**
      * @var string|null

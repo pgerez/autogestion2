@@ -19,19 +19,34 @@ final class EstimuloAdminController extends CRUDController{
         $idx    = $request->get('idx');
         $em     = $this->getDoctrine()->getManager();
         $total  = 0;
+        $b      = 0;
+        $stop   = false;
         foreach ($idx as $id):
             $estimulo = $em->getRepository(Estimulo::class)->find(['id' => $id]);
             $total    = $total + $estimulo->getMonto();
+            if($b == 0){
+                $hospital = $estimulo->getHospitalId();
+                $b = 1;
+            }
+            if($hospital != $estimulo->getHospitalId()){
+                $stop = true;
+            }
         endforeach;
-        $recibo   = new Recibo();
-        $recibo->setNumero($em->getRepository(Recibo::class)->findOneBy([], ['numero' => 'desc'])->getNumero()+1);
-        $recibo->setMonto($total);
-        $em->persist($recibo);
-        $em->flush();
-        $result = $em->getRepository(Estimulo::class)->updateIdRecibo($idx, $recibo->getId());
 
-        $this->addFlash('sonata_flash_success', 'Recibo creado con exito!.');
-        return $this->redirectToRoute('admin_app_recibo_list');
+        if(!$stop){
+            $recibo   = new Recibo();
+            $recibo->setNumero($em->getRepository(Recibo::class)->findOneBy([], ['numero' => 'desc'])->getNumero()+1);
+            $recibo->setMonto($total);
+            $em->persist($recibo);
+            $em->flush();
+            $result = $em->getRepository(Estimulo::class)->updateIdRecibo($idx, $recibo->getId());
+            $this->addFlash('sonata_flash_success', 'Recibo creado con exito!.');
+            return $this->redirectToRoute('admin_app_recibo_list');
+        }else{
+            $this->addFlash('sonata_flash_error', 'Debe seleccionar estimulos de un mismo Hospital!.');
+            return $this->redirectToRoute('admin_app_estimulo_list');
+        }
+
     }
 
 

@@ -99,7 +99,7 @@ class Hospital
 
     public function getDescriph(): ?string
     {
-        return $this->descriph;
+        return utf8_decode($this->descriph);
     }
 
     public function setDescriph(string $descriph): self

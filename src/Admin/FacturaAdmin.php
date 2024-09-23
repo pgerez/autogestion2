@@ -59,6 +59,7 @@ final class FacturaAdmin extends AbstractAdmin
         $collection->add('listitems');
         $collection->add('saveitems');
         $collection->add('pdf');
+        $collection->add('mail');
         $collection->add('selectOs');
     }
 
@@ -88,7 +89,7 @@ final class FacturaAdmin extends AbstractAdmin
             #->add('fechaCarta')
             ->add('digitalPv')
             ->add('digitalNum')
-            #->add('digitalFecha')
+            ->add('fechaEnvio')
             #->add('digitalMonto')
             #->add('fechaEnvioSuper')
             #->add('fechaFiscEstado')
@@ -137,7 +138,7 @@ final class FacturaAdmin extends AbstractAdmin
                     'PDF' => ['template' => 'FacturaAdmin/pdf.html.twig'],
                     'Anular' => ['template' => 'FacturaAdmin/notacredito.html.twig'],
                     'show' => [],
-                    'edit' => [],
+                    'Mail' => ['template' => 'FacturaAdmin/mail.html.twig'],
                     #'delete' => [],
                 ],
             ]);

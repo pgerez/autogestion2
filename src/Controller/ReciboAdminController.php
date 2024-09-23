@@ -39,7 +39,7 @@ final class ReciboAdminController extends CRUDController{
         #$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO); //set image scale factor
 
         $pdf->AddPage();
-        $pdf->SetFont("FreeSerif", "", 10);
+        $pdf->SetFont("FreeSerif", "", 11);
         $html = <<<EOF
                 <br>
                 <div style="text-align: right">{$recibo->getFechaEmicion()->format('d-m-Y')}<br><strong>RECIBO {$recibo}</strong></div>
@@ -57,18 +57,18 @@ final class ReciboAdminController extends CRUDController{
                 de las planillas originales de acuerdo a reglamentacion vigente (Planillas firmadas,depositos de aportes, copia de informe ) informatica y reintegro de fondos
                 </span>
                 <br><br>
-                    Liquido a Pagar: <strong>{$recibo->getMonto()}</strong>  Cheque:<strong> {$recibo->getCheque()}</strong><br>
-                    Aporte ANSES: <strong>{$recibo->getMontoAnses()}</strong>  Cheque:<strong> {$recibo->getChequeAnses()}</strong><br><br>
+                    Liquido a Pagar: <strong>{$recibo->getMonto()}</strong>  Cheque/Transferencia:<strong> {$recibo->getCheque()}</strong><br>
+                    Aporte ANSES: <strong>{$recibo->getMontoAnses()}</strong>  Cheque/Transferencia:<strong> {$recibo->getChequeAnses()}</strong><br><br>
                     
                     <div style="text-align: right">Se Entregan Planillas Originales</div><br><br>
                     <div style="text-align: right">Firma del Director y/o Responsable</div><br>
                     <div style="text-align: right">DNI:.................................</div><br><br>
-                    <div style="text-align: right">{$recibo->getHospital()}</div>
+                    <div style="text-align: left">{$recibo->getHospital()}</div>
                     
 EOF;
 
         $pdf->writeHTML($html,true, false, true, false, '');
-        $pdf->Output('recibo.pdf', 'I');
+        $pdf->Output($recibo.'-recibo.pdf', 'I');
         return sfView::NONE;
 
     }

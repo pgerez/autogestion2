@@ -10,7 +10,13 @@
 {% block sonata_admin_content %}
 
 {% block field%}
+    {% set fecha = object.fechaEnvio ? 'Factura enviada ': '' %}
     <table class="table table-bordered table-striped">
+        {% if object.fechaEnvio %}
+        <tr>
+            <th colspan="5"><div class="label label-info">Factura enviada {{ object.fechaEnvio |date("d/m/Y") }}</div></th>
+        </tr>
+        {% endif %}
         <tr>
             <th>Numero</th>
             <th>Hospital</th>
