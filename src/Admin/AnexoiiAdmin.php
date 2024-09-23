@@ -123,7 +123,7 @@ final class AnexoiiAdmin extends AbstractAdmin
                 ], 'label' => 'Tipo de Atencion'])
             #->add('parentesco')
             #->add('medicos')
-            ->add('mesFacturacion', null, ['label' => 'Fecha Anexo', 'format'=>'d/m/y'])
+            ->add('mesFacturacion')
             #->add('codDev')
             #->add('estadoAnexo')
             ->add('fechaCarga', null, ['label' => 'Fecha de Carga', 'format'=>'d/m/y'])
