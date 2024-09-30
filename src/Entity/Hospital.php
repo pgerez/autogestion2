@@ -34,7 +34,7 @@ class Hospital
     /**
      * @var string
      *
-     * @ORM\Column(name="descriph", type="string", length=50, nullable=false)
+     * @ORM\Column(name="descriph", type="string", length=150, nullable=false)
      */
     private $descriph;
 
