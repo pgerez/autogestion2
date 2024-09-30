@@ -130,6 +130,7 @@ class ItemPrefacturacionRepository extends ServiceEntityRepository
         $em = $this->getEntityManager();
         $debParcial = $this->_em->getRepository(Estado::class)->find(['id' => 5]);
         $percibida  = $this->_em->getRepository(Estado::class)->find(['id' => 3]);
+        $debTotal   = $this->_em->getRepository(Estado::class)->find(['id' => 2]);
         foreach ($array as $id => $value):
             $this->createQueryBuilder('i')
                 ->update(ItemPrefacturacion::class, 'i')
@@ -142,13 +143,14 @@ class ItemPrefacturacionRepository extends ServiceEntityRepository
                 ->getResult();
             $debitoT = $debitoT + $value;
         endforeach;
-
+        $factura = $this->_em->getRepository(Factura::class)->find(['idFactura' => $idF]);
         if($debitoT == 0):
-            $factura = $this->_em->getRepository(Factura::class)->find(['idFactura' => $idF]);
             $factura->setEstadoId($percibida);
             $factura->setDebito($debitoT);
+        elseif($debitoT == $factura->getMontoFact()):
+            $factura->setEstadoId($debTotal);
+            $factura->setDebito($debitoT);
         else:
-            $factura = $this->_em->getRepository(Factura::class)->find(['idFactura' => $idF]);
             $factura->setEstadoId($debParcial);
             $factura->setDebito($debitoT);
         endif;

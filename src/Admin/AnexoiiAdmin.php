@@ -193,7 +193,8 @@ final class AnexoiiAdmin extends AbstractAdmin
                 ->add('codH', EntityType::class,
                     ['class' => Hospital::class,
                         'query_builder' => function (EntityRepository $er) : QueryBuilder {
-                            return $er->createQueryBuilder('h');
+                            return $er->createQueryBuilder('h')
+                                        ->where('h.hpgd is null');
                         },
                         'label' => 'Hospital',
                         'disabled' => $disabled,
