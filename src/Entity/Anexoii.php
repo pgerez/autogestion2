@@ -213,7 +213,7 @@ class Anexoii
     private $fecha_documentacion;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(name="fecha_egreso", type="date", nullable=true)
      */
     private $fecha_egreso;
 
