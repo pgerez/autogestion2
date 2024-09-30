@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Cuota;
+use App\Entity\Hospital;
 use App\Entity\Liquidacion;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
@@ -49,19 +50,63 @@ class CuotaRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Cuota[] Returns an array of Cuota objects
+     * @return int cantidad de cuotas afectadas
      */
-    public function updateByFechaLiquidacion($fd,$fh,$idl)
+    public function updateByFechaLiquidacion($fd,$fh,$idl,$h)
     {
-        return $this->createQueryBuilder('c')
-            ->update(Cuota::class, 'c')
-            ->set('c.liquidacion', $idl)
-            ->andWhere('c.fechaLiquidacion between :fd and :fh')
-            ->setParameter('fd', $fd)
-            ->setParameter('fh', $fh)
-            ->getQuery()
-            ->getResult()
-            ;
+        $em = $this->getEntityManager(); // Get the Entity Manager
+        $liquidacion = $this->_em->getRepository(Liquidacion::class)->find(['id' => $idl]);
+        if($h == null):
+            $hpgd = $this->_em->getRepository(Hospital::class)->arrayHpgd();
+            // Fetch Cuotas meeting the criteria
+            #$cuotas =
+            $qb = $this->_em->createQueryBuilder();
+            $cuotas = $this->createQueryBuilder('c')
+                ->join('c.pago', 'p')
+                ->where('c.fechaLiquidacion BETWEEN (:startDate) AND (:endDate)')
+                ->andWhere('p.hospitalId not in (:hpgd) OR p.hospitalId is null')
+                ->andWhere('c.liquidacion is null')
+                ->setParameters([
+                    'startDate'  => $fd,
+                    'endDate'    => $fh,
+                    'hpgd'       => $hpgd,
+                ])
+                ->getQuery()
+                ->getResult();
+            $updatedCount = 0;
+            foreach ($cuotas as $cuota) {
+                $cuota->setLiquidacion($liquidacion); // Assuming setter exists
+                $em->persist($cuota);
+                $updatedCount++;
+            }
+
+            $em->flush(); // Perform the updates in a single flush
+            return $updatedCount;
+        else:
+
+            // Fetch Cuotas meeting the criteria
+            $cuotas = $this->createQueryBuilder('c')
+                ->join('c.pago', 'p')
+                ->where('c.fechaLiquidacion BETWEEN (:startDate) AND (:endDate)')
+                ->andWhere('c.liquidacion is null')
+                ->andWhere('p.hospitalId = (:hospitalId)')
+                ->setParameters([
+                    'startDate' => $fd,
+                    'endDate' => $fh,
+                    'hospitalId' => $h,
+                ])
+                ->getQuery()
+                ->getResult();
+            $updatedCount = 0;
+            foreach ($cuotas as $cuota) {
+                $cuota->setLiquidacion($liquidacion); // Assuming setter exists
+                $em->persist($cuota);
+                $updatedCount++;
+            }
+
+            $em->flush(); // Perform the updates in a single flush
+            return $updatedCount;
+        endif;
     }
 
     // /**

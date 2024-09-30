@@ -63,6 +63,21 @@ class HospitalRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * @return Hospital[] Returns an array of Hospital objects
+     */
+
+    public function findByNotHpgd($id)
+    {
+        return $this->createQueryBuilder('h')
+            ->andWhere('h.id = :val')
+            ->setParameter('val', $id)
+            ->orderBy('h.id', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     public function findByCodigoh($value)
     {
         return $this->createQueryBuilder('h')
@@ -70,6 +85,25 @@ class HospitalRepository extends ServiceEntityRepository
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()
+            ;
+    }
+
+    public function arrayHpgd()
+    {
+        return $this->createQueryBuilder('h')
+            ->select('h.id as id')
+            ->andWhere('h.hpgd is not null')
+            ->getQuery()
+            ->getArrayResult()
+            ;
+    }
+
+    public function findAllNotHpgd()
+    {
+        return $this->createQueryBuilder('h')
+            ->andWhere('h.hpgd is null')
+            ->getQuery()
+            ->getArrayResult()
             ;
     }
 

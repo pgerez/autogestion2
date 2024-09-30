@@ -85,7 +85,7 @@ class Cuota
      *
      * @ORM\ManyToOne(targetEntity="Liquidacion")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="liquidacion_id", referencedColumnName="id", onDelete={"restrict"})
+     *   @ORM\JoinColumn(name="liquidacion_id", referencedColumnName="id")
      * })
      */
     private $liquidacion;

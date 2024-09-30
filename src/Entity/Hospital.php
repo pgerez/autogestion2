@@ -69,15 +69,36 @@ class Hospital
      */
     private $liquidacions;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $hpgd;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $cuit;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $email;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Certificado::class, mappedBy="hospital")
+     */
+    private $certificados;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->liquidacions = new ArrayCollection();
+        $this->certificados = new ArrayCollection();
     }
 
     public function __toString()
     {
-        return (string) utf8_encode($this->getDescriph());
+        return (string) utf8_decode($this->getDescriph());
     }
 
     public function getId(): ?int
@@ -199,6 +220,72 @@ class Hospital
             // set the owning side to null (unless already changed)
             if ($liquidacion->getHospital() === $this) {
                 $liquidacion->setHospital(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getHpgd(): ?bool
+    {
+        return $this->hpgd;
+    }
+
+    public function setHpgd(?bool $hpgd): self
+    {
+        $this->hpgd = $hpgd;
+
+        return $this;
+    }
+
+    public function getCuit(): ?string
+    {
+        return $this->cuit;
+    }
+
+    public function setCuit(?string $cuit): self
+    {
+        $this->cuit = $cuit;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Certificado>
+     */
+    public function getCertificados(): Collection
+    {
+        return $this->certificados;
+    }
+
+    public function addCertificado(Certificado $certificado): self
+    {
+        if (!$this->certificados->contains($certificado)) {
+            $this->certificados[] = $certificado;
+            $certificado->setHospital($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCertificado(Certificado $certificado): self
+    {
+        if ($this->certificados->removeElement($certificado)) {
+            // set the owning side to null (unless already changed)
+            if ($certificado->getHospital() === $this) {
+                $certificado->setHospital(null);
             }
         }
 

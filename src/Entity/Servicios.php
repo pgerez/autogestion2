@@ -66,7 +66,7 @@ class Servicios
 
     public function __toString()
     {
-        return $this->getCodserv();
+        return (string)$this->getCodserv();
     }
 
     public function __construct()
@@ -81,7 +81,7 @@ class Servicios
 
     public function getDescripcionServicio(): ?string
     {
-        return utf8_encode($this->descripcionServicio);
+        return $this->descripcionServicio;
     }
 
     public function setDescripcionServicio(?string $descripcionServicio): self

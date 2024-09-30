@@ -1,3 +1,5 @@
 framework:
     mailer:
-        dsn: '%env(MAILER_DSN)%'
+        transports:
+            main: '%env(MAILER_DSN)%'
+            10860352193408: '%env(MAILER_DSN_10860352193408)%'

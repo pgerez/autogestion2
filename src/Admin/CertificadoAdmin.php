@@ -7,6 +7,7 @@ namespace App\Admin;
 use App\Entity\Certificado;
 use App\Entity\Estado;
 use App\Entity\Factura;
+use App\Entity\Hospital;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
@@ -19,10 +20,30 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\CollectionType;
 use Sonata\Form\Type\DatePickerType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 final class CertificadoAdmin extends AbstractAdmin
 {
+
+    public function createQuery($context = 'list')
+    {
+        $arrayHpgd = $this->getModelManager()->getEntityManager(Hospital::class)->getRepository(Hospital::class)->arrayHpgd();
+        $query = parent::createQuery($context);
+        $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
+        if ($this->isGranted('ROLE_AUTOGESTION')):
+            $query
+                #->leftJoin($query->getRootAlias()[0].'.hospital', 'h', 'WITH', 'h.hpgd is null')
+                ->where($query->getRootAlias()[0].".hospital not in (:array)")
+                ->orWhere($query->getRootAlias()[0].".hospital is null")
+                ->setParameter('array',$arrayHpgd);
+        elseif ($this->isGranted('ROLE_HPGD')):
+            $query
+                #->join($query->getRootAlias()[0].'.hospitalId', 'h', 'WITH', $query->getRootAlias()[0].'.hospitalId = h.id')
+                ->where($query->getRootAlias()[0].".hospital = ".$user->getHospital()->getId());
+        endif;
+        return $query;
+    }
 
     protected function configureRoutes(RouteCollection $collection)
     {
@@ -61,9 +82,10 @@ final class CertificadoAdmin extends AbstractAdmin
 
     protected function configureFormFields(FormMapper $form): void
     {
-        $true = false;
+
+        $true     = false;
         $disabled = false;
-        $id = '';
+        $id       = '';
         if($this->getSubject()->getId()):
             $true = true;
             $id = $this->getSubject()->getId();
@@ -73,6 +95,7 @@ final class CertificadoAdmin extends AbstractAdmin
                 $disabled = true;
             endif;
         endif;
+
         $form
             ->with('Certificado', ['class' => 'col-md-4', 'box_class' => 'box box-solid box-primary'])
             ->end()
@@ -82,6 +105,7 @@ final class CertificadoAdmin extends AbstractAdmin
 
         $form
             ->with('Certificado')
+                #->add('hospital', HiddenType::class)
                 ->add('obraSocial', null, ['required' => true])
                 ->add('fecha',DatePickerType::class, Array('label'=>'Fecha', 'format'=>'d/M/y'))
                 ->add('fecha_carga', DatePickerType::class, Array('label'=>'Fecha Carga', 'format'=>'d/M/y'))
@@ -112,13 +136,29 @@ final class CertificadoAdmin extends AbstractAdmin
                         'label' => false,
                         'expanded' => false,
                         'query_builder' => function (EntityRepository $er) use ($id) : QueryBuilder {
-                                return $er->createQueryBuilder('f')
-                                    ->Where('f.codOs = :osid')
-                                    ->andWhere('f.estadoId = 1')
-                                    ->orWhere('f.certificado = :idc')
-                                    ->setParameter('osid', $this->getSubject()->getObraSocial()->getRowId())
-                                    ->setParameter('idc' , $id)
-                                    ->addOrderBy('f.fechaEmision', 'asc');
+                                $sql = $this->getSubject()->getHospital() ? true : false;
+                                $arrayHpgd      = $this->getModelManager()->getEntityManager(Hospital::class)->getRepository(Hospital::class)->arrayHpgd();
+                                if(!$sql):
+                                    return $er->createQueryBuilder('f')
+                                        ->Where('f.codOs = :osid')
+                                        ->andWhere('f.hospitalId not in (:array)')
+                                        ->andWhere('f.estadoId = 1')
+                                        ->orWhere('f.certificado = :idc')
+                                        ->setParameter('osid', $this->getSubject()->getObraSocial()->getRowId())
+                                        ->setParameter('idc' , $id)
+                                        ->setParameter('array',$arrayHpgd)
+                                        ->addOrderBy('f.fechaEmision', 'asc');
+                                else:
+                                    return $er->createQueryBuilder('f')
+                                        ->Where('f.codOs = :osid')
+                                        ->andWhere('f.hospitalId = :hid')
+                                        ->andWhere('f.estadoId = 1')
+                                        ->orWhere('f.certificado = :idc')
+                                        ->setParameter('osid', $this->getSubject()->getObraSocial()->getRowId())
+                                        ->setParameter('idc' , $id)
+                                        ->setParameter('hid', $this->getSubject()->getHospital()->getId())
+                                        ->addOrderBy('f.fechaEmision', 'asc');
+                                endif;
                                 },
                         'choice_label' => function (Factura $f = null) {
                             $dias = date('d-m-Y',strtotime( $f->getFechaEmision()->format('d-m-Y')."+ 60 day"));
@@ -147,6 +187,14 @@ final class CertificadoAdmin extends AbstractAdmin
             ->add('punto_venta')
             ->add('numero')
             ;
+    }
+
+    public function prePersist($object)
+    {
+        $user     = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
+        if($this->isGranted('ROLE_HPGD') and $user->getHospital()):
+            $object->setHospital($user->getHospital());
+        endif;
     }
 
     public function postPersist($object)

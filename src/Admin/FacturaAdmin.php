@@ -42,15 +42,27 @@ final class FacturaAdmin extends AbstractAdmin
 
     public function createQuery($context = 'list')
     {
+        $arrayHpgd = $this->getModelManager()->getEntityManager(Hospital::class)->getRepository(Hospital::class)->arrayHpgd();
         $query = parent::createQuery($context);
-        if (!$this->isGranted('ROLE_AUTOGESTION') and !$this->isGranted('ROLE_SUPER_ADMIN')):
-            $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
+        $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
+        if ($this->isGranted('ROLE_AUTOGESTION')):
+            $query
+                #->leftJoin($query->getRootAlias()[0].'.hospital', 'h', 'WITH', 'h.hpgd is null')
+                ->where($query->getRootAlias()[0].".hospitalId not in (:array)")
+                ->orWhere($query->getRootAlias()[0].".hospitalId is null")
+                ->setParameter('array',$arrayHpgd);
+        elseif ($this->isGranted('ROLE_HPGD')):
             $query
                 #->join($query->getRootAlias()[0].'.hospitalId', 'h', 'WITH', $query->getRootAlias()[0].'.hospitalId = h.id')
-                ->where($query->getRootAlias()[0].'.hospitalId = '.$user->getHospital()->getId() )
-                ->andWhere($query->getRootAlias()[0].'.sistema = 1');
+                ->where($query->getRootAlias()[0].".hospitalId = ".$user->getHospital()->getId());
+        else:
+            $query
+                #->Where($query->getRootAlias()[0].".hospital  ".$user->getHospital()->getId())
+                ->where($query->getRootAlias()[0].".hospitalId not in (:array)")
+                ->andWhere($query->getRootAlias()[0].".fechaDesde >= '2023-12-30'")
+                ->orWhere($query->getRootAlias()[0].".hospitalId is null")
+                ->setParameter('array',$arrayHpgd);
         endif;
-        
         return $query;
     }
 
@@ -101,8 +113,8 @@ final class FacturaAdmin extends AbstractAdmin
         $list
             ->add('idFactura')
             #->add('codigo')
-            ->add('puntoVenta',null,['label' => 'PV OP'])
-            ->add('numeroFactura',null,['label' => 'Num OP'])
+            #->add('puntoVenta',null,['label' => 'PV OP'])
+            #->add('numeroFactura',null,['label' => 'Num OP'])
             #->add('digitalPv',null,['label' => 'PV Digital'])
             #->add('digitalNum',null,['label' => 'Num Digital'])
             ->add('numeroCompleto', null, ['label' => 'Factura Digital'])
@@ -117,7 +129,7 @@ final class FacturaAdmin extends AbstractAdmin
             #->add('fechaEnvio')
             #->add('fechaAcuse')
             #->add('pagoId')
-            #->add('debito')
+            ->add('debito')
             #->add('tipoDebitoId')
             ->add('hospitalId',null,['label' => 'Hospital'])
             #->add('itemPrefacturacions',null,['label' => 'Servicio'])
@@ -129,7 +141,7 @@ final class FacturaAdmin extends AbstractAdmin
             ->add('cae')
             ->add('cae_vto', null, ['format'=>'d-m-y'])
             ->add('estadoId', null,['label' => 'Estado', 'template' => 'factura/badge.html.twig']);
-        if ($this->isGranted('ROLE_AUTOGESTION') or $this->isGranted('ROLE_SUPER_ADMIN')):
+        if ($this->isGranted('ROLE_AUTOGESTION') or $this->isGranted('ROLE_SUPER_ADMIN') or $this->isGranted('ROLE_HPGD') ):
             $list->add('tipoFact', null, ['label' => 'Cert Deuda', 'template' => 'factura/progress.html.twig']);
         endif;
         $list
@@ -216,7 +228,8 @@ final class FacturaAdmin extends AbstractAdmin
          $nomenclaRepo = $this->getModelManager()->getEntityManager(Nomencla::class)->getRepository(Nomencla::class);
          
          $object->setPuntoVenta($object->getHospitalId()->getPtoVta());
-         $object->setNumeroFactura($facturaRepo->findById($object->getHospitalId()->getPtoVta())[0]['numeroFactura'] + 1);
+         $nfactura = $facturaRepo->findById($object->getHospitalId()->getPtoVta()) ? $facturaRepo->findById($object->getHospitalId()->getPtoVta())[0]['numeroFactura'] + 1 : 1;
+         $object->setNumeroFactura($nfactura);
 
          $anexoii = new \App\Entity\Anexoii();
          $anexoii->setTipoDoc('DNI');

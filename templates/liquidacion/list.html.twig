@@ -2,6 +2,28 @@
 {% block title %}Facturacion{% endblock %}
 
 {% block sonata_admin_content %}
+    {# check each types #}
+    {% for type in sonata_flashmessages_types() %}
+
+        {# get messages from current type #}
+        {% set messages = sonata_flashmessages_get(type) %}
+
+        {# display flash message, sonata_flashmessages_class will return define CSS class #}
+        {% for message in messages %}
+            <div class="alert alert-{{ sonata_flashmessages_class(type, 'default') }} alert-dismissable">
+                <button
+                        type="button"
+                        class="close"
+                        data-dismiss="alert"
+                        aria-hidden="true"
+                        aria-label="{{ 'message_close'|trans({}, 'SonataTwigBundle') }}">
+                    &times;
+                </button>
+                {{ message|raw }}
+            </div>
+        {% endfor %}
+
+    {% endfor %}
     <div class="box box-primary">
         <div class="box-body table-responsive no-padding">
             <table class="table table-bordered table-striped table-hover sonata-ba-list">
@@ -27,8 +49,7 @@
                             </tr>
                         {% endif %}
                         {% set t = 0 %}
-                        <thead><tr><th colspan="6" style="text-align: center">{{ item['id'] }}-{{ item['hospital'] }}</th></tr></thead>
-                        <thead>
+                        <tr><th colspan="6" style="text-align: center">{{ item['id'] }}-{{ item['hospital'] }}</th></tr>
                         <tr>
                             <th>OS</th>
                             <th>Servicio</th>
@@ -37,10 +58,9 @@
                             <th>Debito</th>
                             <th>Neto</th>
                         </tr>
-                        </thead>
                         {% set header = item['hospital'] %}
                     {% endif %}
-                    {% if 'ROLE_SUPER_ADMIN' in app.user.roles %}
+                    {% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_HPGD' in app.user.roles or 'ROLE_AUTOGESTION' in app.user.roles%}
                         <tr>
                             <td>{{ item['os'] }}</td>
                             <td>{{ item['servicio'] }}</td>

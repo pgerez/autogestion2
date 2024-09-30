@@ -76,7 +76,7 @@ class LiquidacionRepository extends ServiceEntityRepository
     {
         if($hospitalid == null):
             return $this->createQueryBuilder('l')
-                ->select('sum(ip.cantidad * ip.precio) as suma, ip.montoPago as deb, o.denomina as os, h.descriph as hospital, h.id as id, s.descripcionServicio as servicio, f.digitalPv as pv, f.digitalNum as num')
+                ->select('sum(ip.cantidad * ip.precio) as suma, sum(ip.montoPago) as deb, o.denomina as os, h.descriph as hospital, h.id as id, s.descripcionServicio as servicio, f.digitalPv as pv, f.digitalNum as num')
                 ->join('l.cuotas', 'c')
                 ->join('c.itemPrefacturacions', 'ip')
                 ->join('ip.codserv_FK', 's')
@@ -91,7 +91,7 @@ class LiquidacionRepository extends ServiceEntityRepository
                 ->getScalarResult();
         else:
             return $this->createQueryBuilder('l')
-                ->select('sum(ip.cantidad * ip.precio) as suma, ip.montoPago as deb, o.denomina as os, h.descriph as hospital, h.id as id, s.descripcionServicio as servicio, f.digitalPv as pv, f.digitalNum as num')
+                ->select('sum(ip.cantidad * ip.precio) as suma, sum(ip.montoPago) as deb, o.denomina as os, h.descriph as hospital, h.id as id, s.descripcionServicio as servicio, f.digitalPv as pv, f.digitalNum as num')
                 ->join('l.cuotas', 'c')
                 ->join('c.itemPrefacturacions', 'ip')
                 ->join('ip.codserv_FK', 's')

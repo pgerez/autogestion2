@@ -23,7 +23,12 @@ class FacturacionController extends AbstractController
     public function index(): Response
     {
         $em = $this->getDoctrine()->getManager();
-        $hospitals = $em->getRepository('App\Entity\Hospital')->findAll();
+        if($this->isGranted('ROLE_HPGD') and !$this->isGranted('ROLE_AUTOGESTION')) {
+            $hospital = $this->getUser()->getHospital();
+            $hospitals = $em->getRepository('App\Entity\Hospital')->findByHpgd($hospital->getId());
+        }else{
+            $hospitals = $em->getRepository('App\Entity\Hospital')->findAllNotHpgd();
+        }
         $oss = $em->getRepository('App\Entity\ObrasSociales')->findAll();
 
         return $this->render('facturacion/index.html.twig', [
@@ -77,11 +82,19 @@ class FacturacionController extends AbstractController
             $error = 0;
             ##calculo total a facturar#####
             $montoFact = $em->getRepository(ItemPrefacturacion::class)->findTotalItems($check);
-            $afip = new Afip(array('CUIT' => $_ENV['CUIT'], 'production' => TRUE)); //Reemplazar el CUIT
+            if($this->isGranted('ROLE_HPGD') and !$this->isGranted('ROLE_SUPER_ADMIN')){
+                $pv   = $this->getUser()->getHospital()->getPtoVta();
+                $cuit = $this->getUser()->getHospital()->getCuit();
+            }else{
+                $pv   = $_ENV['PTO_VTA'];
+                $cuit = $_ENV['CUIT'];
+            }
+
+            $afip = new Afip(array('CUIT' => $cuit, 'production' => TRUE)); //Reemplazar el CUIT
             /**
              * Numero del punto de venta
              **/
-            $punto_de_venta = $_ENV['PTO_VTA'];
+            $punto_de_venta = $pv;
 
             /**
              * Tipo de factura

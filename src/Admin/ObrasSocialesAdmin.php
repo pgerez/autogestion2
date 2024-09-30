@@ -40,6 +40,7 @@ final class ObrasSocialesAdmin extends AbstractAdmin
             ->add('codsuc')
             ->add('ctabanc')
             ->add('estado')
+            ->add('email')
             ;
     }
 
@@ -105,6 +106,7 @@ final class ObrasSocialesAdmin extends AbstractAdmin
             ->add('ctabanc')
             ->add('cuit')
             ->add('estado')
+            ->add('email')
             ;
     }
 }

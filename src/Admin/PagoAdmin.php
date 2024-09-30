@@ -6,6 +6,7 @@ namespace App\Admin;
 
 use App\Entity\Estado;
 use App\Entity\Factura;
+use App\Entity\Hospital;
 use App\Entity\ObrasSociales;
 use Doctrine\ORM\Mapping\PreRemove;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -34,6 +35,32 @@ final class PagoAdmin extends AbstractAdmin
         unset($actions['delete']);
 
         return $actions;
+    }
+
+    public function createQuery($context = 'list')
+    {
+        $arrayHpgd = $this->getModelManager()->getEntityManager(Hospital::class)->getRepository(Hospital::class)->arrayHpgd();
+        $query = parent::createQuery($context);
+        $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
+        if ($this->isGranted('ROLE_AUTOGESTION')):
+            $query
+                #->leftJoin($query->getRootAlias()[0].'.hospital', 'h', 'WITH', 'h.hpgd is null')
+                ->where($query->getRootAlias()[0].".hospitalId not in (:array)")
+                ->orWhere($query->getRootAlias()[0].".hospitalId is null")
+                ->setParameter('array',$arrayHpgd);
+        elseif ($this->isGranted('ROLE_HPGD')):
+            $query
+                #->join($query->getRootAlias()[0].'.hospitalId', 'h', 'WITH', $query->getRootAlias()[0].'.hospitalId = h.id')
+                ->where($query->getRootAlias()[0].".hospitalId = ".$user->getHospital()->getId());
+        else:
+            $query
+                #->Where($query->getRootAlias()[0].".hospital  ".$user->getHospital()->getId())
+                ->where($query->getRootAlias()[0].".hospitalId not in (:array)")
+                ->andWhere($query->getRootAlias()[0].".fechaDesde >= '2023-12-30'")
+                ->orWhere($query->getRootAlias()[0].".hospitalId is null")
+                ->setParameter('array',$arrayHpgd);
+        endif;
+        return $query;
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
@@ -67,7 +94,7 @@ final class PagoAdmin extends AbstractAdmin
             ->add('monto')
             ->add('isSuperIntendencia')
             ->add('notaCredito')
-            ->add('hospitalId')
+            ->add('hospitalId', null, ['label' => 'Hospital'])
             ->add('descripcion')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
@@ -80,12 +107,16 @@ final class PagoAdmin extends AbstractAdmin
 
     protected function configureFormFields(FormMapper $form): void
     {
-        $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
-        $true = false;
-        $trueFacturas = false;
-        $disabled = false;
-        $sql = false;
-        $estadoId = '';
+        $user           = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
+        $true           = false;
+        $trueFacturas   = false;
+        $disabled       = false;
+        $sql            = false;
+        $sqlh           = false;
+        $estadoId       = '';
+        $id             = null;
+        $required       = false;
+        $arrayHpgd      = $this->getModelManager()->getEntityManager(Hospital::class)->getRepository(Hospital::class)->arrayHpgd();
         if($this->getSubject()->getId()):
             if($this->getSubject()->getJudicial()):
                 $estadoId = 13;
@@ -101,6 +132,12 @@ final class PagoAdmin extends AbstractAdmin
                 $disabled = true;
             endif;
         endif;
+
+        if($this->isGranted('ROLE_HPGD') and !$this->isGranted('ROLE_SUPER_ADMIN')){
+            $id = $user->getHospital()->getId();
+            $sqlh= true;
+        }
+
         $form
             ->with('Pago', ['class' => 'col-md-4', 'box_class' => 'box box-solid box-primary'])
             ->end()
@@ -112,8 +149,38 @@ final class PagoAdmin extends AbstractAdmin
         $form
             ->with('Pago')
                 #->add('id')
-                ->add('hospitalId', null, ['label' => 'Hospital'])
-                ->add('obrasSocialesCodOs', null, ['label' => 'Obra Social', 'required' => true])
+                ->ifTrue($sqlh)
+                    ->add('hospitalId', EntityType::class, [
+                        'class' => Hospital::class,
+                        'choice_value' => 'id',
+                        'by_reference' => false,
+                        'multiple' => false,
+                        'disabled' => $disabled,
+                        'expanded' => false,
+                        'required' => true,
+                        'query_builder' => function (EntityRepository $er) use ($id) : QueryBuilder {
+                            return $er->createQueryBuilder('h')
+                                ->Where('h.id = :id')
+                                ->setParameter('id', $id);
+                        },
+                    ])
+                ->ifEnd()
+                ->ifFalse($sqlh)
+                    ->add('hospitalId', EntityType::class, [
+                        'class' => Hospital::class,
+                        'choice_value' => 'id',
+                        'by_reference' => false,
+                        'multiple' => false,
+                        'disabled' => $disabled,
+                        'expanded' => false,
+                        'required' => false,
+                        'query_builder' => function (EntityRepository $er) : QueryBuilder {
+                            return $er->createQueryBuilder('h')
+                                ->Where('h.hpgd is null');
+                        },
+                    ])
+                ->ifEnd()
+                ->add('obrasSocialesCodOs', null, ['label' => 'Obra Social', 'required' => true, 'disabled' => $disabled])
                 ->add('debito')
                 ->add('fecha', DatePickerType::class, Array('label'=>'Fecha Carga', 'format'=>'d/M/y'))
                 ->add('cantidad')
@@ -136,15 +203,17 @@ final class PagoAdmin extends AbstractAdmin
                         'disabled' => $disabled,
                         'label' => false,
                         'expanded' => false,
-                        'query_builder' => function (EntityRepository $er) use ($sql,$estadoId) : QueryBuilder {
+                        'query_builder' => function (EntityRepository $er) use ($sql,$estadoId,$arrayHpgd) : QueryBuilder {
                             if(!$sql):
                             return $er->createQueryBuilder('f')
                                 ->Where('f.codOs = :osid')
                                 ->andWhere('f.pago is null')
                                 ->andWhere('f.estadoId = :estadoId')
+                                ->andWhere('f.hospitalId not in (:array)')
                                 #->orWhere('f.estadoId = 13')
                                 ->orWhere('f.pago = :pid')
                                 ->setParameter('pid', $this->getSubject()->getId())
+                                ->setParameter('array',$arrayHpgd)
                                 ->setParameter('estadoId', $estadoId)
                                 ->setParameter('osid', $this->getSubject()->getObrasSocialesCodOs()->getRowId());
                             else:
@@ -158,7 +227,7 @@ final class PagoAdmin extends AbstractAdmin
                                 ->setParameter('estadoId', $estadoId)
                                 ->setParameter('hid', $this->getSubject()->getHospitalId()->getId())
                                 ->setParameter('pid', $this->getSubject()->getId())
-                                ->setParameter('osid', $this->getSubject()->getObrasSocialesCodOs()->getCodobra());
+                                ->setParameter('osid', $this->getSubject()->getObrasSocialesCodOs()->getRowId());
                             endif;
                         },
                         'choice_label' => function (Factura $f = null) {
@@ -213,16 +282,22 @@ final class PagoAdmin extends AbstractAdmin
     {
         $f = $this->getModelManager()->getEntityManager(Factura::class);
         $estado = $this->getModelManager()->getEntityManager(Estado::class)->getRepository(Estado::class)->find(3);
-        $total = 0;
+        $total  = 0;
+        $debito = 0;
         if($object->getFacturas()):
             foreach ($object->getFacturas() as $factura):
                 $factura->setEstadoId($estado);
+                foreach ($factura->getItemPrefacturacions() as $item):
+                    $total = $total + ($item->getPrecio()*$item->getCantidad());
+                    $debito = $debito + $item->getMontoPago();
+                endforeach;
+                $factura->setDebito($debito);
                 $f->persist($factura);
                 $f->flush();
-                $total = $total + ($factura->getMontoFact() - $factura->getDebito());
             endforeach;
         endif;
         $object->setMonto($total);
+        $object->setDebito($debito);
     }
 
 }

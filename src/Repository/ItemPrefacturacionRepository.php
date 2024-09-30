@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Anexoii;
+use App\Entity\Estado;
+use App\Entity\Factura;
 use App\Entity\ItemPrefacturacion;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
@@ -122,8 +124,12 @@ class ItemPrefacturacionRepository extends ServiceEntityRepository
     /**
      *
      */
-    public function updateCheckItems($array, $idc)
+    public function updateCheckItems($array, $idc, $idF)
     {
+        $debitoT = null;
+        $em = $this->getEntityManager();
+        $debParcial = $this->_em->getRepository(Estado::class)->find(['id' => 5]);
+        $percibida  = $this->_em->getRepository(Estado::class)->find(['id' => 3]);
         foreach ($array as $id => $value):
             $this->createQueryBuilder('i')
                 ->update(ItemPrefacturacion::class, 'i')
@@ -134,16 +140,36 @@ class ItemPrefacturacionRepository extends ServiceEntityRepository
                 ->setParameter('id', $id)
                 ->getQuery()
                 ->getResult();
+            $debitoT = $debitoT + $value;
         endforeach;
 
+        if($debitoT == 0):
+            $factura = $this->_em->getRepository(Factura::class)->find(['idFactura' => $idF]);
+            $factura->setEstadoId($percibida);
+            $factura->setDebito($debitoT);
+        else:
+            $factura = $this->_em->getRepository(Factura::class)->find(['idFactura' => $idF]);
+            $factura->setEstadoId($debParcial);
+            $factura->setDebito($debitoT);
+        endif;
+        $em->persist($factura);
+        $em->flush();
         return true;
     }
 
     /**
      * @return ItemPrefacturacion[] Returns an array of ItemPrefacturacion objects
      */
-    public function updateUncheckItems($idf, $idc)
+    public function updateUncheckItems($idf, $idc, $idF)
     {
+        $em = $this->getEntityManager();
+        $percibida  = $this->_em->getRepository(Estado::class)->find(['id' => 3]);
+        $factura = $this->_em->getRepository(Factura::class)->find(['idFactura' => $idF]);
+        $factura->setEstadoId($percibida);
+        $factura->setDebito(0);
+        $em->persist($factura);
+        $em->flush();
+
         return $this->createQueryBuilder('i')
             ->update(ItemPrefacturacion::class, 'i')
             ->set('i.estadoPago', 0)

@@ -123,11 +123,11 @@ final class AnexoiiAdmin extends AbstractAdmin
                 ], 'label' => 'Tipo de Atencion'])
             #->add('parentesco')
             #->add('medicos')
-            ->add('mesFacturacion')
+            ->add('mesFacturacion', null, ['label' => 'Fecha Anexo', 'format'=>'d/m/y'])
             #->add('codDev')
             #->add('estadoAnexo')
             ->add('fechaCarga', null, ['label' => 'Fecha de Carga', 'format'=>'d/m/y'])
-            ->add('fechaEgreso')
+            ->add('fechaEgreso', null, ['label' => 'Fecha de Egreso', 'format'=>'d/m/y'])
             #->add('horaCarga')
             #->add('idEntrada')
             #->add('sfGuardUserId')
@@ -209,7 +209,7 @@ final class AnexoiiAdmin extends AbstractAdmin
             ], 'label' => 'Tipo', 'disabled' => $disabled])
             #->add('fechaCarga', DatePickerType::class, Array('label'=>'Carga', 'format'=>'d/M/y', 'disabled' => $disabled))
             ->add('mesFacturacion', DatePickerType::class, Array('label'=>'Fecha Anexo', 'format'=>'d/M/y', 'disabled' => $disabled))
-            ->add('fechaEgreso', DatePickerType::class, Array('label'=>'Fecha Egreso', 'format'=>'d/M/y', 'disabled' => $disabled, 'required' => false))
+            ->add('fechaEgreso', DatePickerType::class, Array('label'=>'Fecha Egreso', 'format'=>'d/M/y', 'disabled' => $disabled, 'required' => false, 'help' => 'Solo para Internacion'))
             ->add('itemPrefacturacions', CollectionType::class, [
                                                 'by_reference' => false,
                                                 'label' => 'Prefacturacion',

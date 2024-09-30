@@ -147,6 +147,7 @@ class ItemPrefacturacion
     public function __construct()
     {
         $this->setEstadoFactura(1);
+        $this->setCantidad(0);
         $this->setEstadoDebito(0);
     }
 

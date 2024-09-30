@@ -78,6 +78,7 @@ class Liquidacion
 
     /**
      * @ORM\OneToMany(targetEntity=Cuota::class, mappedBy="liquidacion")
+     *
      */
     private $cuotas;
 

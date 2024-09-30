@@ -212,7 +212,7 @@ final class FacturaAdminController extends CRUDController{
                 <table class="table table-bordered table-striped table-hover sonata-ba-list">
                     <tbody>
                     <tr>
-                        <td colspan="7" style="text-align: center">Factura: '.$em->getRepository(Factura::class)->find($idfactura)->getNumeroCompleto().'<br> ID:'.$idcuota.'</td>
+                        <td colspan="8" style="text-align: center">Factura: '.$em->getRepository(Factura::class)->find($idfactura)->getNumeroCompleto().'<br> ID:'.$idcuota.'</td>
                     </tr>
                     <tr>
                         <th class="sonata-ba-list-field-header sonata-ba-list-field-header-batch">
@@ -298,12 +298,12 @@ EOF;
         $idcuota = $request->get('idcuota');
         $checked = $request->get('idx');
         $montoFact = 0;
-        $uncheck = $em->getRepository(ItemPrefacturacion::class)->updateUncheckItems($idfactura, $idcuota);
+        $uncheck = $em->getRepository(ItemPrefacturacion::class)->updateUncheckItems($idfactura, $idcuota, $idfactura);
         if(isset($checked)):
             foreach ($checked as $ch):
                 $array[$ch] = $request->get('monto_pago_'.$ch);
             endforeach;
-            $check = $em->getRepository(ItemPrefacturacion::class)->updateCheckItems($array, $idcuota);
+            $check = $em->getRepository(ItemPrefacturacion::class)->updateCheckItems($array, $idcuota, $idfactura);
         endif;
         $this->addFlash('sonata_flash_success', 'Los itemas de las facturas asociadas al pago: '.$idpago.' Se guardaron exitosamenete.');
         return $this->redirectToRoute('admin_app_pago_edit',['id' => $idpago]);
@@ -884,17 +884,35 @@ EOF;
         $html2pdf->writeHTML($html);
         $fpdf = $html2pdf->output("","S");
 
-        $email = (new Email())
-            ->from($_ENV['EMAIL'])
-            ->to($factura->getCodOs()->getEmail())
-            //->cc('cc@example.com')
-            //->bcc('bcc@example.com')
-            //->replyTo('fabien@example.com')
-            //->priority(Email::PRIORITY_HIGH)
-            ->subject('Factura '.$factura)
-            ->text('Factura enviada y generada por sistema...')
-            ->html('<p>Factura generada y enviada por sistema...</p>')
-            ->attach($fpdf, 'factura'.$factura.'.pdf');
+        ####para email por efector
+        if($this->isGranted('ROLE_HPGD') and !$this->isGranted('ROLE_SUPER_ADMIN')){
+            $efector = $this->getUser()->getHospital()->getCodigoh();
+            $email = (new Email())
+                ->from($this->getUser()->getHospital()->getEmail())
+                ->to($factura->getCodOs()->getEmail())
+                //->cc('cc@example.com')
+                //->bcc('bcc@example.com')
+                //->replyTo('fabien@example.com')
+                //->priority(Email::PRIORITY_HIGH)
+                ->subject('Factura '.$factura)
+                ->text('Factura enviada y generada por sistema...')
+                ->html('<p>Factura generada y enviada por sistema...</p>')
+                ->attach($fpdf, 'factura'.$factura.'.pdf')
+                ->getHeaders()->addTextHeader('X-Transport', $efector);
+        }else{
+            $email = (new Email())
+                ->from($_ENV['EMAIL'])
+                ->to($factura->getCodOs()->getEmail())
+                //->cc('cc@example.com')
+                //->bcc('bcc@example.com')
+                //->replyTo('fabien@example.com')
+                //->priority(Email::PRIORITY_HIGH)
+                ->subject('Factura '.$factura)
+                ->text('Factura enviada y generada por sistema...')
+                ->html('<p>Factura generada y enviada por sistema...</p>')
+                ->attach($fpdf, 'factura'.$factura.'.pdf');
+        }
+
         $mailer->send($email);
 
         #guardo fecha de envio#####

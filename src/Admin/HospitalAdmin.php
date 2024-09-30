@@ -34,6 +34,7 @@ final class HospitalAdmin extends AbstractAdmin
             ->add('ptoVta')
             ->add('estado')
             ->add('imputacion')
+            ->add('hpgd')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
@@ -46,12 +47,14 @@ final class HospitalAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form
-            ->add('id')
+            #->add('id')
             ->add('codigoh')
             ->add('descriph')
             ->add('ptoVta')
             ->add('estado')
+            ->add('hpgd')
             ->add('imputacion')
+            ->add('email')
             ;
     }
 

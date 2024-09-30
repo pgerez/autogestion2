@@ -69,6 +69,15 @@ class Certificado
      */
     private $certificadoFacturas;
 
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity=Hospital::class)
+     * @ORM\JoinColumns({
+     * @ORM\JoinColumn(name="hospital_id", referencedColumnName="id")
+     * })
+     */
+    private $hospital;
+
 
 
 
@@ -232,6 +241,18 @@ class Certificado
     public function setMonto(?float $monto): self
     {
         $this->monto = $monto;
+
+        return $this;
+    }
+
+    public function getHospital(): ?Hospital
+    {
+        return $this->hospital;
+    }
+
+    public function setHospital(?Hospital $hospital): self
+    {
+        $this->hospital = $hospital;
 
         return $this;
     }

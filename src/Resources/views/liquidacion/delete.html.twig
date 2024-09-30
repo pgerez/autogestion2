@@ -1,0 +1,8 @@
+{% if 'ROLE_AUTOGESTION' in app.user.roles  or 'ROLE_HPGD' in app.user.roles%}
+{% if object.estimulos|length == 0 %}
+<a href="{{ path('admin_app_liquidacion_delete', {'id': object.id}) }}" class="btn btn-sm btn-danger view_link" title="{{ 'Estimulo'|trans({}, 'SonataAdminBundle') }}" onclick="return confirm('Esta seguro de borrar la Liquidacion?')">
+    <i class="glyphicon glyphicon-remove"></i>
+    Borrar
+</a>
+{% endif %}
+{% endif %}

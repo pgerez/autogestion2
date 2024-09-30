@@ -17,9 +17,11 @@ final class LiquidacionAdminController extends CRUDController{
     public function listitemsAction(Request $request) : Response
     {
         $hospitalId = null;
-        $this->isGranted('ROLE_USER_HOSPITAL') ? $hospitalId = $this->getUser()->getHospital()->getId() : '';
+        if($this->isGranted('ROLE_USER_HOSPITAL') or $this->isGranted('ROLE_HPGD')):
+            $hospitalId = $this->getUser()->getHospital()->getId();
+        endif;
 
-        if($hospitalId != null or $this->isGranted('ROLE_SUPER_ADMIN')):
+        if($hospitalId != null or $this->isGranted('ROLE_SUPER_ADMIN') or $this->isGranted('ROLE_AUTOGESTION')):
             $id = $request->get('id');
             $em = $this->getDoctrine()->getManager();
             $listado = $em->getRepository(Liquidacion::class)->findByIdLiquidacion($id,$hospitalId);
