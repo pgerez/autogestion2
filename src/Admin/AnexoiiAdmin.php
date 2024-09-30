@@ -127,7 +127,7 @@ final class AnexoiiAdmin extends AbstractAdmin
             #->add('codDev')
             #->add('estadoAnexo')
             ->add('fechaCarga', null, ['label' => 'Fecha de Carga', 'format'=>'d/m/y'])
-            ->add('fecha_egreso',null, ['label' => 'Fecha de Carga', 'format'=>'d/m/y'])
+            ->add('fecha_egreso',null, ['label' => 'Fecha de Egreso', 'format'=>'d/m/y'])
             #->add('horaCarga')
             #->add('idEntrada')
             #->add('sfGuardUserId')
