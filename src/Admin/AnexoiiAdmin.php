@@ -201,7 +201,7 @@ final class AnexoiiAdmin extends AbstractAdmin
 
                     ])
             ->ifEnd()
-            ->add('codOs', null, ['label' => 'Obra Social', 'disabled' => $disabled])
+            ->add('codOs', null, ['label' => 'Obra Social', 'disabled' => $disabled, 'required' => true])
             #->add('numAfil')
             ->add('tipoAtencion', ChoiceType::class,
             ['choices' => [
