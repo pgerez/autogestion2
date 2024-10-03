@@ -245,6 +245,16 @@ class Anexoii
         endif;
     }
 
+    public function getFacturado()
+    {
+        foreach ($this->itemPrefacturacions as $ip):
+            if($ip->getIdFacturaFK()):
+                return true;
+            endif;
+        endforeach;
+        return false;
+    }
+
     public function getNumAnexo(): ?int
     {
         return $this->numAnexo;

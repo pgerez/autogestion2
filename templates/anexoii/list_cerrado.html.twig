@@ -1,7 +1,9 @@
 {% extends get_admin_template('base_list_field', admin.code) %}
 {% set editable = false %}
-{% if is_granted('ROLE_SUPER_ADMIN') %}
-    {% set editable = true %}
+{% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_AUTOGESTION')  %}
+    {% if object.facturado == false %}
+        {% set editable = true %}
+    {% endif %}
 {% else %}
     {% if is_granted('ROLE_USER_HOSPITAL') %}
                     {% if object.cerrado == 1 %}
