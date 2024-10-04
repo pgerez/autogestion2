@@ -54,7 +54,7 @@ final class LiquidacionAdminController extends CRUDController{
             $em->persist($estimulo);
             $incremento = new Incremento();
             $incremento->setHospital($hospital);
-            $incremento->setImporte(($item['suma']/2)*0.93);
+            $incremento->setImporte(($item['suma']/2)*0.955);
             $incremento->setFecha(new \DateTime());
             $incremento->setDetalle('Liquidacion con ID: '.$liquidacion->getId().' y fecha: '.$liquidacion->getFechaDesde()->format('d-m-Y').' | '.$liquidacion->getFechaHasta()->format('d-m-Y'));
             $em->persist($incremento);
