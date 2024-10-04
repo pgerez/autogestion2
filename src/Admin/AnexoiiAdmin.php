@@ -39,6 +39,14 @@ final class AnexoiiAdmin extends AbstractAdmin
     public function createQuery($context = 'list')
     {
         $query = parent::createQuery($context);
+        $arrayHpgd = $this->getModelManager()->getEntityManager(Hospital::class)->getRepository(Hospital::class)->arrayHpgd();
+        if ($this->isGranted('ROLE_AUTOGESTION') and !$this->isGranted('ROLE_SUPER_ADMIN')):
+            $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
+            $query
+                ->where($query->getRootAlias()[0].'.codH NOT IN (:array)')
+                ->setParameter('array',$arrayHpgd);
+        endif;
+
         if (!$this->isGranted('ROLE_AUTOGESTION') and !$this->isGranted('ROLE_SUPER_ADMIN') and !$this->isGranted('ROLE_USER_OS')):
             $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
             $query

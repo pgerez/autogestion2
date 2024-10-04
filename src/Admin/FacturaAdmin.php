@@ -49,7 +49,7 @@ final class FacturaAdmin extends AbstractAdmin
             $query
                 #->leftJoin($query->getRootAlias()[0].'.hospital', 'h', 'WITH', 'h.hpgd is null')
                 ->where($query->getRootAlias()[0].".hospitalId not in (:array)")
-                ->orWhere($query->getRootAlias()[0].".hospitalId is null")
+                #->orWhere($query->getRootAlias()[0].".hospitalId is null")
                 ->setParameter('array',$arrayHpgd);
         elseif ($this->isGranted('ROLE_HPGD')):
             $query
@@ -60,7 +60,7 @@ final class FacturaAdmin extends AbstractAdmin
                 #->Where($query->getRootAlias()[0].".hospital  ".$user->getHospital()->getId())
                 ->where($query->getRootAlias()[0].".hospitalId not in (:array)")
                 ->andWhere($query->getRootAlias()[0].".fechaDesde >= '2023-12-30'")
-                ->orWhere($query->getRootAlias()[0].".hospitalId is null")
+                #->orWhere($query->getRootAlias()[0].".hospitalId is null")
                 ->setParameter('array',$arrayHpgd);
         endif;
         return $query;

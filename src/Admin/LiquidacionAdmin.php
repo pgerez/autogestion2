@@ -30,8 +30,8 @@ final class LiquidacionAdmin extends AbstractAdmin
         if ($this->isGranted('ROLE_AUTOGESTION')):
             $query
                 #->leftJoin($query->getRootAlias()[0].'.hospital', 'h', 'WITH', 'h.hpgd is null')
-                ->where($query->getRootAlias()[0].".hospital not in (:array)")
-                ->orWhere($query->getRootAlias()[0].".hospital is null")
+                ->where($query->getRootAlias()[0].".hospital NOT IN (:array)")
+                #->orWhere($query->getRootAlias()[0].".hospital is null")
                 ->setParameter('array',$arrayHpgd);
         elseif ($this->isGranted('ROLE_HPGD')):
             $query
@@ -40,7 +40,7 @@ final class LiquidacionAdmin extends AbstractAdmin
         else:
             $query
                 #->Where($query->getRootAlias()[0].".hospital  ".$user->getHospital()->getId())
-                ->where($query->getRootAlias()[0].".hospital not in (:array)")
+                ->where($query->getRootAlias()[0].".hospital NOT IN (:array)")
                 ->andWhere($query->getRootAlias()[0].".fechaDesde >= '2023-12-30'")
                 ->orWhere($query->getRootAlias()[0].".hospital is null")
                 ->setParameter('array',$arrayHpgd);
@@ -138,7 +138,7 @@ final class LiquidacionAdmin extends AbstractAdmin
                     'required' => false,
                     'query_builder' => function (EntityRepository $er) : QueryBuilder {
                             return $er->createQueryBuilder('h')
-                                ->Where('h.hpgd is null');
+                                ->Where('h.hpgd = 0');
                     },
                 ])
             ->ifEnd()

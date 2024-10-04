@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Entity\Hospital;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -19,12 +20,22 @@ final class EstimuloAdmin extends AbstractAdmin
     public function createQuery($context = 'list')
     {
         $query = parent::createQuery($context);
+        $arrayHpgd = $this->getModelManager()->getEntityManager(Hospital::class)->getRepository(Hospital::class)->arrayHpgd();
         if (!$this->isGranted('ROLE_AUTOGESTION') and !$this->isGranted('ROLE_SUPER_ADMIN')):
             $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
             $query
                 #->join($query->getRootAlias()[0].'.hospitalId', 'h', 'WITH', $query->getRootAlias()[0].'.hospitalId = h.id')
                 ->where($query->getRootAlias()[0].'.hospitalId = '.$user->getHospital()->getId() )
                 ->andWhere($query->getRootAlias()[0].'.sistema = 1');
+        endif;
+
+        if ($this->isGranted('ROLE_AUTOGESTION')):
+            $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
+            $query
+                #->join($query->getRootAlias()[0].'.hospitalId', 'h', 'WITH', $query->getRootAlias()[0].'.hospitalId = h.id')
+                ->where($query->getRootAlias()[0].'.hospitalId NOT IN (:array)')
+                ->andWhere($query->getRootAlias()[0].'.sistema = 1')
+                ->setParameter('array',$arrayHpgd);
         endif;
 
         return $query;

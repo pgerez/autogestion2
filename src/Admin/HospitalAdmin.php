@@ -21,7 +21,7 @@ final class HospitalAdmin extends AbstractAdmin
             if ($this->isGranted('ROLE_AUTOGESTION')):
                 $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
                 $query
-                    ->where($query->getRootAlias()[0].'.hpgd is null');
+                    ->where($query->getRootAlias()[0].'.hpgd = 0');
             endif;
 
             if ($this->isGranted('ROLE_HPGD')):

@@ -92,7 +92,7 @@ class HospitalRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('h')
             ->select('h.id as id')
-            ->andWhere('h.hpgd is not null')
+            ->andWhere('h.hpgd = 1')
             ->getQuery()
             ->getArrayResult()
             ;
@@ -101,7 +101,7 @@ class HospitalRepository extends ServiceEntityRepository
     public function findAllNotHpgd()
     {
         return $this->createQueryBuilder('h')
-            ->andWhere('h.hpgd is null')
+            ->andWhere('h.hpgd = 0')
             ->getQuery()
             ->getArrayResult()
             ;
