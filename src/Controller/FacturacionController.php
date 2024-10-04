@@ -90,7 +90,7 @@ class FacturacionController extends AbstractController
                 $cuit = $_ENV['CUIT'];
             }
 
-            $afip = new Afip(array('CUIT' => $cuit, 'production' => TRUE, 'res_folder' => __DIR__.'/../'.$cuit.'/'));
+            $afip = new Afip(array('CUIT' => $cuit, 'production' => TRUE, 'cert' => $cuit));
             /**
              * Numero del punto de venta
              **/
@@ -268,7 +268,7 @@ class FacturacionController extends AbstractController
             $cuit = $_ENV['CUIT'];
         }
 
-        $afip = new Afip(array('CUIT' => $cuit, 'production' => TRUE, 'res_folder' => $cuit));
+        $afip = new Afip(array('CUIT' => $cuit, 'production' => TRUE, 'cert' => $cuit));
         /**
          * Numero del punto de venta
          **/

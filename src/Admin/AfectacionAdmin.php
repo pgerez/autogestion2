@@ -30,7 +30,6 @@ final class AfectacionAdmin extends AbstractAdmin
 
     protected function configureListFields(ListMapper $list): void
     {
-
         $list
             ->add('id')
             ->add('numero_expediente')
