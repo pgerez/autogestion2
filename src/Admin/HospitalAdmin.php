@@ -13,13 +13,35 @@ use Sonata\AdminBundle\Show\ShowMapper;
 final class HospitalAdmin extends AbstractAdmin
 {
 
+    public function createQuery($context = 'list')
+    {
+        $query = parent::createQuery($context);
+        if(!$this->isGranted('ROLE_SUPER_ADMIN')):
+
+            if ($this->isGranted('ROLE_AUTOGESTION')):
+                $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
+                $query
+                    ->where($query->getRootAlias()[0].'.hpgd is null');
+            endif;
+
+            if ($this->isGranted('ROLE_HPGD')):
+                $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
+                $query
+                    ->where($query->getRootAlias()[0].'.id = '.$user->getHospital()->getId());
+            endif;
+
+        endif;
+
+        return $query;
+    }
+
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
             ->add('id')
-            ->add('codigoh')
-            ->add('descriph')
-            ->add('ptoVta')
+            ->add('codigoh', null, ['label' => 'Codigo'])
+            ->add('descriph', null, ['label' => 'Nombre'])
+            ->add('ptoVta', null, ['label' => 'Punto de Venta'])
             ->add('estado')
             ->add('imputacion')
             ;
@@ -29,8 +51,8 @@ final class HospitalAdmin extends AbstractAdmin
     {
         $list
             ->add('id')
-            ->add('codigoh')
-            ->add('descriph')
+            ->add('codigoh', null, ['label' => 'Codigo'])
+            ->add('descriph', null, ['label' => 'Codigo'])
             ->add('estimulo')
             ->add('afectado')
             ->add('saldo')
@@ -51,13 +73,14 @@ final class HospitalAdmin extends AbstractAdmin
     {
         $form
             #->add('id')
-            ->add('codigoh')
-            ->add('descriph')
-            ->add('ptoVta')
+            ->add('codigoh', null, ['label' => 'Codigo'])
+            ->add('descriph', null, ['label' => 'Nombre'])
+            ->add('ptoVta', null, ['label' => 'Punto de Venta'])
             ->add('estado')
             ->add('hpgd')
-            ->add('imputacion')
+            #->add('imputacion')
             ->add('email')
+            ->add('cuit')
             ;
     }
 
