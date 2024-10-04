@@ -82,7 +82,7 @@ class FacturacionController extends AbstractController
             $error = 0;
             ##calculo total a facturar#####
             $montoFact = $em->getRepository(ItemPrefacturacion::class)->findTotalItems($check);
-            if($this->isGranted('ROLE_HPGD') and !$this->isGranted('ROLE_SUPER_ADMIN')){
+            if($this->isGranted('ROLE_HPGD')){
                 $pv   = $this->getUser()->getHospital()->getPtoVta();
                 $cuit = $this->getUser()->getHospital()->getCuit();
             }else{
@@ -90,7 +90,7 @@ class FacturacionController extends AbstractController
                 $cuit = $_ENV['CUIT'];
             }
 
-            $afip = new Afip(array('CUIT' => $cuit, 'production' => TRUE)); //Reemplazar el CUIT
+            $afip = new Afip(array('CUIT' => $cuit, 'production' => TRUE, 'res_folder' => __DIR__.'/../'.$cuit.'/'));
             /**
              * Numero del punto de venta
              **/
@@ -260,12 +260,19 @@ class FacturacionController extends AbstractController
         $fid = $request->get('id');
         $em = $this->getDoctrine()->getManager();
         $factura = $em->getRepository(Factura::class)->find($fid);
+        if($this->isGranted('ROLE_HPGD')){
+            $pv   = $this->getUser()->getHospital()->getPtoVta();
+            $cuit = $this->getUser()->getHospital()->getCuit();
+        }else{
+            $pv   = $_ENV['PTO_VTA'];
+            $cuit = $_ENV['CUIT'];
+        }
 
-        $afip = new Afip(array('CUIT' => $_ENV['CUIT'], 'production' => TRUE)); //Reemplazar el CUIT
+        $afip = new Afip(array('CUIT' => $cuit, 'production' => TRUE, 'res_folder' => $cuit));
         /**
          * Numero del punto de venta
          **/
-        $punto_de_venta = $_ENV['PTO_VTA'];
+        $punto_de_venta = $pv;
 
         /**
          * Tipo de Nota de Crédito
@@ -281,7 +288,7 @@ class FacturacionController extends AbstractController
          * Numero del punto de venta de la Factura
          * asociada a la Nota de Crédito
          **/
-        $punto_factura_asociada = $_ENV['PTO_VTA'];
+        $punto_factura_asociada = $pv;
 
         /**
          * Tipo de Factura asociada a la Nota de Crédito

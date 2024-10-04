@@ -89,11 +89,45 @@ class Hospital
      */
     private $certificados;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Incremento::class, mappedBy="hospital")
+     */
+    private $incrementos;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Afectacion::class, mappedBy="hospital")
+     */
+    private $afectacions;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->liquidacions = new ArrayCollection();
         $this->certificados = new ArrayCollection();
+        $this->incrementos = new ArrayCollection();
+        $this->afectacions = new ArrayCollection();
+    }
+
+    public function getEstimulo(): ?int
+    {
+        $total = 0;
+        foreach ($this->incrementos as $i):
+            $total = $total + $i->getImporte();
+        endforeach;
+        return $total;
+    }
+    public function getAfectado(): ?int
+    {
+        $total = 0;
+        foreach ($this->afectacions as $a):
+            $total = $total + $a->getImporte();
+        endforeach;
+        return $total;
+    }
+
+    public function getSaldo(): ?int
+    {
+        return $this->getEstimulo() - $this->getAfectado();
     }
 
     public function __toString()
@@ -286,6 +320,66 @@ class Hospital
             // set the owning side to null (unless already changed)
             if ($certificado->getHospital() === $this) {
                 $certificado->setHospital(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Incremento>
+     */
+    public function getIncrementos(): Collection
+    {
+        return $this->incrementos;
+    }
+
+    public function addIncremento(Incremento $incremento): self
+    {
+        if (!$this->incrementos->contains($incremento)) {
+            $this->incrementos[] = $incremento;
+            $incremento->setHospital($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIncremento(Incremento $incremento): self
+    {
+        if ($this->incrementos->removeElement($incremento)) {
+            // set the owning side to null (unless already changed)
+            if ($incremento->getHospital() === $this) {
+                $incremento->setHospital(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Afectacion>
+     */
+    public function getAfectacions(): Collection
+    {
+        return $this->afectacions;
+    }
+
+    public function addAfectacion(Afectacion $afectacion): self
+    {
+        if (!$this->afectacions->contains($afectacion)) {
+            $this->afectacions[] = $afectacion;
+            $afectacion->setHospital($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAfectacion(Afectacion $afectacion): self
+    {
+        if ($this->afectacions->removeElement($afectacion)) {
+            // set the owning side to null (unless already changed)
+            if ($afectacion->getHospital() === $this) {
+                $afectacion->setHospital(null);
             }
         }
 

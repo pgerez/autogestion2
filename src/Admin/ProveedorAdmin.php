@@ -10,18 +10,17 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-final class HospitalAdmin extends AbstractAdmin
+final class ProveedorAdmin extends AbstractAdmin
 {
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
             ->add('id')
-            ->add('codigoh')
-            ->add('descriph')
-            ->add('ptoVta')
-            ->add('estado')
-            ->add('imputacion')
+            ->add('cuit')
+            ->add('nombre')
+            ->add('domicilio')
+            ->add('observacion')
             ;
     }
 
@@ -29,15 +28,10 @@ final class HospitalAdmin extends AbstractAdmin
     {
         $list
             ->add('id')
-            ->add('codigoh')
-            ->add('descriph')
-            ->add('estimulo')
-            ->add('afectado')
-            ->add('saldo')
-            #->add('ptoVta')
-            #->add('estado')
-            #->add('imputacion')
-            #->add('hpgd')
+            ->add('cuit')
+            ->add('nombre')
+            ->add('domicilio')
+            ->add('observacion')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
@@ -51,13 +45,10 @@ final class HospitalAdmin extends AbstractAdmin
     {
         $form
             #->add('id')
-            ->add('codigoh')
-            ->add('descriph')
-            ->add('ptoVta')
-            ->add('estado')
-            ->add('hpgd')
-            ->add('imputacion')
-            ->add('email')
+            ->add('cuit')
+            ->add('nombre')
+            ->add('domicilio')
+            ->add('observacion')
             ;
     }
 
@@ -65,11 +56,10 @@ final class HospitalAdmin extends AbstractAdmin
     {
         $show
             ->add('id')
-            ->add('codigoh')
-            ->add('descriph')
-            ->add('ptoVta')
-            ->add('estado')
-            ->add('imputacion')
+            ->add('cuit')
+            ->add('nombre')
+            ->add('domicilio')
+            ->add('observacion')
             ;
     }
 }

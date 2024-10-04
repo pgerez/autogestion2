@@ -168,3 +168,24 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: CertificadoFactura, show_in_dashboard: false}
         public: true
+
+    admin.incremento:
+        class: App\Admin\IncrementoAdmin
+        arguments: [~, App\Entity\Incremento, App\Controller\IncrementoAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Incremento }
+        public: true
+
+    admin.afectacion:
+        class: App\Admin\AfectacionAdmin
+        arguments: [~, App\Entity\Afectacion, App\Controller\AfectacionAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Afectacion }
+        public: true
+
+    admin.proveedor:
+        class: App\Admin\ProveedorAdmin
+        arguments: [~, App\Entity\Proveedor, App\Controller\ProveedorAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Proveedor }
+        public: true
