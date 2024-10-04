@@ -31,7 +31,7 @@ final class LiquidacionAdmin extends AbstractAdmin
             $query
                 #->leftJoin($query->getRootAlias()[0].'.hospital', 'h', 'WITH', 'h.hpgd is null')
                 ->where($query->getRootAlias()[0].".hospital NOT IN (:array)")
-                #->orWhere($query->getRootAlias()[0].".hospital is null")
+                ->orWhere($query->getRootAlias()[0].".hospital is null")
                 ->setParameter('array',$arrayHpgd);
         elseif ($this->isGranted('ROLE_HPGD')):
             $query

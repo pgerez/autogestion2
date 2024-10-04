@@ -46,7 +46,7 @@ final class PagoAdmin extends AbstractAdmin
             $query
                 #->leftJoin($query->getRootAlias()[0].'.hospital', 'h', 'WITH', 'h.hpgd is null')
                 ->where($query->getRootAlias()[0].".hospitalId NOT IN (:array)")
-                #->orWhere($query->getRootAlias()[0].".hospitalId is null")
+                ->orWhere($query->getRootAlias()[0].".hospitalId is null")
                 ->setParameter('array',$arrayHpgd);
         elseif ($this->isGranted('ROLE_HPGD')):
             $query
