@@ -89,7 +89,7 @@ final class IncrementoAdmin extends AbstractAdmin
             ->ifEnd()
             ->add('importe')
             ->add('numero_expediente')
-            ->add('fecha')
+            ->add('fecha',DatePickerType::class, Array('label'=>'Fecha', 'format'=>'d/M/y'))
             ->add('tipo')
             ;
     }
