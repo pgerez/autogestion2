@@ -242,6 +242,11 @@ class Factura
     private $itemPrefacturacions;
 
     /**
+     * @ORM\OneToMany(targetEntity=Factura::class, mappedBy="facturaIdFactura")
+     */
+    private $facturas;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $cae;
@@ -301,6 +306,7 @@ class Factura
         $this->setUsuarioFacturacion('SISTEMA');
         $this->itemPrefacturacions = new ArrayCollection();
         $this->certificadoFacturas = new ArrayCollection();
+        $this->facturas = new ArrayCollection();
         
 
     }
@@ -321,6 +327,15 @@ class Factura
         }
 
         return (string) $pv.'-'.$num;
+    }
+
+    public function getAllFacturas()
+    {
+        $string = '';
+        foreach ($this->facturas as $factura):
+            $string .= $factura.' ';
+        endforeach;
+        return $string;
     }
 
     public function getSoloNumeroCompleto()
@@ -802,6 +817,36 @@ class Factura
     public function setCaeVto(?\DateTimeInterface $cae_vto): self
     {
         $this->cae_vto = $cae_vto;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Factura>
+     */
+    public function getFacturas(): Collection
+    {
+        return $this->facturas;
+    }
+
+    public function addFactura(Factura $factura): self
+    {
+        if (!$this->facturas->contains($factura)) {
+            $this->facturas[] = $factura;
+            $factura->setIdFactura($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFactura(Factura $factura): self
+    {
+        if ($this->facturas->removeElement($factura)) {
+            // set the owning side to null (unless already changed)
+            if ($factura->getIdFactura() === $this) {
+                $factura->setIdFactura(null);
+            }
+        }
 
         return $this;
     }
