@@ -333,7 +333,7 @@ class Factura
     {
         $string = '';
         foreach ($this->facturas as $factura):
-            $string .= $factura.' ';
+            $string .= '('.$factura->getEstadoId().') '.$factura.' | ';
         endforeach;
         return $string;
     }
