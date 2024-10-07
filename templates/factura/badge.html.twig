@@ -3,7 +3,7 @@
     {% set badge = {1 : 'label label-primary', 2 : 'label label-danger', 3 : 'label label-success', 6 : 'label label-danger', 13 : 'label label-info', 14 : 'label label-warning', 7 : 'label label-default', 11 : 'label label-default', 9 : 'label label-default', 8 : 'label label-default', 5 : 'label label-default'} %}
         {% if object.estadoId.codEstado == 14 %}
             <span class="{{ badge[object.estadoId.codEstado] }}" title="{{ object.facturaIdFactura }}">{{ object.estadoId }}</span>
-        {% elseif object.estadoId.codEstado == 6 or object.estadoId.codEstado == 8  %}
+        {% elseif object.estadoId.codEstado == 6 or object.estadoId.codEstado == 9  %}
             <span class="{{ badge[object.estadoId.codEstado] }}" title="{{ object.allFacturas }}">{{ object.estadoId }}</span>
         {% else %}
             <span class="{{ badge[object.estadoId.codEstado] }}">{{ object.estadoId }}</span>
