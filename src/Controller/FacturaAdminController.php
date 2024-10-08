@@ -895,7 +895,7 @@ EOF;
                 //->replyTo('fabien@example.com')
                 //->priority(Email::PRIORITY_HIGH)
                 ->subject('Factura '.$factura)
-                ->text('Factura enviada y generada por sistema...')
+                ->text('Se envía factura de prestaciones médico realizada en el establecimiento asistencial de referencia en la Pcia de Santiago del Estero conforme a la Ley Pcial N 7384/2024')
                 ->html('<p>Factura generada y enviada por sistema...</p>')
                 ->attach($fpdf, 'factura'.$factura.'.pdf')
                 ->getHeaders()->addTextHeader('X-Transport', $efector);
@@ -908,8 +908,8 @@ EOF;
                 //->replyTo('fabien@example.com')
                 //->priority(Email::PRIORITY_HIGH)
                 ->subject('Factura '.$factura)
-                ->text('Factura enviada y generada por sistema...')
-                ->html('<p>Factura generada y enviada por sistema...</p>')
+                ->text('Se envía factura de prestaciones médico realizada en el establecimiento asistencial de referencia en la Pcia de Santiago del Estero conforme a la Ley Pcial N 7384/2024')
+                ->html('Se envía factura de prestaciones médico realizada en el establecimiento asistencial de referencia en la Pcia de Santiago del Estero conforme a la Ley Pcial N 7384/2024')
                 ->attach($fpdf, 'factura'.$factura.'.pdf');
         }
 
