@@ -43,14 +43,14 @@ class Servicios
      *
      * @ORM\Column(name="cod_rango", type="string", length=50, nullable=false)
      */
-    private $codRango;
+    private $codRango = 0;
 
     /**
      * @var string
      *
      * @ORM\Column(name="cod_fijo", type="string", length=50, nullable=false)
      */
-    private $codFijo;
+    private $codFijo = 0;
 
     /**
      * @var bool|null
@@ -64,6 +64,11 @@ class Servicios
      */
     private $itemPrefacturacions;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Hospital::class, inversedBy="servicios")
+     */
+    private $hospital;
+
     public function __toString()
     {
         return (string)$this->getCodserv();
@@ -72,11 +77,6 @@ class Servicios
     public function __construct()
     {
         $this->itemPrefacturacions = new ArrayCollection();
-    }
-
-    public function getCodserv(): ?int
-    {
-        return $this->codserv;
     }
 
     public function getDescripcionServicio(): ?string
@@ -167,6 +167,23 @@ class Servicios
         }
 
         return $this;
+    }
+
+    public function getHospital(): ?Hospital
+    {
+        return $this->hospital;
+    }
+
+    public function setHospital(?Hospital $hospital): self
+    {
+        $this->hospital = $hospital;
+
+        return $this;
+    }
+
+    public function getCodserv(): ?int
+    {
+        return $this->codserv;
     }
 
   

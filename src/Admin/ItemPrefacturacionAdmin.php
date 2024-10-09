@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Entity\Hospital;
 use App\Entity\Nomencla;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -107,6 +108,15 @@ final class ItemPrefacturacionAdmin extends AbstractAdmin
     {
         $estado = false;
         $disabled = '';
+        $codh = null;
+        $list = true;
+        if($this->isGranted('ROLE_AUTOGESTION') or $this->isGranted('ROLE_USER_HOSPITAL')):
+            $list = false;
+        else:
+            $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
+            $codh = $user->getHospital()->getId();
+        endif;
+
         if ($this->getSubject()->getEstadoPago() == 1 or $this->getSubject()->getNumAnexo()->getCerrado() == 1):
             $estado = true;
             $disabled = 'disabled';
@@ -114,15 +124,41 @@ final class ItemPrefacturacionAdmin extends AbstractAdmin
 
         $form
             #->add('id')
-            ->add('codserv_Fk', EntityType::class, [
-                'class' => Servicios::class,
-                'choice_value' => 'codserv',
-                'choice_label' => function (Servicios $s = null) {
-                    return null === $s ? '' : $s->getDescripcionServicio();
-                }, 'label' => 'Servicio',
-                'disabled' => $estado
+            ->ifTrue($list)
+            ->add('codserv_Fk', EntityType::class,
+                ['class' => Servicios::class,
+                    'choice_value' => 'codserv',
+                    'query_builder' => function (EntityRepository $er) use ($codh): QueryBuilder {
+                        return $er->createQueryBuilder('s')
+                            ->where('s.hospital = (:codh)')
+                            ->orderBy('s.descripcionServicio', 'ASC')
+                            ->setParameter('codh',$codh);
+                    },
+                    'choice_label' => function (Servicios $s = null) {
+                        return null === $s ? '' : $s->getDescripcionServicio();
+                    },
+                    'label' => 'Servicio',
+                    'disabled' => $estado,
 
-            ])
+                ])
+            ->ifEnd()
+            ->ifFalse($list)
+            ->add('codserv_Fk', EntityType::class,
+                ['class' => Servicios::class,
+                    'choice_value' => 'codserv',
+                    'query_builder' => function (EntityRepository $er) : QueryBuilder {
+                        return $er->createQueryBuilder('s')
+                            ->where('s.hospital is null')
+                            ->orderBy('s.descripcionServicio', 'ASC');
+                    },
+                    'choice_label' => function (Servicios $s = null) {
+                        return null === $s ? '' : $s->getDescripcionServicio();
+                    },
+                    'label' => 'Servicio',
+                    'disabled' => $estado,
+
+                ])
+            ->ifEnd()
             #, ModelListType::class, array(
             #    'by_reference' => false,'btn_edit' => false,'btn_delete' => false,'btn_add' => false, 'label' => 'Servicio'
             #))

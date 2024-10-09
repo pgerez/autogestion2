@@ -99,6 +99,11 @@ class Hospital
      */
     private $afectacions;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Servicios::class, mappedBy="hospital")
+     */
+    private $servicios;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -106,6 +111,7 @@ class Hospital
         $this->certificados = new ArrayCollection();
         $this->incrementos = new ArrayCollection();
         $this->afectacions = new ArrayCollection();
+        $this->servicios = new ArrayCollection();
     }
 
     public function getEstimulo(): ?int
@@ -380,6 +386,36 @@ class Hospital
             // set the owning side to null (unless already changed)
             if ($afectacion->getHospital() === $this) {
                 $afectacion->setHospital(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Servicios>
+     */
+    public function getServicios(): Collection
+    {
+        return $this->servicios;
+    }
+
+    public function addServicio(Servicios $servicio): self
+    {
+        if (!$this->servicios->contains($servicio)) {
+            $this->servicios[] = $servicio;
+            $servicio->setHospital($this);
+        }
+
+        return $this;
+    }
+
+    public function removeServicio(Servicios $servicio): self
+    {
+        if ($this->servicios->removeElement($servicio)) {
+            // set the owning side to null (unless already changed)
+            if ($servicio->getHospital() === $this) {
+                $servicio->setHospital(null);
             }
         }
 
