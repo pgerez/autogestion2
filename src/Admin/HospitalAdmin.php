@@ -9,6 +9,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\Form\Type\DatePickerType;
 
 final class HospitalAdmin extends AbstractAdmin
 {
@@ -81,6 +82,9 @@ final class HospitalAdmin extends AbstractAdmin
             #->add('imputacion')
             ->add('email')
             ->add('cuit')
+            ->add('condicion')
+            ->add('fecha_inicio',DatePickerType::class, Array('label'=>'Inicio de Actividad', 'format'=>'d/M/y'))
+            ->add('domicilio')
             ;
     }
 
@@ -93,6 +97,9 @@ final class HospitalAdmin extends AbstractAdmin
             ->add('ptoVta')
             ->add('estado')
             ->add('imputacion')
+            ->add('condicion')
+            ->add('fechaInicio')
+            ->add('domicilio')
             ;
     }
 }

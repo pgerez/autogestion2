@@ -104,6 +104,21 @@ class Hospital
      */
     private $servicios;
 
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $fecha_inicio;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $condicion;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $domicilio;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -418,6 +433,42 @@ class Hospital
                 $servicio->setHospital(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFechaInicio(): ?\DateTimeInterface
+    {
+        return $this->fecha_inicio;
+    }
+
+    public function setFechaInicio(\DateTimeInterface $fecha_inicio): self
+    {
+        $this->fecha_inicio = $fecha_inicio;
+
+        return $this;
+    }
+
+    public function getCondicion(): ?string
+    {
+        return $this->condicion;
+    }
+
+    public function setCondicion(string $condicion): self
+    {
+        $this->condicion = $condicion;
+
+        return $this;
+    }
+
+    public function getDomicilio(): ?string
+    {
+        return $this->domicilio;
+    }
+
+    public function setDomicilio(string $domicilio): self
+    {
+        $this->domicilio = $domicilio;
 
         return $this;
     }

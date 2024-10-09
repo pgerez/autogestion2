@@ -618,6 +618,12 @@ EOF;
         $items = $em->getRepository(Factura::class)->findAnexoItems($factura->getIdFactura());
         $fechaCae = $factura->getCaeVto() ? $factura->getCaeVto()->format('d/m/Y') : 'SIN FECHA';
         $tipoF = $factura->getTipoFact() == 'C'? 'FACTURA' : 'NOTA DE CREDITO';
+        $fantacia = $this->isGranted('ROLE_AUTOGESTION') ? 'SUBSECRETARIA DE <br> SALUD' : $factura->getHospital()->getDescriph();
+        $fechaInicio = $this->isGranted('ROLE_AUTOGESTION') ? '01/05/1994' : $factura->getHospital()->getFechaInicio();
+        $condicion = $this->isGranted('ROLE_AUTOGESTION') ? 'IVA Sujeto Exento' : $factura->getHospital()->getCondicion();
+        $domicilio = $this->isGranted('ROLE_AUTOGESTION') ? 'Av Belgrano Sud 2050 - Santiago Del Estero, Santiago del Estero' : $factura->getHospital()->getDomicilio();
+        $cuit = $this->isGranted('ROLE_AUTOGESTION') ? '30675068441' : $factura->getHospital()->getCuit();
+
         $texto = $factura->getTipoFact() == 'X'? 'POR FACTURA '.$factura->getFacturaIdFactura()->getNumeroCompleto() :'Prestaciones médicas realizadas a vuestros<br> afiliados según detalle adjunto.';
         $html=<<<EOF
 <!DOCTYPE html>
@@ -749,11 +755,11 @@ EOF;
 
     <div class="flex relative">
         <div class="wrapper inline-block w50">
-            <h3 class="text-center" style="font-size:24px;margin-bottom: 3px">SUBSECRETARIA DE <br> SALUD</h3>
+            <h3 class="text-center" style="font-size:24px;margin-bottom: 3px"></h3>
             <p style="font-size: 13px;line-height: 1.5;margin-bottom: 0;align-self: flex-end;">
-                <b>Razón Social:</b> SUBSECRETARIA DE SALUD
-                <br><b>Domicilio Comercial:</b> Av Belgrano Sud 2050 - Santiago Del Estero, Santiago del Estero
-                <br><b>Condición frente al IVA: IVA Sujeto Exento</b>
+                <b>Razón Social:</b> {$fantacia}
+                <br><b>Domicilio Comercial:</b> {$domicilio}
+                <br><b>Condición frente al IVA: {$condicion}</b>
                 <br>
             </p>
         </div>
@@ -762,9 +768,9 @@ EOF;
             <p style="font-size: 13px;line-height: 1.5;margin-bottom: 0;">
                 <b>Punto de Venta: {$factura->getSoloPvCompleto()} Comp. Nro: {$factura->getSoloNumeroCompleto()}</b>
                 <br><b>Fecha de Emisión: {$factura->getFechaEmision()->format('d/m/Y')}</b>
-                <br><b>CUIT:</b> 30675068441
-                <br><b>Ingresos Brutos:</b> 30675068441
-                <br><b>Fecha de Inicio de Actividades:</b> 01/05/1994
+                <br><b>CUIT:</b> {$cuit}
+                <br><b>Ingresos Brutos:</b> {$cuit}
+                <br><b>Fecha de Inicio de Actividades:</b> {$fechaInicio}
             </p>
         </div>
         <div class="wrapper floating-mid">
