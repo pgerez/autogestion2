@@ -320,7 +320,7 @@ EOF;
         $fantacia = $this->isGranted('ROLE_AUTOGESTION') ? 'SUBSECRETARIA DE SALUD' : $factura->getHospitalId()->getDescriph();
         $fechaInicio = $this->isGranted('ROLE_AUTOGESTION') ? '01/05/1994' : $factura->getHospitalId()->getFechaInicio();
         $condicion = $this->isGranted('ROLE_AUTOGESTION') ? 'IVA Sujeto Exento' : $factura->getHospitalId()->getCondicion();
-        $domicilio = $this->isGranted('ROLE_AUTOGESTION') ? 'Av Belgrano Sud 2050 - Santiago Del Estero, Santiago del Estero' : $factura->getHospital()->getDomicilio();
+        $domicilio = $this->isGranted('ROLE_AUTOGESTION') ? 'Av Belgrano Sud 2050 - Santiago Del Estero, Santiago del Estero' : $factura->getHospitalId()->getDomicilio();
         $cuit = $this->isGranted('ROLE_AUTOGESTION') ? '30675068441' : $factura->getHospitalId()->getCuit();
 
         $html=<<<EOF
@@ -627,7 +627,7 @@ EOF;
         $fantacia = $this->isGranted('ROLE_AUTOGESTION') ? 'SUBSECRETARIA DE SALUD' : $factura->getHospitalId()->getDescriph();
         $fechaInicio = $this->isGranted('ROLE_AUTOGESTION') ? '01/05/1994' : $factura->getHospitalId()->getFechaInicio();
         $condicion = $this->isGranted('ROLE_AUTOGESTION') ? 'IVA Sujeto Exento' : $factura->getHospitalId()->getCondicion();
-        $domicilio = $this->isGranted('ROLE_AUTOGESTION') ? 'Av Belgrano Sud 2050 - Santiago Del Estero, Santiago del Estero' : $factura->getHospital()->getDomicilio();
+        $domicilio = $this->isGranted('ROLE_AUTOGESTION') ? 'Av Belgrano Sud 2050 - Santiago Del Estero, Santiago del Estero' : $factura->getHospitalId()->getDomicilio();
         $cuit = $this->isGranted('ROLE_AUTOGESTION') ? '30675068441' : $factura->getHospitalId()->getCuit();
 
         $texto = $factura->getTipoFact() == 'X'? 'POR FACTURA '.$factura->getFacturaIdFactura()->getNumeroCompleto() :'Prestaciones médicas realizadas a vuestros<br> afiliados según detalle adjunto.';
