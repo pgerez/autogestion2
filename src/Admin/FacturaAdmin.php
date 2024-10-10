@@ -230,6 +230,7 @@ final class FacturaAdmin extends AbstractAdmin
          $object->setPuntoVenta($object->getHospitalId()->getPtoVta());
          $nfactura = $facturaRepo->findById($object->getHospitalId()->getPtoVta()) ? $facturaRepo->findById($object->getHospitalId()->getPtoVta())[0]['numeroFactura'] + 1 : 1;
          $object->setNumeroFactura($nfactura);
+         $object->setTipoFact('C');
 
          $anexoii = new \App\Entity\Anexoii();
          $anexoii->setTipoDoc('DNI');
