@@ -344,7 +344,7 @@ EOF;
         width: 21cm;
         min-height: 27cm;
         max-height: 29.7cm;
-        font-size: 13px;
+        font-size: 10px;
     }
 
     .wrapper {
@@ -453,8 +453,8 @@ EOF;
 
     <div class="flex relative">
         <div class="wrapper inline-block w50">
-            <h3 class="text-center" style="font-size:18px;margin-bottom: 3px">{$fantacia}</h3>
-            <p style="font-size: 13px;line-height: 1.5;margin-bottom: 0;align-self: flex-end;">
+            <h3 class="text-center" style="font-size:14px;margin-bottom: 3px">{$fantacia}</h3>
+            <p style="font-size: 12px;line-height: 1.5;margin-bottom: 0;align-self: flex-end;">
                 <b>Razón Social:</b> {$fantacia}
                 <br><b>Domicilio Comercial:</b> {$domicilio}
                 <br><b>Condición frente al IVA: {$condicion}</b>
@@ -463,7 +463,7 @@ EOF;
         </div>
         <div class="wrapper inline-block w50 floating-left">
             <h3 class="text-center" style="font-size:24px;margin-bottom: 3px;">{$tipoF}</h3>
-            <p style="font-size: 13px;line-height: 1.5;margin-bottom: 0;">
+            <p style="font-size: 12px;line-height: 1.5;margin-bottom: 0;">
                 <b>Punto de Venta: {$factura->getSoloPvCompleto()} Comp. Nro: {$factura->getSoloNumeroCompleto()}</b>
                 <br><b>Fecha de Emisión: {$factura->getFechaEmision()->format('d/m/Y')}</b>
                 <br><b>CUIT:</b> {$cuit}
@@ -652,7 +652,7 @@ EOF;
         width: 21cm;
         min-height: 27cm;
         max-height: 29.7cm;
-        font-size: 13px;
+        font-size: 12px;
     }
 
     .wrapper {
@@ -761,8 +761,8 @@ EOF;
 
     <div class="flex relative">
         <div class="wrapper inline-block w50">
-            <h3 class="text-center" style="font-size:18px;margin-bottom: 3px">{$fantacia}</h3>
-            <p style="font-size: 13px;line-height: 1.5;margin-bottom: 0;align-self: flex-end;">
+            <h3 class="text-center" style="font-size:12px;margin-bottom: 3px">{$fantacia}</h3>
+            <p style="font-size: 12px;line-height: 1.5;margin-bottom: 0;align-self: flex-end;">
                 <b>Razón Social:</b> {$fantacia}
                 <br><b>Domicilio Comercial:</b> {$domicilio}
                 <br><b>Condición frente al IVA: {$condicion}</b>
@@ -771,7 +771,7 @@ EOF;
         </div>
         <div class="wrapper inline-block w50 floating-left">
             <h3 class="text-center" style="font-size:24px;margin-bottom: 3px;">{$tipoF}</h3>
-            <p style="font-size: 13px;line-height: 1.5;margin-bottom: 0;">
+            <p style="font-size: 12px;line-height: 1.5;margin-bottom: 0;">
                 <b>Punto de Venta: {$factura->getSoloPvCompleto()} Comp. Nro: {$factura->getSoloNumeroCompleto()}</b>
                 <br><b>Fecha de Emisión: {$factura->getFechaEmision()->format('d/m/Y')}</b>
                 <br><b>CUIT:</b> {$cuit}
