@@ -153,6 +153,9 @@ class FacturacionController extends AbstractController
              * Los siguientes campos solo son obligatorios para los conceptos 2 y 3
              **/
             if ($concepto === 2 || $concepto === 3) {
+                $date = new \DateTime();
+                //modificas tu fecha diciendo que quieres el final de mes
+                $date->modify('+1 month');
                 /**
                  * Fecha de inicio de servicio en formato aaaammdd
                  **/
@@ -166,7 +169,7 @@ class FacturacionController extends AbstractController
                 /**
                  * Fecha de vencimiento del pago en formato aaaammdd
                  **/
-                $fecha_vencimiento_pago = intval(date('Ymd'));
+                $fecha_vencimiento_pago = intval($date->format('Ymd'));
             }
             else {
                 $fecha_servicio_desde = null;
@@ -347,6 +350,9 @@ class FacturacionController extends AbstractController
          * Los siguientes campos solo son obligatorios para los conceptos 2 y 3
          **/
         if ($concepto === 2 || $concepto === 3) {
+            $date = new \DateTime();
+            //modificas tu fecha diciendo que quieres el final de mes
+            $date->modify('+1 month');
             /**
              * Fecha de inicio de servicio en formato aaaammdd
              **/
@@ -360,7 +366,8 @@ class FacturacionController extends AbstractController
             /**
              * Fecha de vencimiento del pago en formato aaaammdd
              **/
-            $fecha_vencimiento_pago = intval(date('Ymd'));
+            $fecha_vencimiento_pago = intval($date->format('Ymd'));
+            
         }
         else {
             $fecha_servicio_desde = null;

@@ -53,7 +53,7 @@ final class HospitalAdmin extends AbstractAdmin
         $list
             ->add('id')
             ->add('codigoh', null, ['label' => 'Codigo'])
-            ->add('descriph', null, ['label' => 'Codigo'])
+            ->add('descriph', null, ['label' => 'Nombre'])
             ->add('estimulo')
             ->add('afectado')
             ->add('saldo')

@@ -38,8 +38,10 @@
             <th>Cantidad</th>
             <th>Precio</th>
             <th>Total</th>
+            <th>Factura</th>
         </tr>
         {% set total = 0 %}
+        {% set badge = {1 : 'label label-primary', 2 : 'label label-danger', 3 : 'label label-success', 6 : 'label label-danger', 13 : 'label label-info', 14 : 'label label-warning', 7 : 'label label-default', 11 : 'label label-default', 9 : 'label label-default', 8 : 'label label-default', 5 : 'label label-default'} %}
         {% for item in object.itemPrefacturacions %}
         <tr>
             <td>{{ item.id }}</td>
@@ -48,6 +50,7 @@
             <td>{{ item.cantidad }}</td>
             <td>{{ item.precio }}</td>
             <td>{{ item.precio * item.cantidad }}</td>
+            <td><span class="label label-success">{{ item.idFacturaFK }}</span></td>
             {% set total = total + (item.precio * item.cantidad) %}
         </tr>
         {% endfor %}

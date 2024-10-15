@@ -81,7 +81,7 @@ class Servicios
 
     public function getDescripcionServicio(): ?string
     {
-        return $this->descripcionServicio;
+        return utf8_decode($this->descripcionServicio);
     }
 
     public function setDescripcionServicio(?string $descripcionServicio): self

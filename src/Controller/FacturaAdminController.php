@@ -238,9 +238,11 @@ final class FacturaAdminController extends CRUDController{
                             $html .= '<div class="icheckbox_square-blue" style="position: relative;">
                                         <input type="checkbox" '.$checked.' name="idx[]" value="'.$item->getId().'" style="position: absolute; opacity: 0;">
                                       </div>';
+                        else:
+                            $html .= 'C-'.$cid;
                         endif;
                     else:
-                        $html .=$cuota->getLiquidacion()->getId();
+                        $html .='L-'.$cuota->getLiquidacion()->getId();
                     endif;
                     $html .='</td>
                                 <td>'.$item->getNumAnexo().'</td>
