@@ -482,7 +482,7 @@ EOF;
     <div class="wrapper flex space-around" style="margin-top: 1px;">
         <span><b>Período Facturado Desde:</b> {$factura->getFechaEmision()->format('d/m/Y')}</span>
         <span><b>Hasta:</b> {$factura->getFechaEmision()->format('d/m/Y')}</span>
-        <span><b>Fecha de Vto. para el pago:</b> {$factura->getFechaEmision()->format('d/m/Y')}</span>
+        <span><b>Fecha de Vto. para el pago:</b> {$factura->getFechaEmision()->modify('+1 month')->format('d/m/Y')}</span>
     </div>
 
     <div class="wrapper" style="margin-top: 2px">
@@ -790,7 +790,7 @@ EOF;
     <div class="wrapper flex space-around" style="margin-top: 1px;">
         <span><b>Período Facturado Desde:</b> {$factura->getFechaEmision()->format('d/m/Y')}</span>
         <span><b>Hasta:</b> {$factura->getFechaEmision()->format('d/m/Y')}</span>
-        <span><b>Fecha de Vto. para el pago:</b> {$factura->getFechaEmision()->format('d/m/Y')}</span>
+        <span><b>Fecha de Vto. para el pago:</b> {$factura->getFechaEmision()->modify('+1 month')->format('d/m/Y')}</span>
     </div>
 
     <div class="wrapper" style="margin-top: 2px">
