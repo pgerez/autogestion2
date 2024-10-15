@@ -367,7 +367,7 @@ class FacturacionController extends AbstractController
              * Fecha de vencimiento del pago en formato aaaammdd
              **/
             $fecha_vencimiento_pago = intval($date->format('Ymd'));
-            
+
         }
         else {
             $fecha_servicio_desde = null;

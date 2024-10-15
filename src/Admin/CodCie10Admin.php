@@ -40,7 +40,7 @@ final class CodCie10Admin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form
-            ->add('id')
+            #->add('id')
             ->add('cod3')
             ->add('descripcion')
             ;
