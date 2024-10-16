@@ -52,6 +52,7 @@ final class LiquidacionAdmin extends AbstractAdmin
     {
         $collection->add('listitems');
         $collection->add('procItems');
+        $collection->remove('edit');
         #$estimulo = $this->getSubject() ? $this->getSubject()->getEstimulos() : false;
         #if($estimulo or !$this->isGranted('ROLE_SUPER_ADMIN')):
         #    $collection->remove('edit');
