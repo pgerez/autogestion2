@@ -71,7 +71,7 @@ final class EstimuloAdmin extends AbstractAdmin
             ->add('fecha')
             ->add('pagado')
             ->add('monto')
-            ->add('liquidacion')
+            #->add('liquidacion')
             ;
     }
 
