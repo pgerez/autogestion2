@@ -52,6 +52,10 @@ final class LiquidacionAdmin extends AbstractAdmin
     {
         $collection->add('listitems');
         $collection->add('procItems');
+        #$estimulo = $this->getSubject() ? $this->getSubject()->getEstimulos() : false;
+        #if($estimulo or !$this->isGranted('ROLE_SUPER_ADMIN')):
+        #    $collection->remove('edit');
+        #endif;
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
@@ -87,7 +91,7 @@ final class LiquidacionAdmin extends AbstractAdmin
                 'actions' => [
                     'show' => ['template' => 'liquidacion/cuotas.html.twig'],
                     'estimulo' => ['template' => 'liquidacion/estimulo.html.twig'],
-                    'edit' => [],
+                    #'edit' => ['template' => 'liquidacion/edit.html.twig'],
                     'delete' => ['template' => 'liquidacion/delete.html.twig'],
                 ],
             ]);

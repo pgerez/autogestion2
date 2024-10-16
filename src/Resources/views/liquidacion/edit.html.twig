@@ -1,0 +1,8 @@
+{% if 'ROLE_AUTOGESTION' in app.user.roles  or 'ROLE_HPGD' in app.user.roles%}
+{% if object.estimulos|length == 0 %}
+<a href="{{ path('admin_app_liquidacion_edit', {'id': object.id}) }}" class="btn btn-sm btn-default view_link" title="{{ 'Editar'|trans({}, 'SonataAdminBundle') }}">
+    <i class="glyphicon glyphicon-edit"></i>
+    Editar
+</a>
+{% endif %}
+{% endif %}
