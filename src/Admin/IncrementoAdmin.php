@@ -26,6 +26,7 @@ final class IncrementoAdmin extends AbstractAdmin
             ->add('numero_expediente')
             ->add('fecha')
             ->add('tipo')
+            ->add('hospital')
             ;
     }
 
