@@ -129,6 +129,7 @@ final class AnexoiiAdminController extends CRUDController{
     {
         $em = $this->getDoctrine()->getManager();
         $anexo_id = $request->get('id');
+        $url = $request->get('url');
         $anexo = $em->getRepository(Anexoii::class)->find($anexo_id);
         $texto = $request->get('texto');
         $mensaje = new Mensaje();
@@ -141,7 +142,7 @@ final class AnexoiiAdminController extends CRUDController{
 
         #####flash exito#######
         $this->addFlash('sonata_flash_success', 'Mensaje para anexo '.$anexo_id.' guardado exitosamente!');
-        return $this->redirectToRoute('admin_app_anexoii_list');
+        return $this->redirectToRoute('admin_app_anexoii_'.$url, ['id' => $anexo_id]);
     }
 
 
