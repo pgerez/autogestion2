@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Anexoii;
+use App\Entity\Mensaje;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -121,5 +123,26 @@ final class AnexoiiAdminController extends CRUDController{
         endforeach;
         return new JsonResponse($renaper);
     }
+
+
+    function mensajeAction(Request $request) : Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $anexo_id = $request->get('id');
+        $anexo = $em->getRepository(Anexoii::class)->find($anexo_id);
+        $texto = $request->get('texto');
+        $mensaje = new Mensaje();
+        $mensaje->setFecha(new \DateTime());
+        $mensaje->setTexto($texto);
+        $mensaje->setAnexoii($anexo);
+        $mensaje->setFosUserUserId($this->getUser());
+        $em->persist($mensaje);
+        $em->flush();
+
+        #####flash exito#######
+        $this->addFlash('sonata_flash_success', 'Mensaje para anexo '.$anexo_id.' guardado exitosamente!');
+        return $this->redirectToRoute('admin_app_anexoii_list');
+    }
+
 
 }

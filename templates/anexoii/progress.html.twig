@@ -7,11 +7,11 @@
         {% set tope = dias.diff(date('now')).days + 1 %}
         {% if dias.diff(date('now')).days > 0 and dias.diff(date('now')).invert == 0 %}
             <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: 100%;background-color: red;" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" title="PLAZO VENCIDO"></div>
+                <div class="progress-bar" role="progressbar" style="width: 100%;background-color: red;" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" title="PLAZO VENCIDO">{{ tope }}</div>
             </div>
         {% else %}
             <div class="progress">
-                <div class="progress-bar" role="progressbar" style=" width: {{ tope*10 }}%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" title="TE QUEDAN {{ tope }} DIAS"></div>
+                <div class="progress-bar" role="progressbar" style=" width: {{ tope*10 }}%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" title="TE QUEDAN {{ tope }} DIAS">{{ tope }}</div>
             </div>
         {% endif %}
     {% endif %}

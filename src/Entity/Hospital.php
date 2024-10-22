@@ -127,6 +127,7 @@ class Hospital
         $this->incrementos = new ArrayCollection();
         $this->afectacions = new ArrayCollection();
         $this->servicios = new ArrayCollection();
+        $this->imputacion = 0;
     }
 
     public function getEstimulo(): ?int

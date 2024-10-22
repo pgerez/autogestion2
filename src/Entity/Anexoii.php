@@ -217,6 +217,16 @@ class Anexoii
      */
     private $fecha_egreso;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Mensaje::class, mappedBy="anexoii")
+     */
+    private $mensajes;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $url;
+
 
     public function __toString()
     {
@@ -233,6 +243,7 @@ class Anexoii
         $this->setSexo(0);
         $this->setCerrado(0);
         $this->cie10 = new ArrayCollection();
+        $this->mensajes = new ArrayCollection();
     }
 
     /**
@@ -255,6 +266,10 @@ class Anexoii
         return false;
     }
 
+    public function lastmensaje()
+    {
+        return $this->getMensajes()->last();
+    }
     public function getNumAnexo(): ?int
     {
         return $this->numAnexo;
@@ -617,6 +632,48 @@ class Anexoii
     public function setFechaEgreso(?\DateTimeInterface $fecha_egreso): self
     {
         $this->fecha_egreso = $fecha_egreso;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Mensaje>
+     */
+    public function getMensajes(): Collection
+    {
+        return $this->mensajes;
+    }
+
+    public function addMensaje(Mensaje $mensaje): self
+    {
+        if (!$this->mensajes->contains($mensaje)) {
+            $this->mensajes[] = $mensaje;
+            $mensaje->setNumAnexo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMensaje(Mensaje $mensaje): self
+    {
+        if ($this->mensajes->removeElement($mensaje)) {
+            // set the owning side to null (unless already changed)
+            if ($mensaje->getNumAnexo() === $this) {
+                $mensaje->setNumAnexo(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(?string $url): self
+    {
+        $this->url = $url;
 
         return $this;
     }

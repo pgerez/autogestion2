@@ -74,6 +74,7 @@ final class AnexoiiAdmin extends AbstractAdmin
     {
         $collection->add('buscarOs');
         $collection->add('renaper');
+        $collection->add('mensaje');
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
@@ -151,6 +152,7 @@ final class AnexoiiAdmin extends AbstractAdmin
                         'show' => [],
                         'edit' => ['template' => 'ItemAnexoiiAdmin/edit.html.twig'],
                         'delete' => ['template' => 'ItemAnexoiiAdmin/delete.html.twig'],
+                        'mensaje' => ['template' => 'ItemAnexoiiAdmin/mensaje.html.twig'],
                     ],
                 ]);
         else:
@@ -158,6 +160,7 @@ final class AnexoiiAdmin extends AbstractAdmin
                 ->add(ListMapper::NAME_ACTIONS, null, [
                     'actions' => [
                         'show' => [],
+                        'mensaje' => ['template' => 'ItemAnexoiiAdmin/mensaje.html.twig'],
                     ],
             ]);
         endif;

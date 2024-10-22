@@ -75,7 +75,52 @@
             </tr>
         {% endfor %}
     </table>
-{% endblock field%}
+    <div class="box-header"><h6 class="box-title"><strong>MENSAJES</strong></h6></div>
+                        <div class="panel-body">
+                            <ul class="chat">
+                                {% set total = 0 %}
+                                {% set left = 0 %}
+                                {% set rigth = 0 %}
+                                {% set b = 0 %}
+                                {% for mensaje in object.mensajes %}
+                                    {% if b == 0 %}
+                                        {%  set b = 1 %}
+                                        {%  set left = mensaje.fosUserUserId.id %}
+                                    {% endif %}
+                                    {%  if(left == mensaje.fosUserUserId.id) %}
+                                        <li class="left clearfix"><span class="chat-img pull-left"></span>
+                                            <div class="chat-body clearfix">
+                                                <div class="header">
+                                                    <strong class="primary-font"><span class="glyphicon glyphicon-comment"></span> {{ mensaje.fosUserUserId.username }}</strong> <small class="pull-right text-muted">
+                                                        <span class="glyphicon glyphicon-time"></span>{{ mensaje.fecha |date('d-m-Y H:m:s') }}</small>
+                                                </div>
+                                                <p>
+                                                    {{ mensaje.texto }}
+                                                </p>
+                                            </div>
+                                        </li>
+                                    {% else %}
+                                        {%  set rigth = mensaje.fosUserUserId.id %}
+                                    {% endif %}
+
+                                    {%  if(rigth == mensaje.fosUserUserId.id) %}
+                                        <li class="left clearfix"><span class="chat-img pull-right"></span>
+                                            <div class="chat-body clearfix">
+                                                <div class="header">
+                                                    <small class=" text-muted"><span class="glyphicon glyphicon-time"></span>{{ mensaje.fecha |date('d-m-Y H:m:s') }}</small>
+                                                    <strong class="pull-right primary-font"><span class="glyphicon glyphicon-comment"></span> {{ mensaje.fosUserUserId.username }}</strong>
+                                                </div>
+                                                <p>
+                                                    {{ mensaje.texto }}
+                                                </p>
+                                            </div>
+                                        </li>
+                                    {% else %}
+                                        {% set left = mensaje.fosUserUserId.id %}
+                                    {% endif %}
+
+                                {% endfor %}
+                        </div>
 
     <style>
         .badge-custome {
@@ -147,5 +192,64 @@
             --bs-body-color: #212529;
             --bs-body-bg: #fff;
         }
+        .chat
+        {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .chat li
+        {
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px dotted #B3A9A9;
+        }
+
+        .chat li.left .chat-body
+        {
+            margin-left: unset;
+        }
+
+        .chat li.right .chat-body
+        {
+            margin-right: unset;
+        }
+
+
+        .chat li .chat-body p
+        {
+            margin: 0;
+            color: #777777;
+        }
+
+        .panel .slidedown .glyphicon, .chat .glyphicon
+        {
+            margin-right: unset;
+        }
+
+        .panel-body
+        {
+            height: 100%;
+        }
+
+        ::-webkit-scrollbar-track
+        {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            background-color: #F5F5F5;
+        }
+
+        ::-webkit-scrollbar
+        {
+            width: 12px;
+            background-color: #F5F5F5;
+        }
+
+        ::-webkit-scrollbar-thumb
+        {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+            background-color: #555;
+        }
     </style>
+{% endblock field%}
 {% endblock%}

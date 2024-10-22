@@ -1,0 +1,101 @@
+{% if object.cerrado == 1 %}
+<button type="button" class="btn btn-sm btn-facebook view_link" data-toggle="modal" data-target="#mensajeModal{{ object.NumAnexo }}" ><i class="glyphicon ion-android-send"></i> Msj <span class="badge text-bg-secondary">{{ object.mensajes |length }}</span></button>
+
+<div class="modal fade" id="mensajeModal{{ object.NumAnexo }}" tabindex="-1" role="dialog" aria-labelledby="mensajeModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                        <div class="modal-body">
+                                {% if object.lastmensaje %}
+                                <h5>ULTIMO MENSAJE</h5>
+                                <div class="panel-body">
+                                        <ul class="chat">
+                                                <li class="left clearfix"><span class="chat-img pull-right"></span>
+                                                        <div class="chat-body clearfix">
+                                                                <div class="header">
+                                                                        <small class=" text-muted"><span class="glyphicon glyphicon-time"></span>{{ object.lastmensaje.fecha |date('d-m-Y H:m:s') }}</small>
+                                                                        <strong class="pull-right primary-font"><span class="glyphicon glyphicon-comment"></span> {{ object.lastmensaje.fosUserUserId.username }}</strong>
+                                                                </div>
+                                                                <p>
+                                                                        {{ object.lastmensaje.texto }}
+                                                                </p>
+                                                        </div>
+                                                </li>
+                                        </ul>
+                                </div>
+                                {% endif %}
+                        <form action="{{ path('admin_app_anexoii_mensaje', {'id': object.NumAnexo}) }}" method="post" enctype="multipart/form-data">
+                                        <div class="form-group">
+                                                <label for="message-text" class="col-form-label">Nuevo Mensaje:</label>
+                                                <textarea class="form-control" id="texto" name="texto"></textarea>
+                                        </div>
+
+                        </div>
+                                <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        <button type="submit" class="btn btn-primary">Guardar Mensaje</button>
+                                </div>
+                        </form>
+                </div>
+        </div>
+</div>
+        <style>
+                .chat
+                {
+                        list-style: none;
+                        margin: 0;
+                        padding: 0;
+                }
+
+                .chat li
+                {
+                        margin-bottom: 10px;
+                        padding-bottom: 5px;
+                        border-bottom: 1px dotted #B3A9A9;
+                }
+
+                .chat li.left .chat-body
+                {
+                        margin-left: unset;
+                }
+
+                .chat li.right .chat-body
+                {
+                        margin-right: unset;
+                }
+
+
+                .chat li .chat-body p
+                {
+                        margin: 0;
+                        color: #777777;
+                }
+
+                .panel .slidedown .glyphicon, .chat .glyphicon
+                {
+                        margin-right: unset;
+                }
+
+                .panel-body
+                {
+                        height: 100%;
+                }
+
+                ::-webkit-scrollbar-track
+                {
+                        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+                        background-color: #F5F5F5;
+                }
+
+                ::-webkit-scrollbar
+                {
+                        width: 12px;
+                        background-color: #F5F5F5;
+                }
+
+                ::-webkit-scrollbar-thumb
+                {
+                        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+                        background-color: #555;
+                }
+        </style>
+{% endif %}
