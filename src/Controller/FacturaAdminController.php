@@ -913,7 +913,7 @@ EOF;
                 ->html('Se envía factura de prestaciones médico realizada en el establecimiento asistencial de referencia en la Pcia de Santiago del Estero conforme a la Ley Pcial N 7384/2024')
                 ->attach($fpdf, 'factura'.$factura.'.pdf')
                 ->getHeaders()->addTextHeader('X-Transport', $efector);
-            $mailer->getTransport($this->getUser()->getHospital()->getCodigoh())->send($email);
+            $mailer->getTransport('MAILER_DSN_'.$this->getUser()->getHospital()->getCodigoh())->send($email);
         }else{
             $email = (new Email())
                 ->from($_ENV['EMAIL'])
