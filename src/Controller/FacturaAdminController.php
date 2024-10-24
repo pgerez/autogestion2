@@ -8,6 +8,9 @@ use App\Application\ReportBundle\Report\ReportPDF;
 use App\Entity\Cuota;
 use App\Entity\Factura;
 use App\Entity\ItemPrefacturacion;
+use App\Service\Mailer\Autogestion;
+use App\Service\Mailer\Cisbanda;
+use PhpOffice\PhpSpreadsheet\Calculation\Web\Service;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Spipu\Html2Pdf\Html2Pdf;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,9 +20,8 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Mailer\MailerInterface;
-
+use Symfony\Component\Mime\Crypto\SMimeEncrypter;
 final class FacturaAdminController extends CRUDController{
-
     //------    CONVERTIR NUMEROS A LETRAS         ---------------
     public function numtoletras($xcifra)
     {
@@ -619,6 +621,7 @@ EOF;
         return new JsonResponse($select);
     }
 
+
     public function mailAction(MailerInterface $mailer): Response
     {
         $factura  = $this->admin->getSubject();
@@ -913,7 +916,8 @@ EOF;
                 ->html('Se envía factura de prestaciones médico realizada en el establecimiento asistencial de referencia en la Pcia de Santiago del Estero conforme a la Ley Pcial N 7384/2024')
                 ->attach($fpdf, 'factura'.$factura.'.pdf')
                 ->getHeaders()->addTextHeader('X-Transport', $efector);
-            $mailer->getTransport('MAILER_DSN_'.$this->getUser()->getHospital()->getCodigoh())->send($email);
+            $email->getHeaders()->addTextHeader('X-Transport', $this->getUser()->getHospital()->getCodigoh());
+            $mailer->send($email);
         }else{
             $email = (new Email())
                 ->from($_ENV['EMAIL'])
