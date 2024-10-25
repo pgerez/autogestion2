@@ -8,7 +8,6 @@ use App\Application\ReportBundle\Report\ReportPDF;
 use App\Entity\Cuota;
 use App\Entity\Factura;
 use App\Entity\ItemPrefacturacion;
-use App\Service\MailerService;
 use PhpOffice\PhpSpreadsheet\Calculation\Web\Service;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Spipu\Html2Pdf\Html2Pdf;
@@ -21,13 +20,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Crypto\SMimeEncrypter;
 final class FacturaAdminController extends CRUDController{
-
-    private MyMailerService $mailerService;
-
-    public function __construct(MailerService $mailerService)
-    {
-        $this->mailerService = $mailerService;
-    }
 
     //------    CONVERTIR NUMEROS A LETRAS         ---------------
     public function numtoletras($xcifra)
