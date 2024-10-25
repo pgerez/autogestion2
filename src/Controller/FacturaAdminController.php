@@ -22,6 +22,14 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Crypto\SMimeEncrypter;
 final class FacturaAdminController extends CRUDController{
+
+    private $mailer; // Declare the property
+
+    public function __construct(MailerInterface $mailer) // Inject the mailer
+    {
+        $this->mailer = $mailer;
+    }
+
     //------    CONVERTIR NUMEROS A LETRAS         ---------------
     public function numtoletras($xcifra)
     {
