@@ -915,7 +915,7 @@ EOF;
                 ->text('Se envía factura de prestaciones médico realizada en el establecimiento asistencial de referencia en la Pcia de Santiago del Estero conforme a la Ley Pcial N 7384/2024')
                 ->html('Se envía factura de prestaciones médico realizada en el establecimiento asistencial de referencia en la Pcia de Santiago del Estero conforme a la Ley Pcial N 7384/2024')
                 ->attach($fpdf, 'factura'.$factura.'.pdf');
-            $mailer->send($email,$this->getUser()->getHospital()->getCodigoh());
+            $mailer->send($email,$this->mailer->getTransport('smtp2'));
         }else{
             $email = (new Email())
                 ->from($_ENV['EMAIL'])
@@ -928,7 +928,7 @@ EOF;
                 ->text('Se envía factura de prestaciones médico realizada en el establecimiento asistencial de referencia en la Pcia de Santiago del Estero conforme a la Ley Pcial N 7384/2024')
                 ->html('Se envía factura de prestaciones médico realizada en el establecimiento asistencial de referencia en la Pcia de Santiago del Estero conforme a la Ley Pcial N 7384/2024')
                 ->attach($fpdf, 'factura'.$factura.'.pdf');
-            $mailer->send($email,'main');
+            $mailer->send($email);
         }
 
 

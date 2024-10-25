@@ -1,8 +1,6 @@
 framework:
     mailer:
-        dns: 'smtp://autogestion@msaludsgo.gov.ar:hospitalCarro12!!@mail.msaludsgo.gov.ar:465'
         transports:
-            smtp1:
-                dns: 'smtp://autogestion@msaludsgo.gov.ar:hospitalCarro12!!@mail.msaludsgo.gov.ar:465'
-            smtp2:
-                dns: 'smtp://autogestion@cisb.gob.ar:Autogestion2024$@smtp.hostinger.com:465'
+            smtp1: 'smtp://autogestion@msaludsgo.gov.ar:hospitalCarro12!!@mail.msaludsgo.gov.ar:465'
+            smtp2: 'smtp://autogestion@cisb.gob.ar:Autogestion2024$@smtp.hostinger.com:465'
+        default_transport: smtp1
