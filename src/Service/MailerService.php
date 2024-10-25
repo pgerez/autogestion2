@@ -1,40 +1,39 @@
 <?php
 namespace App\Service;
-
-use App\Service\Mailer\Autogestion;
-use App\Service\Mailer\Cisbanda;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
-class MailerService
-{
-    private $autogestion;
-    private $cisbanda;
+class MailerService {
 
-    public function __construct(Autogestion $autogestion, Cisbanda $cisbanda)
-    {
-    $this->autogestion = $autogestion;
-    $this->cisbanda = $cisbanda;
+    private MailerInterface $mailer;
+
+    public function __construct(MailerInterface $mailer) {
+        $this->mailer = $mailer;
     }
 
-    public function sendAutogestionEmail()
-    {
+    public function sendEmailToTransport1(string $to, string $subject, string $body): void {
         $email = (new Email())
-        ->from('marketing@example.com')
-        ->to('customer@example.com')
-        ->subject('Marketing Email')
-        ->text('Marketing message');
+            ->from('autogestion@msaludsgo.gov.ar')
+            ->cc('autogestion@msaludsgo.gov.ar')
+            ->to($to)
+            ->subject($subject)
+            ->text($body);
 
-        $this->autogestion->send($email);
+        // Send using transport named 'smtp1'
+        $this->mailer->send($email, 'smtp1');
     }
 
-    public function sendCisbandaEmail()
-    {
+
+    public function sendEmailToTransport2(string $to, string $subject, string $body): void {
         $email = (new Email())
-        ->from('noreply@example.com')
-        ->to('user@example.com')
-        ->subject('Transactional Email')
-        ->text('Order confirmation');
+            ->from('autogestion@cisb.gob.ar')
+            ->cc('autogestion@cisb.gob.ar')
+            ->to($to)
+            ->subject($subject)
+            ->text($body);
 
-        $this->cisbanda->send($email);
+        // Send using transport named 'smtp2'
+        $this->mailer->send($email, 'smtp2');
     }
+    // ... Add more methods for other transports as needed ...
 }

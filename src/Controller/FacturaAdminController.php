@@ -8,8 +8,7 @@ use App\Application\ReportBundle\Report\ReportPDF;
 use App\Entity\Cuota;
 use App\Entity\Factura;
 use App\Entity\ItemPrefacturacion;
-use App\Service\Mailer\Autogestion;
-use App\Service\Mailer\Cisbanda;
+use App\Service\MailerService;
 use PhpOffice\PhpSpreadsheet\Calculation\Web\Service;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Spipu\Html2Pdf\Html2Pdf;
@@ -23,11 +22,11 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Crypto\SMimeEncrypter;
 final class FacturaAdminController extends CRUDController{
 
-    private $mailer; // Declare the property
+    private MyMailerService $mailerService;
 
-    public function __construct(MailerInterface $mailer) // Inject the mailer
+    public function __construct(MailerService $mailerService)
     {
-        $this->mailer = $mailer;
+        $this->mailerService = $mailerService;
     }
 
     //------    CONVERTIR NUMEROS A LETRAS         ---------------
@@ -923,7 +922,10 @@ EOF;
                 ->text('Se envía factura de prestaciones médico realizada en el establecimiento asistencial de referencia en la Pcia de Santiago del Estero conforme a la Ley Pcial N 7384/2024')
                 ->html('Se envía factura de prestaciones médico realizada en el establecimiento asistencial de referencia en la Pcia de Santiago del Estero conforme a la Ley Pcial N 7384/2024')
                 ->attach($fpdf, 'factura'.$factura.'.pdf');
-            $mailer->send($email,$this->mailer->getTransport('smtp2'));
+
+            $email->getHeaders()->addTextHeader('X-Transport', '10860352193408');
+            $mailer->send($email);
+
         }else{
             $email = (new Email())
                 ->from($_ENV['EMAIL'])

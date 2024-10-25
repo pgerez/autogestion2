@@ -13,6 +13,9 @@ parameters:
     router.request_context.http_port: 443
 
 services:
+    App\Service\MailerService:
+        autowire: true
+
     app.menu_listener:
         class: App\EventListener\MenuBuilderListener
         tags:

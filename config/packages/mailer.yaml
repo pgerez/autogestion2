@@ -1,5 +1,5 @@
 framework:
     mailer:
         transports:
-            smtp1: 'smtp://autogestion@msaludsgo.gov.ar:hospitalCarro12!!@mail.msaludsgo.gov.ar:465'
-            smtp2: 'smtp://autogestion@cisb.gob.ar:Autogestion2024$@smtp.hostinger.com:465'
+            main: '%env(MAILER_DSN)%'
+            10860352193408: '%env(MAILER_DSN_10860352193408)%'
