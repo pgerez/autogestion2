@@ -61,6 +61,18 @@ class MenuBuilderListener
                 'label' => 'Pagos',
                 'route' => 'admin_app_pago_list',
             ]);
+
+            $child = $menu->addChild('Informes', [
+                'label' => 'Informes',
+                //'route' => 'excel',
+            ])->setExtras([
+                'icon' => '<i class="fa fa-file-text" aria-hidden="true"></i>',
+            ]);
+
+            $child->addChild('Adeudadas', [
+                'label' => 'Adeudadas',
+                'route' => 'admin_app_factura_adeudadas',
+            ]);
 		}
 		
 		

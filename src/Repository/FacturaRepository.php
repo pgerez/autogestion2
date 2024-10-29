@@ -82,4 +82,31 @@ class FacturaRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findByAdeudadas($hospitalid=null,$osid=null,$fechai=null,$fechaf=null)
+    {
+        $adeudadas = $this->createQueryBuilder('f')
+            ->select('f.digitalNum as numero','f.digitalPv as pv')
+            ->join('f.codOs','os')
+            ->join('f.hospitalId', 'h')
+            ->where('f.estadoId = 1');
+        if($fechai!=null):
+            $adeudadas->andWhere("f.fechaEmision >= '".$fechai."'");
+        endif;
+        if($fechaf!=null):
+            $adeudadas->andWhere("f.fechaEmision <= '".$fechaf."'");
+        endif;
+        if($osid!=null):
+            $adeudadas->andWhere('f.codOs = '.$osid);
+        endif;
+        if($hospitalid!=null):
+            $adeudadas->andWhere('f.hospitalId = '.$hospitalid);
+        endif;
+            $adeudadas->orderBy('f.hospitalId','ASC')
+                ->getQuery()
+                ->getResult();
+
+        return $adeudadas;
+
+    }
+
 }

@@ -939,5 +939,36 @@ EOF;
 
     }
 
+    public function adeudadasAction(Request $request): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        if($this->isGranted('ROLE_HPGD') and !$this->isGranted('ROLE_AUTOGESTION')) {
+            $hospital = $this->getUser()->getHospital();
+            $hospitals = $em->getRepository('App\Entity\Hospital')->findByHpgd($hospital->getId());
+        }else{
+            $hospitals = $em->getRepository('App\Entity\Hospital')->findAllNotHpgd();
+        }
+        $oss = $em->getRepository('App\Entity\ObrasSociales')->findAll();
+
+        return $this->render('informe/adeudadas.html.twig', [
+            'controller_name' => 'FacturaAdminController',
+            'hospitals' => $hospitals,
+            'oss' => $oss,
+            'success' => 0,
+        ]);
+    }
+
+    public function processadeudadasAction(Request $request): Response
+    {
+        $hospitalid = $request->get('hospitalid');
+        $osid = $request->get('obrasocialid');
+        $fechai = $request->get('fechainicio');
+        $fechaf = $request->get('fechafin');
+        $em = $this->getDoctrine()->getManager();
+        $items = $em->getRepository(Factura::class)->findByAdeudadas($hospitalid,$osid,$fechai,$fechaf);
+       foreach ($items as $item):
+           echo var_dump($item);'<br>';
+       endforeach;exit;
+    }
 
 }

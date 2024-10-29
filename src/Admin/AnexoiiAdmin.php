@@ -11,6 +11,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sonata\AdminBundle\Show\ShowMapper;
@@ -19,6 +20,7 @@ use Sonata\Form\Type\DatePickerType;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Validator\Constraints\Choice;
 
 
 final class AnexoiiAdmin extends AbstractAdmin
@@ -89,11 +91,17 @@ final class AnexoiiAdmin extends AbstractAdmin
             ->add('codH', null, ['label' => 'Hospital'])
             ->add('codOs', null, ['label' => 'Obra Social'])
             #->add('numAfil')
-            ->add('tipoBenef', null,  ['label' => 'Tipo de Atencion'], ChoiceType::class, [ 'choices' =>
-                [
-                'Ambulatorio' => 1,
-                'Internacion' => 2,
-                ]])
+            ->add('tipoAtencion', ChoiceFilter::class, [
+                'label' => 'Tipo de Atencion',
+                'field_type' => ChoiceType::class,
+                'field_options' => [
+                    'choices' =>
+                        [
+                            'Ambulatorio' => 1,
+                            'Internacion' => 2,
+                        ],
+                ],
+            ])
             #->add('parentesco')
             #->add('medicos')
             ->add('mesFacturacion', null, ['label' => 'Fecha Anexo'])

@@ -1,0 +1,80 @@
+{% extends "standard_layout.html.twig" %}
+
+{% block title %}Adeudadas{% endblock %}
+
+{% block sonata_admin_content %}
+
+    {% block notice %}
+        {% include ['@SonataCore/FlashMessage/render.html.twig', '@SonataTwig/FlashMessage/render.html.twig'] %}
+    {% endblock notice %}
+    {% if success == 1 %}
+        <div class="alert alert-success" role="alert">
+            Se creo con exito la Facturar.
+        </div>
+    {% endif %}
+    <h3>Facturacion</h3>
+    <form action="{{ path('admin_app_factura_processadeudadas') }}" method="post" enctype="multipart/form-data">
+        <div class="box box-primary">
+            <div class="box-body">
+        <input type="hidden" name="token" value="{{ csrf_token('upload') }}" />
+
+        <div>
+            <label for="myfile">Hospital:</label>
+            <select id="hospitalid" name="hospitalid" onchange="buscarOs(this.value)">
+                <option value="">Seleccione un Hospital</option>
+                {% for hospital in hospitals %}
+                    <option value="{{hospital.id}}">{{hospital.codigoh}} - {{hospital.descriph}}</option><br />
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="myfile">Obra Social:</label>
+            <select id="obrasocialid" name="obrasocialid">
+                {% for os in oss %}
+                    <option value="{{os.rowId}}">{{os.codobra}} - {{os.denomina}}</option><br/>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="row">
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    <label for="myfile">fecha inicio:</label>
+                    <div class='input-group date' id='datei'>
+                        <input type='text' class="form-control" name="fechainicio" id="fechainicio"/>
+                        <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                    </div>
+                    <label for="myfile">fecha fin:</label>
+                    <div class='input-group date' id='datef'>
+                        <input type='text' class="form-control" name="fechafin" id="fechafin"/>
+                        <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                    </div>
+                </div>
+            </div>
+            <script type="text/javascript">
+                $(function () {
+                    $('#fechainicio').datetimepicker({
+                        format: 'Y-MM-D',
+                        language: 'es',
+                        pickTime: false
+                    });
+                    $('#fechafin').datetimepicker({
+                        format: 'Y-MM-D',
+                        language: 'es',
+                        pickTime: false
+                    });
+                });
+            </script>
+        </div>
+            </div>
+        <br>
+         <div   class="sonata-ba-form-actions well well-small form-actions">
+            <button type="submit" class="btn btn-primary">Procesar</button>
+         </div>
+        </div>
+    </form>
+{% endblock %}
