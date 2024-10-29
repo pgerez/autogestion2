@@ -61,18 +61,19 @@ class MenuBuilderListener
                 'label' => 'Pagos',
                 'route' => 'admin_app_pago_list',
             ]);
+            if(in_array("ROLE_ADMIN_REPORTES", $roles)) {
+                $child = $menu->addChild('Reportes', [
+                    'label' => 'Reportes',
+                    //'route' => 'excel',
+                ])->setExtras([
+                    'icon' => '<i class="fa fa-file-text" aria-hidden="true"></i>',
+                ]);
 
-            $child = $menu->addChild('Informes', [
-                'label' => 'Informes',
-                //'route' => 'excel',
-            ])->setExtras([
-                'icon' => '<i class="fa fa-file-text" aria-hidden="true"></i>',
-            ]);
-
-            $child->addChild('Adeudadas', [
-                'label' => 'Adeudadas',
-                'route' => 'admin_app_factura_adeudadas',
-            ]);
+                $child->addChild('Adeudadas', [
+                    'label' => 'Adeudadas',
+                    'route' => 'admin_app_factura_adeudadas',
+                ]);
+            }
 		}
 		
 		
