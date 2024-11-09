@@ -59,7 +59,7 @@ final class FacturaAdmin extends AbstractAdmin
             $query
                 #->Where($query->getRootAlias()[0].".hospital  ".$user->getHospital()->getId())
                 ->where($query->getRootAlias()[0].".hospitalId not in (:array)")
-                ->andWhere($query->getRootAlias()[0].".fechaDesde >= '2023-12-30'")
+                ->andWhere($query->getRootAlias()[0].".fechaEmision >= '2023-12-30'")
                 #->orWhere($query->getRootAlias()[0].".hospitalId is null")
                 ->setParameter('array',$arrayHpgd);
         endif;
