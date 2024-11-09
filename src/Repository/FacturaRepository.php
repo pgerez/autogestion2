@@ -65,14 +65,15 @@ class FacturaRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return [] Returns an array of Anexo items objects
+     * @return Factura[] Returns an array items objects
      */
     public function findAnexoItems($id)
     {
         return $this->createQueryBuilder('f')
-            ->select('a.numAnexo','a.documento','a.apeynom','i.cantidad','i.precio','s.descripcionServicio')
+            ->select('a.numAnexo','a.documento','a.apeynom','i.cantidad','i.precio','n.tema','s.descripcionServicio as servicio')
             ->join('f.itemPrefacturacions', 'i')
             ->join('i.Num_Anexo', 'a')
+            ->join('i.nomencla', 'n')
             ->join('i.codserv_FK', 's')
             ->andWhere('f.idFactura = :val')
             ->setParameter('val', $id)
@@ -82,28 +83,39 @@ class FacturaRepository extends ServiceEntityRepository
             ;
     }
 
-    public function findByAdeudadas($hospitalid=null,$osid=null,$fechai=null,$fechaf=null)
+    public function findAdeudadas($hospitalid=null,$osid=null,$fechai=null,$fechaf=null)
     {
-        $adeudadas = $this->createQueryBuilder('f')
-            ->select('f.digitalNum as numero','f.digitalPv as pv')
-            ->join('f.codOs','os')
-            ->join('f.hospitalId', 'h')
-            ->where('f.estadoId = 1');
-        if($fechai!=null):
-            $adeudadas->andWhere("f.fechaEmision >= '".$fechai."'");
-        endif;
-        if($fechaf!=null):
-            $adeudadas->andWhere("f.fechaEmision <= '".$fechaf."'");
-        endif;
-        if($osid!=null):
-            $adeudadas->andWhere('f.codOs = '.$osid);
-        endif;
-        if($hospitalid!=null):
-            $adeudadas->andWhere('f.hospitalId = '.$hospitalid);
-        endif;
-            $adeudadas->orderBy('f.hospitalId','ASC')
+        if($osid != null):
+            $adeudadas = $this->createQueryBuilder('f')
+                #->select('f.digitalNum as numero','f.digitalPv as pv','f.montoFact as monto','f.fechaEmision as fechaEmision')
+                ->innerJoin('f.codOs','os')
+                ->innerJoin('f.hospitalId', 'h')
+                ->where('f.estadoId = 1')
+                ->andWhere('f.fechaEmision BETWEEN (:fechai) AND (:fechaf)')
+                ->andWhere('f.codOs = (:osid)')
+                ->andWhere('f.hospitalId = (:hospitalid)')
+                ->setParameters(['fechaf' => $fechaf, 'fechai' => $fechai])
+                ->setParameter('osid' , $osid)
+                ->setParameter('hospitalid', $hospitalid)
+                ->orderBy('f.hospitalId','ASC')
+                ->addorderBy('f.codOs','ASC')
                 ->getQuery()
                 ->getResult();
+        else:
+            $adeudadas = $this->createQueryBuilder('f')
+                #->select('f.digitalNum as numero','f.digitalPv as pv','f.montoFact as monto','f.fechaEmision as fechaEmision')
+                ->innerJoin('f.hospitalId', 'h')
+                ->where('f.estadoId = 1')
+                ->andWhere('f.fechaEmision BETWEEN (:fechai) AND (:fechaf)')
+                ->andWhere('f.hospitalId = (:hospitalid)')
+                ->setParameters(['fechaf' => $fechaf, 'fechai' => $fechai])
+                ->setParameter('hospitalid', $hospitalid)
+                ->orderBy('f.hospitalId','ASC')
+                ->addorderBy('f.codOs','ASC')
+                ->getQuery()
+                ->getResult();
+        endif;
+
 
         return $adeudadas;
 

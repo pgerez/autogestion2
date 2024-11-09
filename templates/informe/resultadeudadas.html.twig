@@ -1,0 +1,40 @@
+{% extends "standard_layout.html.twig" %}
+
+{% block title %}Facturacion{% endblock %}
+
+{% block sonata_admin_content %}
+
+    <div class="box box-title">
+        <h3>Listado de Facturas Adeudadas</h3>
+    </div>
+        <div class="box box-primary">
+            {% set total = 0 %}
+            <table class="table table-responsive">
+                <tr>
+                    <th>HOSPITAL</th>
+                    <th>OBRA SOCIAL</th>
+                    <th>NUMERO</th>
+                    <th>FECHA</th>
+                    <th>MONTO</th>
+                </tr>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.hospitalId }}</td>
+                        <td>{{ item.CodOS }}</td>
+                        <td>{{ item.numeroCompleto }}</td>
+                        <td>{{ item.fechaEmision|date("d/m/Y") }}</td>
+                        <td>{{ item.montoFact }}</td>
+                        {% set total = total + item.montoFact %}
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="4" style="text-align: right"><u>TOTAL FACTURADO:</u></td>
+                    <td><strong>{{ total }}</strong></td>
+                </tr>
+            </table>
+
+            <div   class="sonata-ba-form-actions well well-small form-actions">
+                <a href="{{ path('admin_app_factura_adeudadas') }}" type="button" class="btn btn-warning">Volver a calcular</a>
+            </div>
+        </div>
+{% endblock %}

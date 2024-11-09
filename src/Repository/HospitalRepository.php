@@ -107,5 +107,16 @@ class HospitalRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findByHpgd($value)
+    {
+        return $this->createQueryBuilder('h')
+            ->where('h.id = :id')
+            ->andWhere('h.hpgd = 1')
+            ->setParameter('id', $value)
+            ->getQuery()
+            ->getArrayResult()
+            ;
+    }
+
 
 }

@@ -7,7 +7,9 @@ namespace App\Controller;
 use App\Application\ReportBundle\Report\ReportPDF;
 use App\Entity\Cuota;
 use App\Entity\Factura;
+use App\Entity\Hospital;
 use App\Entity\ItemPrefacturacion;
+use App\Entity\ObrasSociales;
 use PhpOffice\PhpSpreadsheet\Calculation\Web\Service;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Spipu\Html2Pdf\Html2Pdf;
@@ -555,17 +557,20 @@ EOF;
     </div>
     <div style="page-break-after: always;"></div>
 EOF;
-        $html .= '<div class="wrapper " style="width:100%; margin-top: 10px;padding-left: 0px; border: 0px">
+        $html .= '<div class="wrapper" style="width:10%; margin-top: 10px;padding-right: 0px; border: 0px">
                   <table style="margin-left: 0px">
-                    <tr>
-                        <th>Anexo</th>
-                        <th>Nombre y Apellido</th>
-                        <th>Dni</th>
-                        <th>Practica</th>
-                        <th>Cantidad</th>
-                        <th>Precio</th>
-                        <th>Total</th>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>Anexo</th>
+                            <th>Nombre y Apellido</th>
+                            <th>Dni</th>
+                            <!--<th>Servicio</th>-->
+                            <th>Practica</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
                 ';
         $t = 0;
         foreach ($items as $i){
@@ -574,7 +579,8 @@ EOF;
                 $html .='<td>'.$i['numAnexo'].'</td>';
                 $html .='<td>'.$i['apeynom'].'</td>';
                 $html .='<td>'.$i['documento'].'</td>';
-                $html .='<td>'.$i['descripcionServicio'].'</td>';
+                #$html .='<td>'.$i['servicio'].'</td>';
+                $html .='<td>'.$i['tema'].'</td>';
                 $html .='<td>'.$i['cantidad'].'</td>';
                 $html .='<td>'.$i['precio'].'</td>';
                 $html .='<td>'.$i['precio']*$i['cantidad'].'</td>';
@@ -870,6 +876,7 @@ EOF;
                         <th>Anexo</th>
                         <th>Nombre y Apellido</th>
                         <th>Dni</th>
+                        <!--<th>Servicio</th>-->
                         <th>Practica</th>
                         <th>Cantidad</th>
                         <th>Precio</th>
@@ -883,7 +890,8 @@ EOF;
             $html .='<td>'.$i['numAnexo'].'</td>';
             $html .='<td>'.$i['apeynom'].'</td>';
             $html .='<td>'.$i['documento'].'</td>';
-            $html .='<td>'.$i['descripcionServicio'].'</td>';
+            #$html .='<td>'.$i['servicio'].'</td>';
+            $html .='<td>'.$i['tema'].'</td>';
             $html .='<td>'.$i['cantidad'].'</td>';
             $html .='<td>'.$i['precio'].'</td>';
             $html .='<td>'.$i['precio']*$i['cantidad'].'</td>';
@@ -944,11 +952,11 @@ EOF;
         $em = $this->getDoctrine()->getManager();
         if($this->isGranted('ROLE_HPGD') and !$this->isGranted('ROLE_AUTOGESTION')) {
             $hospital = $this->getUser()->getHospital();
-            $hospitals = $em->getRepository('App\Entity\Hospital')->findByHpgd($hospital->getId());
+            $hospitals = $em->getRepository(Hospital::class)->findByHpgd($hospital->getId());
         }else{
-            $hospitals = $em->getRepository('App\Entity\Hospital')->findAllNotHpgd();
+            $hospitals = $em->getRepository(Hospital::class)->findAllNotHpgd();
         }
-        $oss = $em->getRepository('App\Entity\ObrasSociales')->findAll();
+        $oss = $em->getRepository(ObrasSociales::class)->findAll();
 
         return $this->render('informe/adeudadas.html.twig', [
             'controller_name' => 'FacturaAdminController',
@@ -965,10 +973,13 @@ EOF;
         $fechai = $request->get('fechainicio');
         $fechaf = $request->get('fechafin');
         $em = $this->getDoctrine()->getManager();
-        $items = $em->getRepository(Factura::class)->findByAdeudadas($hospitalid,$osid,$fechai,$fechaf);
-       foreach ($items as $item):
-           echo var_dump($item);'<br>';
-       endforeach;exit;
+        $items = $em->getRepository(Factura::class)->findAdeudadas($hospitalid,$osid,$fechai,$fechaf);
+
+        return $this->render('informe/resultadeudadas.html.twig', [
+            'controller_name' => 'FacturaAdminController',
+            'items' => $items,
+            'success' => 0,
+        ]);
     }
 
 }

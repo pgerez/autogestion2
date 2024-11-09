@@ -20,7 +20,7 @@
 
         <div>
             <label for="myfile">Hospital:</label>
-            <select id="hospitalid" name="hospitalid" onchange="buscarOs(this.value)">
+            <select id="hospitalid" name="hospitalid" required>
                 <option value="">Seleccione un Hospital</option>
                 {% for hospital in hospitals %}
                     <option value="{{hospital.id}}">{{hospital.codigoh}} - {{hospital.descriph}}</option><br />
@@ -30,6 +30,7 @@
         <div>
             <label for="myfile">Obra Social:</label>
             <select id="obrasocialid" name="obrasocialid">
+                <option value="">Seleccione una Obra Social</option><br/>
                 {% for os in oss %}
                     <option value="{{os.rowId}}">{{os.codobra}} - {{os.denomina}}</option><br/>
                 {% endfor %}
@@ -41,14 +42,14 @@
                 <div class="form-group">
                     <label for="myfile">fecha inicio:</label>
                     <div class='input-group date' id='datei'>
-                        <input type='text' class="form-control" name="fechainicio" id="fechainicio"/>
+                        <input type='text' class="form-control" name="fechainicio" id="fechainicio" required/>
                         <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
                     </div>
                     <label for="myfile">fecha fin:</label>
                     <div class='input-group date' id='datef'>
-                        <input type='text' class="form-control" name="fechafin" id="fechafin"/>
+                        <input type='text' class="form-control" name="fechafin" id="fechafin" required/>
                         <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>

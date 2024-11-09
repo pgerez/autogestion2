@@ -21,7 +21,7 @@ final class NomenclaAdmin extends AbstractAdmin
             $query
                 #->join($query->getRootAlias()[0].'.hospitalId', 'h', 'WITH', $query->getRootAlias()[0].'.hospitalId = h.id')
                 ->andWhere($query->getRootAlias()[0].'.estado = 1')
-                ->andWhere($query->getRootAlias()[0].".fechaInicio = '2022-10-4'");
+                ->andWhere($query->getRootAlias()[0].".fechaInicio >= '2022-10-4'");
         endif;
 
         return $query;
