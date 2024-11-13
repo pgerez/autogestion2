@@ -34,8 +34,10 @@
     </table>
     <table class="table table-bordered table-striped">
         <tr>
-            <th>Id</th>
+            <th>Anexo</th>
+            <th>Paciente</th>
             <th>Servicio</th>
+            <th>Practica</th>
             <th>Cantidad</th>
             <th>Precio</th>
             <th>Total</th>
@@ -43,8 +45,10 @@
         {% set total = 0 %}
         {% for item in object.itemPrefacturacions %}
         <tr>
-            <td>{{ item.id }}</td>
+            <td>{{ item.numAnexo }}</td>
+            <td>{{ item.numAnexo.apeynom }}</td>
             <td>{{ item.codservFK.descripcionServicio }}</td>
+            <td>{{ item.nomencla.tema }}</td>
             <td>{{ item.cantidad }}</td>
             <td>{{ item.precio }}</td>
             <td>{{ item.precio * item.cantidad }}</td>
@@ -52,7 +56,7 @@
         </tr>
         {% endfor %}
         <tr>
-            <td colspan="4" style="text-align: right">TOTAL</td>
+            <td colspan="6" style="text-align: right">TOTAL</td>
             <td>{{ total }}</td>
         </tr>
     </table>
