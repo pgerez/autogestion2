@@ -616,9 +616,9 @@ EOF;
         if(isset($obrasocials)):
             foreach ($obrasocials as $o):
                 if($select == '') {
-                    $select .= '<option value="' . $o['id'] . '" selected>' . $o['codobra'] . '-' . $o['denomina'] . '</option>';
+                    $select .= '<option value="' . $o['id'] . '" selected>' . $o['codobra'] . '-' . utf8_decode($o['denomina']) . '</option>';
                 }else{
-                    $select .= '<option value="' . $o['id'] . '">' . $o['codobra'] . '-' . $o['denomina'] . '</option>';
+                    $select .= '<option value="' . $o['id'] . '">' . $o['codobra'] . '-' . utf8_decode($o['denomina']) . '</option>';
                 }
             endforeach;
         endif;
