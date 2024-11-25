@@ -29,12 +29,12 @@ final class EstimuloAdmin extends AbstractAdmin
                 ->andWhere($query->getRootAlias()[0].'.sistema = 1');
         endif;
 
-        if ($this->isGranted('ROLE_AUTOGESTION')):
+        if ($this->isGranted('ROLE_AUTOGESTION') or $this->isGranted('ROLE_SUPER_ADMIN')):
             $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
             $query
                 #->join($query->getRootAlias()[0].'.hospitalId', 'h', 'WITH', $query->getRootAlias()[0].'.hospitalId = h.id')
                 ->where($query->getRootAlias()[0].'.hospitalId NOT IN (:array)')
-                ->andWhere($query->getRootAlias()[0].'.sistema = 1')
+                #->andWhere($query->getRootAlias()[0].'.sistema = 1')
                 ->setParameter('array',$arrayHpgd);
         endif;
 
