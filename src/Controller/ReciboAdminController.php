@@ -57,7 +57,7 @@ final class ReciboAdminController extends CRUDController{
                 de las planillas originales de acuerdo a reglamentacion vigente (Planillas firmadas,depositos de aportes, copia de informe ) informatica y reintegro de fondos
                 </span>
                 <br><br>
-                    Liquido a Pagar: <strong>{$recibo->getMonto()}</strong>  Cheque/Transferencia:<strong> {$recibo->getCheque()}</strong><br>
+                    Liquido a Pagar: <strong>{$recibo->getMonto()}/strong>  Cheque/Transferencia:<strong> {$recibo->getCheque()}</strong><br>
                     Aporte ANSES: <strong>{$recibo->getMontoAnses()}</strong>  Cheque/Transferencia:<strong> {$recibo->getChequeAnses()}</strong><br><br>
                     
                     <div style="text-align: right">Se Entregan Planillas Originales</div><br><br>
