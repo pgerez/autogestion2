@@ -557,8 +557,8 @@ EOF;
     </div>
     <div style="page-break-after: always;"></div>
 EOF;
-        $html .= '<div class="wrapper" style="width:10%; margin-top: 10px;padding-right: 0px; border: 0px">
-                  <table style="margin-left: 0px">
+        $html .=<<<EOF
+                  <table>
                     <thead>
                         <tr>
                             <th>Anexo</th>
@@ -566,24 +566,24 @@ EOF;
                             <th>Dni</th>
                             <!--<th>Servicio</th>-->
                             <th>Practica</th>
-                            <th>Cantidad</th>
+                            <th>Cant</th>
                             <th>Precio</th>
                             <th>Total</th>
                         </tr>
                     </thead>
-                ';
+EOF;
         $t = 0;
         foreach ($items as $i){
 
                 $html .='<tr>';
-                $html .='<td>'.$i['numAnexo'].'</td>';
-                $html .='<td>'.$i['apeynom'].'</td>';
-                $html .='<td>'.$i['documento'].'</td>';
+                $html .='<td style="width: 10%">'.$i['numAnexo'].'</td>';
+                $html .='<td style="width: 20%">'.$i['apeynom'].'</td>';
+                $html .='<td style="width: 10%">'.$i['documento'].'</td>';
                 #$html .='<td>'.$i['servicio'].'</td>';
-                $html .='<td>'.$i['tema'].'</td>';
-                $html .='<td>'.$i['cantidad'].'</td>';
-                $html .='<td>'.$i['precio'].'</td>';
-                $html .='<td>'.$i['precio']*$i['cantidad'].'</td>';
+                $html .='<td style="width: 40%">'.$i['tema'].'</td>';
+                $html .='<td style="width: 5%">'.$i['cantidad'].'</td>';
+                $html .='<td style="width: 8%">'.$i['precio'].'</td>';
+                $html .='<td style="width: 8%">'.$i['precio']*$i['cantidad'].'</td>';
                 $html .='</tr>';
                 $t = $t + ($i['precio']*$i['cantidad']);
 
@@ -591,7 +591,7 @@ EOF;
         }
         $html .='<tr><td colspan="6" style="text-align: right"><strong>TOTAL:</strong></td>';
         $html .='<td><strong>'.$t.'</strong></td></tr>';
-        $html.='</table></div></body></html>';
+        $html.='</table></body></html>';
 
         $html2pdf = new Html2Pdf();
         $html2pdf->writeHTML($html);
@@ -870,31 +870,33 @@ EOF;
     </div>
     <div style="page-break-after: always;"></div>
 EOF;
-        $html .= '<div class="wrapper " style="width:100%; margin-top: 10px;padding-left: 0px; border: 0px">
-                  <table style="margin-left: 0px">
-                    <tr>
-                        <th>Anexo</th>
-                        <th>Nombre y Apellido</th>
-                        <th>Dni</th>
-                        <!--<th>Servicio</th>-->
-                        <th>Practica</th>
-                        <th>Cantidad</th>
-                        <th>Precio</th>
-                        <th>Total</th>
-                    </tr>
-                ';
+        $html .=<<<EOF
+                  <table>
+                    <thead>
+                        <tr>
+                            <th>Anexo</th>
+                            <th>Nombre y Apellido</th>
+                            <th>Dni</th>
+                            <!--<th>Servicio</th>-->
+                            <th>Practica</th>
+                            <th>Cant</th>
+                            <th>Precio</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+EOF;
         $t = 0;
         foreach ($items as $i){
 
             $html .='<tr>';
-            $html .='<td>'.$i['numAnexo'].'</td>';
-            $html .='<td>'.$i['apeynom'].'</td>';
-            $html .='<td>'.$i['documento'].'</td>';
+            $html .='<td style="width: 10%">'.$i['numAnexo'].'</td>';
+            $html .='<td style="width: 20%">'.$i['apeynom'].'</td>';
+            $html .='<td style="width: 10%">'.$i['documento'].'</td>';
             #$html .='<td>'.$i['servicio'].'</td>';
-            $html .='<td>'.$i['tema'].'</td>';
-            $html .='<td>'.$i['cantidad'].'</td>';
-            $html .='<td>'.$i['precio'].'</td>';
-            $html .='<td>'.$i['precio']*$i['cantidad'].'</td>';
+            $html .='<td style="width: 40%">'.$i['tema'].'</td>';
+            $html .='<td style="width: 5%">'.$i['cantidad'].'</td>';
+            $html .='<td style="width: 8%">'.$i['precio'].'</td>';
+            $html .='<td style="width: 8%">'.$i['precio']*$i['cantidad'].'</td>';
             $html .='</tr>';
             $t = $t + ($i['precio']*$i['cantidad']);
 
