@@ -60,7 +60,9 @@ final class AnexoiiAdmin extends AbstractAdmin
         if ($this->isGranted('ROLE_USER_OS') and !$this->isGranted('ROLE_SUPER_ADMIN') and !$this->isGranted('ROLE_AUTOGESTION')):
             $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
             $query
+                ->innerJoin($query->getRootAlias()[0].'.itemPrefacturacions', 'i')
                 ->where($query->getRootAlias()[0].'.codOs = '.$user->getObraSocial()->getRowId())
+                ->andWhere('i.id_factura_FK is not null')
                 ->andWhere($query->getRootAlias()[0].'.cerrado = 1')
                 ->andWhere($query->getRootAlias()[0].'.sistema = 1');
         endif;
