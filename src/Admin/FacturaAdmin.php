@@ -59,8 +59,8 @@ final class FacturaAdmin extends AbstractAdmin
             $query
                 ->where($query->getRootAlias()[0].".hospitalId  = ".$user->getHospital()->getId())
                 #->where($query->getRootAlias()[0].".hospitalId not in (:array)")
-                ->andWhere($query->getRootAlias()[0].".fechaEmision >= '2024-08-30'");
-                #->orWhere($query->getRootAlias()[0].".hospitalId is null")
+                ->andWhere($query->getRootAlias()[0].".fechaEmision >= '2024-08-30'")
+                ->andWhere($query->getRootAlias()[0].".digitalPv <> 111 ");
                 #->setParameter('array',$arrayHpgd);
         elseif ($this->isGranted('ROLE_USER_OS')):
             $query
