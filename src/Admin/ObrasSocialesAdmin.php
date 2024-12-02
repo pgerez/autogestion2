@@ -91,6 +91,7 @@ final class ObrasSocialesAdmin extends AbstractAdmin
             ->add('codsuc')
             ->add('cuit')
             ->add('email')
+            ->add('emailInternacion')
             ->add('estado')
             ;
     }
