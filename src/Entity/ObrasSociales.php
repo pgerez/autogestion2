@@ -93,6 +93,16 @@ class ObrasSociales
 
     /**
      * @var string|null
+     * @Assert\Email(
+     *      message = "El email para internacion '{{ value }}' no es valido.",
+     *      checkMX = true
+     *  )
+     * @ORM\Column(name="email_internacion", type="string", length=100, nullable=true, options={"fixed"=true})
+     */
+    private $emailInternacion = null;
+
+    /**
+     * @var string|null
      *
      * @ORM\Column(name="provincia", type="string", length=200, nullable=true, options={"fixed"=true})
      */
@@ -410,6 +420,18 @@ class ObrasSociales
     public function setProvincia(?string $provincia): self
     {
         $this->provincia = $provincia;
+
+        return $this;
+    }
+
+    public function getEmailInternacion(): ?string
+    {
+        return $this->emailInternacion;
+    }
+
+    public function setEmailInternacion(?string $emailInternacion): self
+    {
+        $this->emailInternacion = $emailInternacion;
 
         return $this;
     }

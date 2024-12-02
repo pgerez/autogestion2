@@ -59,8 +59,13 @@ final class ObrasSocialesAdmin extends AbstractAdmin
             ->add('cuit')
             ->add('codsuc')
             ->add('ctabanc')
-            ->add('estado')
-            ->add('email')
+            ->add('estado');
+        if ($this->isGranted('ROLE_AUTOGESTION') or $this->isGranted('ROLE_SUPER_ADMIN') or $this->isGranted('ROLE_HPGD') ):
+            $list->add('email');
+        endif;
+
+        $list
+            ->add('emailInternacion', null, ['label' => 'Email Internacion'])
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
