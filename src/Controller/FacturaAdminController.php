@@ -904,7 +904,7 @@ EOF;
         }
         $html .='<tr><td colspan="6" style="text-align: right"><strong>TOTAL:</strong></td>';
         $html .='<td><strong>'.$t.'</strong></td></tr>';
-        $html.='</table></div></body></html>';
+        $html.='</table></body></html>';
 
         $html2pdf = new Html2Pdf();
         $html2pdf->writeHTML($html);
