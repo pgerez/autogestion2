@@ -154,7 +154,7 @@ class Hospital
 
     public function __toString()
     {
-        return (string) utf8_decode($this->getDescriph());
+        return (string) utf8_encode($this->getDescriph());
     }
 
     public function getId(): ?int

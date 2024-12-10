@@ -1,0 +1,31 @@
+{% extends "standard_layout.html.twig" %}
+
+{% block title %}Facturacion{% endblock %}
+
+{% block sonata_admin_content %}
+
+    <div class="box box-title">
+        <h3>Saldo en Hospitales</h3>
+    </div>
+    <div class="box box-primary">
+        {% set total = 0 %}
+        <table class="table table-responsive">
+            <tr>
+                <th>HOSPITAL</th>
+                <th>SALDO</th>
+            </tr>
+            {% for result in results %}
+                <tr>
+                    <td>{{ result.descriph }}</td>
+                    <td>{{ result.saldo|number_format(2, ',', '.') }}</td>
+                    {% set total = total + result.saldo %}
+                </tr>
+            {% endfor %}
+            <tr>
+                <td style="text-align: right"><u>TOTAL FACTURADO:</u></td>
+                <td><strong>{{ total|number_format(2, ',', '.') }}</strong></td>
+            </tr>
+        </table>
+        </div>
+    </div>
+{% endblock %}

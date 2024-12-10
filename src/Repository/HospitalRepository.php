@@ -98,12 +98,27 @@ class HospitalRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     * @return array
+     */
     public function findAllNotHpgd()
     {
         return $this->createQueryBuilder('h')
             ->andWhere('h.hpgd = 0')
             ->getQuery()
             ->getArrayResult()
+            ;
+    }
+
+    /**
+     * @return object
+     */
+    public function findAllNotHpgdObject()
+    {
+        return $this->createQueryBuilder('h')
+            ->andWhere('h.hpgd = 0')
+            ->getQuery()
+            ->getResult()
             ;
     }
 

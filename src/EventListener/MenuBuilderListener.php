@@ -73,6 +73,11 @@ class MenuBuilderListener
                     'label' => 'Adeudadas',
                     'route' => 'admin_app_factura_adeudadas',
                 ]);
+
+                $child->addChild('Saldos', [
+                    'label' => 'Saldos',
+                    'route' => 'admin_app_hospital_saldos',
+                ]);
             }
 		}
 		
