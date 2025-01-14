@@ -222,11 +222,12 @@ class Certificado
         }
         $em = $kernel->getContainer()->get( 'doctrine.orm.entity_manager' );
         $e = $em->getRepository(Estado::class)->find(1);
+        $du = $em->getRepository(Estado::class)->find(15);
         if ($this->facturas->removeElement($factura)) {
             // set the owning side to null (unless already changed)
             if ($factura->getCertificado() === $this) {
                 $factura->setCertificado(null);
-                $factura->setEstadoId($e);
+                $factura->getSaldo() == 0 ? $factura->setEstadoId($e) : $factura->setEstadoId($du);
             }
         }
 

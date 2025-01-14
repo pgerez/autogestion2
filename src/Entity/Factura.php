@@ -51,9 +51,16 @@ class Factura
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="periodo", type="date", nullable=true)
+     * @ORM\Column(name="periodo_desde", type="date", nullable=true)
      */
-    private $periodo;
+    private $periodo_desde = null;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="periodo_hasta", type="date", nullable=true)
+     */
+    private $periodo_hasta = null;
 
     /**
      * @var string
@@ -298,7 +305,8 @@ class Factura
     }
     public function __construct()
     {
-        $this->setPeriodo(new \DateTime());
+        $this->setPeriodoDesde(new \DateTime());
+        $this->setPeriodoHasta(new \DateTime());
         $this->setDigitalFecha(new \DateTime());
         $this->setFechaEmision(new \DateTime());
         $this->setMontoReal(0);
@@ -309,6 +317,23 @@ class Factura
         $this->facturas = new ArrayCollection();
         
 
+    }
+
+    public function getSaldo()
+    {
+        $saldo = 0;
+        $i     = 0;
+        foreach ($this->itemPrefacturacions as $item):
+             if($item->getEstadoPago()==0):
+                $saldo = $saldo + ($item->getPrecio() * $item->getCantidad());
+                $i++;
+             endif;
+        endforeach;
+        if(count($this->itemPrefacturacions) != $i):
+            return $saldo;
+        else:
+            return 0;
+        endif;
     }
 
     public function getNumeroCompleto()
@@ -397,18 +422,6 @@ class Factura
     public function setFechaEmision(?\DateTimeInterface $fechaEmision): self
     {
         $this->fechaEmision = $fechaEmision;
-
-        return $this;
-    }
-
-    public function getPeriodo(): ?\DateTimeInterface
-    {
-        return $this->periodo;
-    }
-
-    public function setPeriodo(?\DateTimeInterface $periodo): self
-    {
-        $this->periodo = $periodo;
 
         return $this;
     }
@@ -847,6 +860,30 @@ class Factura
                 $factura->setIdFactura(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPeriodoDesde(): ?\DateTimeInterface
+    {
+        return $this->periodo_desde;
+    }
+
+    public function setPeriodoDesde(?\DateTimeInterface $periodo_desde): self
+    {
+        $this->periodo_desde = $periodo_desde;
+
+        return $this;
+    }
+
+    public function getPeriodoHasta(): ?\DateTimeInterface
+    {
+        return $this->periodo_hasta;
+    }
+
+    public function setPeriodoHasta(?\DateTimeInterface $periodo_hasta): self
+    {
+        $this->periodo_hasta = $periodo_hasta;
 
         return $this;
     }

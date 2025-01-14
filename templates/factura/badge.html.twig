@@ -1,6 +1,6 @@
 {% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
 {% block field %}
-    {% set badge = {1 : 'label label-primary', 2 : 'label label-danger', 3 : 'label label-success', 6 : 'label label-danger', 13 : 'label label-info', 14 : 'label label-warning', 7 : 'label label-default', 11 : 'label label-default', 9 : 'label label-default', 8 : 'label label-default', 5 : 'label label-default'} %}
+    {% set badge = {1 : 'label label-primary', 2 : 'label label-danger', 3 : 'label label-success', 6 : 'label label-danger', 13 : 'label label-info', 15 : 'label label-danger', 14 : 'label label-warning', 7 : 'label label-default', 11 : 'label label-default', 9 : 'label label-default', 8 : 'label label-default', 5 : 'label label-default'} %}
         {% if object.estadoId.codEstado == 14 or object.estadoId.codEstado == 9 %}
             <span class="{{ badge[object.estadoId.codEstado] }}" title="{{ object.facturaIdFactura }}">{{ object.estadoId }}</span>
         {% elseif object.estadoId.codEstado == 6  %}

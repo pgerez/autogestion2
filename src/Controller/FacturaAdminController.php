@@ -317,6 +317,10 @@ EOF;
     public function pdfAction(Request $request) : Response
     {
         $factura  = $this->admin->getSubject();
+        ###periodo#####
+        $desde = $factura->getPeriodoDesde() == null ? $factura->getFechaEmision()->format('d/m/Y') : $factura->getPeriodoDesde()->format('d/m/Y');
+        $hasta = $factura->getPeriodoHasta() == null ? $factura->getFechaEmision()->format('d/m/Y') : $factura->getPeriodoHasta()->format('d/m/Y');
+        ######
         $em = $this->getDoctrine()->getManager();
         $items = $em->getRepository(Factura::class)->findAnexoItems($factura->getIdFactura());
         $fechaCae = $factura->getCaeVto() ? $factura->getCaeVto()->format('d/m/Y') : 'SIN FECHA';
@@ -484,8 +488,8 @@ EOF;
     </div>
 <br>
     <div class="wrapper flex space-around" style="margin-top: 1px;">
-        <span><b>Período Facturado Desde:</b> {$factura->getFechaEmision()->format('d/m/Y')}</span>
-        <span><b>Hasta:</b> {$factura->getFechaEmision()->format('d/m/Y')}</span>
+        <span><b>Período Facturado Desde:</b> {$desde}</span>
+        <span><b>Hasta:</b> {$hasta}</span>
         <span><b>Fecha de Vto. para el pago:</b> {$factura->getFechaEmision()->modify('+1 month')->format('d/m/Y')}</span>
     </div>
 
@@ -631,6 +635,10 @@ EOF;
     public function mailAction(MailerInterface $mailer): Response
     {
         $factura  = $this->admin->getSubject();
+        ###periodo#####
+        $desde = $factura->getPeriodoDesde() == null ? $factura->getFechaEmision()->format('d/m/Y') : $factura->getPeriodoDesde()->format('d/m/Y');
+        $hasta = $factura->getPeriodoHasta() == null ? $factura->getFechaEmision()->format('d/m/Y') : $factura->getPeriodoHasta()->format('d/m/Y');
+        ######
         $em = $this->getDoctrine()->getManager();
         $items = $em->getRepository(Factura::class)->findAnexoItems($factura->getIdFactura());
         $fechaCae = $factura->getCaeVto() ? $factura->getCaeVto()->format('d/m/Y') : 'SIN FECHA';
@@ -798,8 +806,8 @@ EOF;
     </div>
 <br>
     <div class="wrapper flex space-around" style="margin-top: 1px;">
-        <span><b>Período Facturado Desde:</b> {$factura->getFechaEmision()->format('d/m/Y')}</span>
-        <span><b>Hasta:</b> {$factura->getFechaEmision()->format('d/m/Y')}</span>
+        <span><b>Período Facturado Desde:</b> {$desde}</span>
+        <span><b>Hasta:</b> {$hasta}</span>
         <span><b>Fecha de Vto. para el pago:</b> {$factura->getFechaEmision()->modify('+1 month')->format('d/m/Y')}</span>
     </div>
 

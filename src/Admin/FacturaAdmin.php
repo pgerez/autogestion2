@@ -157,8 +157,17 @@ final class FacturaAdmin extends AbstractAdmin
             ->add('cae_vto', null, ['format'=>'d-m-y'])
             ->add('estadoId', null,['label' => 'Estado', 'template' => 'factura/badge.html.twig']);
         if ($this->isGranted('ROLE_AUTOGESTION') or $this->isGranted('ROLE_SUPER_ADMIN') or $this->isGranted('ROLE_HPGD') ):
-            $list->add('tipoFact', null, ['label' => 'Cert Deuda', 'template' => 'factura/progress.html.twig']);
-        endif;
+            $list->add('tipoFact', null, ['label' => 'Cert Deuda', 'template' => 'factura/progress.html.twig'])
+                ->add(ListMapper::NAME_ACTIONS, null, [
+                    'actions' => [
+                        'PDF' => ['template' => 'FacturaAdmin/pdf.html.twig'],
+                        'Anular' => ['template' => 'FacturaAdmin/notacredito.html.twig'],
+                        'show' => [],
+                        'Mail' => ['template' => 'FacturaAdmin/mail.html.twig'],
+                        'edit' => [],
+                    ],
+                ]);
+        else:
         $list
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
@@ -169,6 +178,7 @@ final class FacturaAdmin extends AbstractAdmin
                     #'delete' => [],
                 ],
             ]);
+        endif;
     }
 
     protected function configureFormFields(FormMapper $form): void
@@ -186,7 +196,8 @@ final class FacturaAdmin extends AbstractAdmin
             #->add('puntoVenta')
             #->add('numeroFactura')
             ->add('fechaEmision', DatePickerType::class, Array('label'=>'Emision', 'format'=>'d/M/y', 'disabled' => $disabled))
-            ->add('periodo', DatePickerType::class, Array('label'=>'Periodo', 'format'=>'d/M/y', 'disabled' => $disabled))
+            ->add('periodo_desde', DatePickerType::class, Array('label'=>'Periodo Desde', 'format'=>'d/M/y'))
+            ->add('periodo_hasta', DatePickerType::class, Array('label'=>'Periodo Hasta', 'format'=>'d/M/y'))
             ->add('usuarioFacturacion',null, ['disabled' => $disabled])#, ['hidden' => true])
             ->add('horaFactura', DateTimePickerType::class, [ 'format' => 'H:m', 'disabled' => $disabled])
             ->add('codOs', null, ['disabled' => $disabled])

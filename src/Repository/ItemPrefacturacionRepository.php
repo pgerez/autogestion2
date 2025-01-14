@@ -127,10 +127,12 @@ class ItemPrefacturacionRepository extends ServiceEntityRepository
     public function updateCheckItems($array, $idc, $idF)
     {
         $debitoT = null;
+        $cantidad = 0;
         $em = $this->getEntityManager();
-        $debParcial = $this->_em->getRepository(Estado::class)->find(['id' => 5]);
-        $percibida  = $this->_em->getRepository(Estado::class)->find(['id' => 3]);
-        $debTotal   = $this->_em->getRepository(Estado::class)->find(['id' => 2]);
+        $debParcial     = $this->_em->getRepository(Estado::class)->find(['id' => 5]);
+        $percibida      = $this->_em->getRepository(Estado::class)->find(['id' => 3]);
+        $debTotal       = $this->_em->getRepository(Estado::class)->find(['id' => 2]);
+        $debUnilateral  = $this->_em->getRepository(Estado::class)->find(['id' => 15]);
         foreach ($array as $id => $value):
             $this->createQueryBuilder('i')
                 ->update(ItemPrefacturacion::class, 'i')
@@ -154,6 +156,19 @@ class ItemPrefacturacionRepository extends ServiceEntityRepository
             $factura->setEstadoId($debParcial);
             $factura->setDebito($debitoT);
         endif;
+        $cantidad = $this->createQueryBuilder('i')
+            ->select('count(i.id) as cantidad')
+            ->where('i.id_factura_FK = (:idF)')
+            ->setParameter('idF', $idF)
+            ->getQuery()
+            ->getResult()
+        ;
+        if($cantidad[0]['cantidad'] != count($array)):
+            #echo $cantidad[0]['cantidad'].' - '.count($array);
+            $factura->setEstadoId($debUnilateral);
+            $factura->setDebito($debitoT);
+        endif;
+        #exit;
         $em->persist($factura);
         $em->flush();
         return true;

@@ -227,8 +227,13 @@ EOF;
                             <td>MONTO</td>
                         </tr>';
         foreach($certificado->getFacturas() as $factura):
-        $html .= '<tr><td>'.$factura->getNumeroCompleto().'</td><td> $'.$factura->getMontoFact().'</td></tr>';
-        $total = $total + $factura->getMontoFact();
+            if($factura->getSaldo() != 0):
+                $html .= '<tr><td>'.$factura->getNumeroCompleto().'</td><td> $'.$factura->getSaldo().'</td></tr>';
+                $total = $total + $factura->getSaldo();
+            else:
+                $html .= '<tr><td>'.$factura->getNumeroCompleto().'</td><td> $'.$factura->getMontoFact().'</td></tr>';
+                $total = $total + $factura->getMontoFact();
+            endif;
         endforeach;
         $html .= '<tr><td style="text-align: right">TOTAL</td><td> $'.$total.'</td></tr></table><br>';
         $html .= 'Son: <strong>'.$this->numtoletras((string)$total).'</strong><br><br>';
