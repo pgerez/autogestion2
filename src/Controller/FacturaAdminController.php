@@ -234,11 +234,12 @@ final class FacturaAdminController extends CRUDController{
                 foreach ($items as $item):
                     $cid = $item->getCuota() ? $item->getCuota()->getId() : 0;
                     $checked = $item->getEstadoPago() == 1 ? 'checked' : '';
+                    $pointer = $item->getEstadoFactura() == 3 ? 'pointer-events:none' : '';
                     $html .='<tr>
                                 <td class="sonata-ba-list-field sonata-ba-list-field-batch" objectid="'.$item->getId().'">';
                     if($cuota->getLiquidacion() == null):
                         if($cid == $idcuota or $cid == 0):
-                            $html .= '<div class="icheckbox_square-blue" style="position: relative;">
+                            $html .= '<div class="icheckbox_square-blue" style="position: relative; '.$pointer.'">
                                         <input type="checkbox" '.$checked.' name="idx[]" value="'.$item->getId().'" style="position: absolute; opacity: 0;">
                                       </div>';
                         else:
@@ -255,7 +256,7 @@ final class FacturaAdminController extends CRUDController{
                                 <td>'.$item->getCantidad().'</td>
                                 <td>'.$item->getPrecio().'</td>';
                     if($cuota->getLiquidacion() == null):
-                        $html .='<td><input type="text" name="monto_pago_'.$item->getId().'" id="monto_pago_'.$item->getId().'" value="'.$item->getMontoPago().'" size="5"></td>';
+                        $html .='<td><input type="text" name="monto_pago_'.$item->getId().'" id="monto_pago_'.$item->getId().'" value="'.$item->getMontoPago().'" size="5" style="'.$pointer.'"></td>';
                     else:
                         $html .= '<td>'.$item->getMontoPago().'</td>';
                     endif;

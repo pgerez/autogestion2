@@ -145,17 +145,6 @@ class ItemPrefacturacionRepository extends ServiceEntityRepository
                 ->getQuery()
                 ->getResult();
 
-            $this->createQueryBuilder('i')
-                ->update(ItemPrefacturacion::class, 'i')
-                ->set('i.estadoItem', 1)
-                ->set('i.cuota', $idc)
-                ->set('i.montoPago', $value)
-                ->where('i.id = (:id) and (:value) <> 0')
-                ->setParameter('id', $id)
-                ->setParameter('value', $value)
-                ->getQuery()
-                ->getResult();
-
             $debitoT = $debitoT + $value;
         endforeach;
         $factura = $this->_em->getRepository(Factura::class)->find(['idFactura' => $idF]);
