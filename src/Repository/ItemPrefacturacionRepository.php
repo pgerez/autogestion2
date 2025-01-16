@@ -114,6 +114,7 @@ class ItemPrefacturacionRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('i')
             ->update(ItemPrefacturacion::class, 'i')
             ->set('i.id_factura_FK', $idf)
+            ->set('i.estadoFactura', 2)
             ->where('i.id IN (:array)')
             ->setParameter('array', $array)
             ->getQuery()
@@ -143,6 +144,18 @@ class ItemPrefacturacionRepository extends ServiceEntityRepository
                 ->setParameter('id', $id)
                 ->getQuery()
                 ->getResult();
+
+            $this->createQueryBuilder('i')
+                ->update(ItemPrefacturacion::class, 'i')
+                ->set('i.estadoItem', 1)
+                ->set('i.cuota', $idc)
+                ->set('i.montoPago', $value)
+                ->where('i.id = (:id) and (:value) <> 0')
+                ->setParameter('id', $id)
+                ->setParameter('value', $value)
+                ->getQuery()
+                ->getResult();
+
             $debitoT = $debitoT + $value;
         endforeach;
         $factura = $this->_em->getRepository(Factura::class)->find(['idFactura' => $idF]);
@@ -190,9 +203,10 @@ class ItemPrefacturacionRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('i')
             ->update(ItemPrefacturacion::class, 'i')
             ->set('i.estadoPago', 0)
+            ->set('i.estadoItem', 0)
             ->set('i.montoPago', 0)
             ->set('i.cuota', 0)
-            ->where('i.id_factura_FK = (:idf)')
+            ->where('i.id_factura_FK = (:idf) and i.estadoFactura <> 3')
             ->andwhere('i.cuota = (:idc)')
             ->setParameter('idc', $idc)
             ->setParameter('idf', $idf)

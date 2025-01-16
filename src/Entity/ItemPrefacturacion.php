@@ -56,6 +56,7 @@ class ItemPrefacturacion
   #   */
   #  private $idFacturaFk;
 
+    ### 1 para facturar, 2 facturado, 3 nota de credito######
     /**
      * @var int
      *

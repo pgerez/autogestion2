@@ -632,8 +632,10 @@ class FacturacionController extends AbstractController
         $em->persist($factura);
         ###vuelvo a estado de prefacturacion a los items
         foreach ($factura->getItemPrefacturacions() as $i){
-            $i->setIdFacturaFK(null);
-            $em->persist($i);
+            if($i->getMontoPago() > 0):
+                $i->setEstadoFactura(3);
+                $em->persist($i);
+            endif;
         }
         $em->flush();
         $this->addFlash('sonata_flash_success', 'Nota de credito generada exitosamente.');

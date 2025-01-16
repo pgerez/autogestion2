@@ -324,7 +324,7 @@ class Factura
         $saldo = 0;
         $i     = 0;
         foreach ($this->itemPrefacturacions as $item):
-             if($item->getEstadoPago()==0):
+             if($item->getEstadoItem() == 1):
                 $saldo = $saldo + ($item->getPrecio() * $item->getCantidad());
                 $i++;
              endif;
