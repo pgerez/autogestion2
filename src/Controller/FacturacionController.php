@@ -453,7 +453,7 @@ class FacturacionController extends AbstractController
      * @Route("/processNotaDeCreditoAceptado", name="process_nota_de_credito_aceptado")
      * @return Response
      */
-    public function generarNotaDeCreditoUnilateral(Request $request): Response
+    public function generarNotaDeCreditoAceptado(Request $request): Response
     {
         $fid = $request->get('id');
         $em = $this->getDoctrine()->getManager();
@@ -614,11 +614,11 @@ class FacturacionController extends AbstractController
         $object->setTipoFact('X');
         $object->setPeriodoDesde($factura->getPeriodoDesde());
         $object->setPeriodoHasta($factura->getPeriodoHasta());
-        $object->setDigitalMonto($factura->getDigitalMonto());
+        $object->setDigitalMonto($importe_total);
         $object->setCodOs($factura->getCodOs());
         $object->setHospitalId($factura->getHospitalId());
-        $object->setMontoReal($factura->getMontoReal());
-        $object->setMontoFact($factura->getMontoFact());
+        $object->setMontoReal($importe_total);
+        $object->setMontoFact($importe_total);
         $object->setPuntoVenta($factura->getPuntoVenta());
         $object->setNumeroFactura($em->getRepository(Factura::class)->findById($factura->getHospitalId()->getPtoVta())[0]['numeroFactura'] + 1);
         #$object->setCae('CAE-notacredito');
@@ -627,9 +627,9 @@ class FacturacionController extends AbstractController
         $object->setCae($res['CAE']);
         $object->setFacturaIdFactura($factura);
         $em->persist($object);
-        $estadoF = $em->getRepository(Estado::class)->find(6);
-        $factura->setEstadoId($estadoF);
-        $em->persist($factura);
+        #$estadoF = $em->getRepository(Estado::class)->find(6);
+        #$factura->setEstadoId($estadoF);
+        #$em->persist($factura);
         ###vuelvo a estado de prefacturacion a los items
         foreach ($factura->getItemPrefacturacions() as $i){
             if($i->getMontoPago() > 0):

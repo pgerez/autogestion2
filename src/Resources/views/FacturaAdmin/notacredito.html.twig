@@ -6,9 +6,11 @@
                 </a>
         {%  endif %}
         {% if object.estadoId.codEstado == 5 and object.tipoFact == 'C'%}
-                <a href="{{ path('process_nota_de_credito_aceptado', {'id': object.idFactura}) }}" class="btn btn-sm btn-success view_link" title="{{ 'Generar Nota de Credito'|trans({}, 'SonataAdminBundle') }}" onclick="return confirm('Esta seguro de generar una Nota de Credito por {{ object.saldo }}, a la Factura {{ object }}?')">
-                        <i class="glyphicon glyphicon-list-alt"></i>
-                        Nota Credito
-                </a>
+                {% if not object.allFacturas %}
+                        <a href="{{ path('process_nota_de_credito_aceptado', {'id': object.idFactura}) }}" class="btn btn-sm btn-success view_link" title="{{ 'Generar Nota de Credito'|trans({}, 'SonataAdminBundle') }}" onclick="return confirm('Esta seguro de generar una Nota de Credito por {{ object.saldo }}, a la Factura {{ object }}?')">
+                                <i class="glyphicon glyphicon-list-alt"></i>
+                                Nota Credito
+                        </a>
+                {% endif %}
         {%  endif %}
 {% endif %}
