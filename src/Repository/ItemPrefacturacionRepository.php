@@ -135,15 +135,29 @@ class ItemPrefacturacionRepository extends ServiceEntityRepository
         $debTotal       = $this->_em->getRepository(Estado::class)->find(['id' => 2]);
         $debUnilateral  = $this->_em->getRepository(Estado::class)->find(['id' => 15]);
         foreach ($array as $id => $value):
-            $this->createQueryBuilder('i')
-                ->update(ItemPrefacturacion::class, 'i')
-                ->set('i.estadoPago', 1)
-                ->set('i.cuota', $idc)
-                ->set('i.montoPago', $value)
-                ->where('i.id = (:id)')
-                ->setParameter('id', $id)
-                ->getQuery()
-                ->getResult();
+            if($value == 0):
+                $this->createQueryBuilder('i')
+                    ->update(ItemPrefacturacion::class, 'i')
+                    ->set('i.estadoPago', 1)
+                    ->set('i.cuota', $idc)
+                    ->set('i.montoPago', $value)
+                    ->where('i.id = (:id)')
+                    ->setParameter('id', $id)
+                    ->getQuery()
+                    ->getResult();
+            else:
+                ###debito Aceptado#######
+                $this->createQueryBuilder('i')
+                    ->update(ItemPrefacturacion::class, 'i')
+                    ->set('i.estadoPago', 1)
+                    ->set('i.cuota', $idc)
+                    ->set('i.estadoItem', 1)
+                    ->set('i.montoPago', $value)
+                    ->where('i.id = (:id)')
+                    ->setParameter('id', $id)
+                    ->getQuery()
+                    ->getResult();
+            endif;
 
             $debitoT = $debitoT + $value;
         endforeach;
