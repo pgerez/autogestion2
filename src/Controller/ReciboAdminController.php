@@ -40,6 +40,8 @@ final class ReciboAdminController extends CRUDController{
 
         $pdf->AddPage();
         $pdf->SetFont("FreeSerif", "", 11);
+        $monto = number_format($recibo->getMonto(),2);
+        $anses = number_format($recibo->getMontoAnses(),2);
         $html = <<<EOF
                 <br>
                 <div style="text-align: right">{$recibo->getFechaEmicion()->format('d-m-Y')}<br><strong>RECIBO {$recibo}</strong></div>
@@ -57,8 +59,8 @@ final class ReciboAdminController extends CRUDController{
                 de las planillas originales de acuerdo a reglamentacion vigente (Planillas firmadas,depositos de aportes, copia de informe ) informatica y reintegro de fondos
                 </span>
                 <br><br>
-                    Liquido a Pagar: <strong>{$recibo->getMonto()}/strong>  Cheque/Transferencia:<strong> {$recibo->getCheque()}</strong><br>
-                    Aporte ANSES: <strong>{$recibo->getMontoAnses()}</strong>  Cheque/Transferencia:<strong> {$recibo->getChequeAnses()}</strong><br><br>
+                    Liquido a Pagar: <strong>{$monto}</strong>  Cheque/Transferencia:<strong> {$recibo->getCheque()}</strong><br>
+                    Aporte ANSES: <strong>{$anses}</strong>  Cheque/Transferencia:<strong> {$recibo->getChequeAnses()}</strong><br><br>
                     
                     <div style="text-align: right">Se Entregan Planillas Originales</div><br><br>
                     <div style="text-align: right">Firma del Director y/o Responsable</div><br>
