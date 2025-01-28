@@ -325,15 +325,11 @@ class Factura
         $i     = 0;
         foreach ($this->itemPrefacturacions as $item):
              if($item->getEstadoItem() == 1):
-                $saldo = $saldo + ($item->getPrecio() * $item->getCantidad());
+                $saldo += $item->getMontoPago();
                 $i++;
              endif;
         endforeach;
-        if(count($this->itemPrefacturacions) != $i):
-            return $saldo;
-        else:
-            return 0;
-        endif;
+        return $saldo;
     }
 
     public function getNumeroCompleto()
