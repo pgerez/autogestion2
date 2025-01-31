@@ -31,9 +31,16 @@
                 {% set total = 0 %}
                 {% set debito = 0 %}
                 {% set totalg = 0 %}
+                {% set totalgos = 0 %}
                 {% set debitog = 0 %}
+                {% set debitogos = 0 %}
+                {% set sumamitados = 0 %}
+                {% set sumamitados1 = 0 %}
+                {% set sumamitados2 = 0 %}
+                {% set sumamitados3 = 0 %}
                 {% set header = '' %}
                 {% set t = 1 %}
+                {% set arr = [] %}
                 {% for item in listado %}
                     {% if header != item['hospital'] %}
                         {% if t == 0 %}
@@ -100,6 +107,51 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+    </div>
+    <div class="box box-success">
+        <h4 class="box-body table-responsive no-padding">
+            {% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_AUTOGESTION' in app.user.roles%}
+            <h4 style="text-align: center">Listado Por Obra Social</h4>
+            <table class="table table-bordered table-striped table-hover sonata-ba-list">
+                <tr>
+                    <th>OS</th>
+                    <th>Total Gral</th>
+                    <th>Debito</th>
+                    <th>54.5%</th>
+                    <th>Hospital 90%</th>
+                    <th>Dpto Autogest Hospitales 5,5%</th>
+                    <th>Dpto Autogest Area Central 9%</th>
+                </tr>
+                {% for os in oss %}
+                {% set sumamitad = (os['suma']/2) %}
+                <tr>
+                    <td>{{ os['os'] }}</td>
+                    <td>{{ os['suma']|number_format(2, ',', '.') }}</td>
+                    <td>{{ os['deb']|number_format(2, ',', '.') }}</td>
+                    <td>{{ (sumamitad+(sumamitad*0.045))|number_format(2, ',', '.') }}</td>
+                    <td>{{ (sumamitad*0.9)|number_format(2, ',', '.') }}</td>
+                    <td>{{ (sumamitad*0.055)|number_format(2, ',', '.') }}</td>
+                    <td>{{ (sumamitad*0.09)|number_format(2, ',', '.') }}</td>
+                    {% set totalgos = totalgos + os['suma']  %}
+                    {% set debitogos = debitogos + os['deb']  %}
+                    {% set sumamitados = sumamitados + (sumamitad+(sumamitad*0.045))  %}
+                    {% set sumamitados1 = sumamitados1 + (sumamitad*0.9)  %}
+                    {% set sumamitados2 = sumamitados2 + (sumamitad*0.055)  %}
+                    {% set sumamitados3 = sumamitados3 + (sumamitad*0.09)  %}
+                </tr>
+                {% endfor%}
+                <tr class="bg-black-gradient">
+                    <th style="text-align: right">TOTAL GENERAL</th>
+                    <th>${{ totalgos|number_format(2, ',', '.') }}</th>
+                    <th>${{ debitogos|number_format(2, ',', '.') }}</th>
+                    <th>${{ sumamitados|number_format(2, ',', '.') }}</th>
+                    <th>${{ sumamitados1|number_format(2, ',', '.') }}</th>
+                    <th>${{ sumamitados2|number_format(2, ',', '.') }}</th>
+                    <th>${{ sumamitados3|number_format(2, ',', '.') }}</th>
+                </tr>
+            </table>
+            {% endif %}
         </div>
     </div>
 {% endblock%}

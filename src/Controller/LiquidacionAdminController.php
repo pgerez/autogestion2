@@ -26,6 +26,7 @@ final class LiquidacionAdminController extends CRUDController{
             $id = $request->get('id');
             $em = $this->getDoctrine()->getManager();
             $listado = $em->getRepository(Liquidacion::class)->findByIdLiquidacion($id,$hospitalId);
+            $totalOs = $em->getRepository(Liquidacion::class)->findByIdLiquidacionOnlyOs($id,$hospitalId);
         else:
             $listado = [];
             $this->addFlash('sonata_flash_danger', 'No tiene hospital o permisos asignados para ver este reporte.');
@@ -33,6 +34,7 @@ final class LiquidacionAdminController extends CRUDController{
         return $this->render('liquidacion/list.html.twig', [
             'controller_name' => 'LiquidacionController',
             'listado' => $listado,
+            'oss' => $totalOs,
         ]);
 
     }
