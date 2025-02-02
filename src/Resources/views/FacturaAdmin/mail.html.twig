@@ -6,4 +6,11 @@
                         Mail
                 </a>
         {%  endif %}
+        {% if object.estadoId.codEstado == 14 and object.tipoFact == 'X' and object.codOs.email != null %}
+                {% set tipo = object.fechaEnvio ? 'btn-info' : 'btn-default'  %}
+                <a href="{{ path('admin_app_factura_mail', {'id': object.idFactura}) }}" class="btn btn-sm {{ tipo }} view_link" title="{{ 'Enviar Factura por Mail'|trans({}, 'SonataAdminBundle') }}" onclick="return confirm('Esta seguro de enviar por mail la Factura {{ object }} a la Obra social {{ object.codOs }} con email {{ object.codOs.email }}?')">
+                        <i class="glyphicon ion-android-mail"></i>
+                        Mail
+                </a>
+        {%  endif %}
 {% endif %}

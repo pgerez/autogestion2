@@ -929,8 +929,8 @@ EOF;
                 ->to($factura->getCodOs()->getEmail())
                 ->cc($this->getUser()->getHospital()->getEmail())
                 ->subject('Factura '.$factura)
-                ->text('Se envía factura de prestaciones médico realizada en el establecimiento asistencial de referencia en la Pcia de Santiago del Estero conforme a la Ley Pcial N 7384/2024')
-                ->html('Se envía factura de prestaciones médico realizada en el establecimiento asistencial de referencia en la Pcia de Santiago del Estero conforme a la Ley Pcial N 7384/2024')
+                ->text('Se envía factura/nota de credito de prestaciones médico realizada en el establecimiento asistencial de referencia en la Pcia de Santiago del Estero conforme a la Ley Pcial N 7384/2024')
+                ->html('Se envía factura/nota de credito de prestaciones médico realizada en el establecimiento asistencial de referencia en la Pcia de Santiago del Estero conforme a la Ley Pcial N 7384/2024')
                 ->attach($fpdf, 'factura'.$factura.'.pdf');
 
             $email->getHeaders()->addTextHeader('X-Transport', '10860352193408');
@@ -942,8 +942,8 @@ EOF;
                 ->to($factura->getCodOs()->getEmail())
                 ->cc($_ENV['EMAIL'])
                 ->subject('Factura '.$factura)
-                ->text('Se envía factura de prestaciones médico realizada en el establecimiento asistencial de referencia en la Pcia de Santiago del Estero conforme a la Ley Pcial N 7384/2024')
-                ->html('Se envía factura de prestaciones médico realizada en el establecimiento asistencial de referencia en la Pcia de Santiago del Estero conforme a la Ley Pcial N 7384/2024')
+                ->text('Se envía factura/nota de credito de prestaciones médico realizada en el establecimiento asistencial de referencia en la Pcia de Santiago del Estero conforme a la Ley Pcial N 7384/2024')
+                ->html('Se envía factura/nota de credito de prestaciones médico realizada en el establecimiento asistencial de referencia en la Pcia de Santiago del Estero conforme a la Ley Pcial N 7384/2024')
                 ->attach($fpdf, 'factura'.$factura.'.pdf');
             $mailer->send($email);
         }
@@ -955,7 +955,7 @@ EOF;
         $em->persist($factura);
         $em->flush();
         #####flash exito#######
-        $this->addFlash('sonata_flash_success', 'Envio de factura '.$factura.' por Mail de manera exitosa.');
+        $this->addFlash('sonata_flash_success', 'Envio de factura/nota de credito '.$factura.' por Mail de manera exitosa.');
         return $this->redirectToRoute('admin_app_factura_list');
 
     }
