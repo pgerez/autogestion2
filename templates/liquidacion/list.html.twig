@@ -124,7 +124,7 @@
                     <th>Dpto Autogest Area Central 9%</th>
                 </tr>
                 {% for os in oss %}
-                {% set sumamitad = (os['suma']/2) %}
+                {% set sumamitad = ((os['suma']-os['deb'])/2) %}
                 <tr>
                     <td>{{ os['os'] }}</td>
                     <td>{{ os['suma']|number_format(2, ',', '.') }}</td>
