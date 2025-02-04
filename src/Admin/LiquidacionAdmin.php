@@ -22,6 +22,13 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 final class LiquidacionAdmin extends AbstractAdmin
 {
 
+    public function getBatchActions()
+    {
+        $actions = parent::getBatchActions();
+        unset($actions['delete']);
+
+        return $actions;
+    }
     public function createQuery($context = 'list')
     {
         $arrayHpgd = $this->getModelManager()->getEntityManager(Hospital::class)->getRepository(Hospital::class)->arrayHpgd();
