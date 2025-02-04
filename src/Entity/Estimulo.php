@@ -101,6 +101,13 @@ class Estimulo
      */
     private $sistema = 1;
 
+    public function isCondicionParaDeshabilitar()
+    {
+        // Lógica para determinar si el checkbox debe estar deshabilitado
+
+        return $this->recibo? true : false;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

@@ -1,0 +1,11 @@
+{# templates/admin/list_checkbox.html.twig #}
+
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+
+{% block field %}
+    <input type="checkbox"
+           name="idx[]"
+           value="{{ object.id }}"  {# Asumiendo que 'id' es el identificador del objeto #}
+            {% if object.condicionParaDeshabilitar %}disabled{% endif %}
+    >
+{% endblock %}
