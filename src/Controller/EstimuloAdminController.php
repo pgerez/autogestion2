@@ -28,7 +28,7 @@ final class EstimuloAdminController extends CRUDController{
             $neto       = $estimulo->getMonto()*0.955;
             $basico     = $neto / 1.1017;
             $anses      = $basico * 0.2117;
-            $total      = $total + ($neto-$anses);
+            $total      = $total + ($basico-$anses);
             $totalAnses = $totalAnses + $anses;
             if($b == 0){
                 $hospital = $estimulo->getHospitalId();
