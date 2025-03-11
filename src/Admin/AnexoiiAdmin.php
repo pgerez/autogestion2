@@ -101,6 +101,8 @@ final class AnexoiiAdmin extends AbstractAdmin
                         [
                             'Ambulatorio' => 1,
                             'Internacion' => 2,
+                            'Ambulatorio(consulta)' => 3,
+                            'Ambulatorio(guardia)' => 4,
                         ],
                 ],
             ])
@@ -140,6 +142,8 @@ final class AnexoiiAdmin extends AbstractAdmin
                     ''  => 'Sin Tipo de Atencion',
                     '1' => 'Ambulatorio',
                     '2' => 'Internacion',
+                    '3' => 'Ambulatorio(consulta)',
+                    '4' => 'Ambulatorio(guardia)',
                 ], 'label' => 'Tipo de Atencion'])
             #->add('parentesco')
             #->add('medicos')
@@ -229,6 +233,9 @@ final class AnexoiiAdmin extends AbstractAdmin
             ['choices' => [
                 'Ambulatorio' => 1,
                 'Internacion' => 2,
+                'Ambulatorio(consulta)' => 3,
+                'Ambulatorio(guardia)' => 4,
+
             ], 'label' => 'Tipo', 'disabled' => $disabled])
             #->add('fechaCarga', DatePickerType::class, Array('label'=>'Carga', 'format'=>'d/M/y', 'disabled' => $disabled))
             ->add('mesFacturacion', DatePickerType::class, Array('label'=>'Fecha Anexo', 'format'=>'d/M/y', 'disabled' => $disabled))

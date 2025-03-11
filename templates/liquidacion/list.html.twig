@@ -85,7 +85,7 @@
                             <td>{{ item['pv'] }}-{{ item['num'] }}</td>
                             <td>${{ (item['suma']/2) |number_format(2, ',', '.')}}</td>
                             <td>${{ item['deb'] |number_format(2, ',', '.')}}</td>
-                            <td>${{ ((item['suma']/2) - item['deb']) |number_format(2, ',', '.')}}</td>
+                            <td>${{ ((item['suma'] - item['deb'])/2) |number_format(2, ',', '.')}}</td>
                             {% set total = total + (item['suma']/2) %}
                             {% set debito = debito + item['deb'] %}
                         </tr>
