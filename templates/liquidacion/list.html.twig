@@ -79,18 +79,15 @@
                                 {% set debito = debito + (item['deb']) %}
                         </tr>
                     {% else %}
-                        {% set suma = (item['suma']/2) %}
-                        {% set deb = (item['deb']/2) %}
-                        {% set tot = suma - deb %}
                         <tr>
                             <td>{{ item['os'] }}</td>
                             <td>{{ item['servicio'] }}</td>
                             <td>{{ item['pv'] }}-{{ item['num'] }}</td>
-                            <td>${{ suma |number_format(2, ',', '.')}}</td>
-                            <td>${{ deb |number_format(2, ',', '.')}}</td>
-                            <td>${{ tot |number_format(2, ',', '.')}}</td>
-                            {% set total = total + tot %}
-                            {% set debito = debito + deb %}
+                            <td>${{ (item['suma']/2) |number_format(2, ',', '.')}}</td>
+                            <td>${{ item['deb'] |number_format(2, ',', '.')}}</td>
+                            <td>${{ ((item['suma']/2) - (item['deb']/2)) |number_format(2, ',', '.')}}</td>
+                            {% set total = total + (item['suma']/2) %}
+                            {% set debito = debito + (item['deb']/2) %}
                         </tr>
                     {% endif %}
                 {% endfor %}
