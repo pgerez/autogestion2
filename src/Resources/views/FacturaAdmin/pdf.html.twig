@@ -1,4 +1,4 @@
-{% if 'ROLE_ADMIN_FACTURA_PDF' in app.user.roles %}
+{% if 'ROLE_ADMIN_FACTURA_PDF' in app.user.roles or 'ROLE_ADMIN_FACTURA_HOSPITAL_PDF' in app.user.roles %}
 <a href="{{ path('admin_app_factura_pdf', {'id': object.idFactura}) }}" class="btn btn-sm btn-info view_link" title="{{ 'Generar PDF'|trans({}, 'SonataAdminBundle') }}">
         <i class="glyphicon glyphicon-save-file"></i>
         Pdf
