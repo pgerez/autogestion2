@@ -70,7 +70,7 @@ class FacturaRepository extends ServiceEntityRepository
     public function findAnexoItems($id)
     {
         return $this->createQueryBuilder('f')
-            ->select('a.numAnexo','a.documento','a.apeynom','i.cantidad','i.precio','n.tema','s.descripcionServicio as servicio')
+            ->select('a.numAnexo','a.documento','a.apeynom','i.cantidad','i.precio','n.tema','n.codigon', 'n.subcodn','s.descripcionServicio as servicio')
             ->join('f.itemPrefacturacions', 'i')
             ->join('i.Num_Anexo', 'a')
             ->join('i.nomencla', 'n')

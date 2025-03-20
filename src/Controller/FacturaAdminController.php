@@ -586,7 +586,7 @@ EOF;
                 $html .='<td style="width: 20%">'.$i['apeynom'].'</td>';
                 $html .='<td style="width: 10%">'.$i['documento'].'</td>';
                 #$html .='<td>'.$i['servicio'].'</td>';
-                $html .='<td style="width: 40%">'.$i['tema'].'</td>';
+                $html .='<td style="width: 40%">('.$i['codigon'].','.$i['subcodn'].') '.$i['tema'].'</td>';
                 $html .='<td style="width: 5%">'.$i['cantidad'].'</td>';
                 $html .='<td style="width: 8%">'.$i['precio'].'</td>';
                 $html .='<td style="width: 8%">'.$i['precio']*$i['cantidad'].'</td>';
