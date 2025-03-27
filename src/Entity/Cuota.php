@@ -115,9 +115,20 @@ class Cuota
      */
     private $itemPrefacturacions;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Recibo::class, mappedBy="cuota")
+     */
+    private $recibo;
+
     public function __construct()
     {
         $this->itemPrefacturacions = new ArrayCollection();
+        $this->recibo = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->id;
     }
 
     public function getTotal()
@@ -129,6 +140,18 @@ class Cuota
         return $total;
     }
 
+    public function getFacturas()
+    {
+        $f = array();
+        $text = '';
+        foreach ($this->getItemPrefacturacions() as $item):
+            $f[$item->getIdFacturaFK()->getIdFactura()] = $item->getIdFacturaFK();
+        endforeach;
+        foreach ($f as $value):
+            $text .= $value.', ';
+        endforeach;
+        return $text;
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -291,6 +314,36 @@ class Cuota
             // set the owning side to null (unless already changed)
             if ($itemPrefacturacion->getCuota() === $this) {
                 $itemPrefacturacion->setCuota(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Recibo>
+     */
+    public function getRecibo(): Collection
+    {
+        return $this->recibo;
+    }
+
+    public function addRecibo(Recibo $recibo): self
+    {
+        if (!$this->recibo->contains($recibo)) {
+            $this->recibo[] = $recibo;
+            $recibo->setCuota($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecibo(Recibo $recibo): self
+    {
+        if ($this->recibo->removeElement($recibo)) {
+            // set the owning side to null (unless already changed)
+            if ($recibo->getCuota() === $this) {
+                $recibo->setCuota(null);
             }
         }
 

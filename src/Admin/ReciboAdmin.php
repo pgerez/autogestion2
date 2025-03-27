@@ -49,14 +49,16 @@ final class ReciboAdmin extends AbstractAdmin
             ->add('cheque')
             ->add('monto')
             ->add('fechaEmicion')
-            ->add('fechaCobro')
-            ->add('observacion')
+            #->add('fechaCobro')
+            #->add('observacion')
             ->add('montoForesu')
             ->add('montoIosep')
-            ->add('chequeAnses')
+            #->add('chequeAnses')
             ->add('montoAnses')
             ->add('expediente')
             ->add('ordenPago')
+            ->add('obrasocial')
+            ->add('cuota')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'pdf' => ['template' => 'ReciboAdmin/pdf_action.html.twig'],

@@ -132,6 +132,21 @@ class Pago
         $this->facturas = new ArrayCollection();
     }
 
+    public function getRecibo()
+    {
+        $r = 0;
+        foreach ($this->cuotas as $cuota):
+            foreach($cuota->getRecibo() as $recibo):
+                if($recibo):
+                    $r++;
+                endif;
+            endforeach;
+        endforeach;
+        if(count($this->cuotas) == $r):
+            return true;
+        endif;
+        return false;
+    }
     public function getId(): ?int
     {
         return $this->id;

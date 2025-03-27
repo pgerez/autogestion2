@@ -139,6 +139,16 @@ class Recibo
      */
     private $estimulos;
 
+    /**
+     * @var \ObrasSociales
+     *
+     * @ORM\ManyToOne(targetEntity="ObrasSociales")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="obrasocial", referencedColumnName="row_id")
+     * })
+     */
+    private $obrasocial;
+
     public function __construct()
     {
         $this->setPtoVta('1');
@@ -371,6 +381,18 @@ class Recibo
                 $estimulo->setRecibo(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getObrasocial(): ?ObrasSociales
+    {
+        return $this->obrasocial;
+    }
+
+    public function setObrasocial(?ObrasSociales $obrasocial): self
+    {
+        $this->obrasocial = $obrasocial;
 
         return $this;
     }

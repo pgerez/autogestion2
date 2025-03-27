@@ -13,6 +13,7 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\CollectionType;
 use Sonata\Form\Type\DatePickerType;
@@ -25,8 +26,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class PagoAdmin extends AbstractAdmin
 {
 
-    public function  configure(){
-        $this->setTemplate('edit', '/PagoAdmin/edit.html.twig');
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->add('recibo');
     }
 
     public function getBatchActions()
@@ -100,6 +102,7 @@ final class PagoAdmin extends AbstractAdmin
                 'actions' => [
                     'show' => [],
                     'edit' => [],
+                    'recibo' => ['template' => 'PagoAdmin/recibo.html.twig'],
                     'delete' => [],
                 ],
             ]);
@@ -269,6 +272,7 @@ final class PagoAdmin extends AbstractAdmin
             ->add('notaCredito')
             ->add('hospitalId')
             ->add('descripcion')
+            ->add('cuotas')
             ;
     }
 

@@ -149,11 +149,17 @@ class ObrasSociales
      */
     private $certificados;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Recibo::class, mappedBy="obrasocial")
+     */
+    private $recibos;
+
     public function __construct()
     {
         $this->liquidacions = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->certificados = new ArrayCollection();
+        $this->recibos = new ArrayCollection();
     }
 
     public function __toString()
@@ -432,6 +438,36 @@ class ObrasSociales
     public function setEmailInternacion(?string $emailInternacion): self
     {
         $this->emailInternacion = $emailInternacion;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Recibo>
+     */
+    public function getRecibos(): Collection
+    {
+        return $this->recibos;
+    }
+
+    public function addRecibo(Recibo $recibo): self
+    {
+        if (!$this->recibos->contains($recibo)) {
+            $this->recibos[] = $recibo;
+            $recibo->setObrasocial($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecibo(Recibo $recibo): self
+    {
+        if ($this->recibos->removeElement($recibo)) {
+            // set the owning side to null (unless already changed)
+            if ($recibo->getObrasocial() === $this) {
+                $recibo->setObrasocial(null);
+            }
+        }
 
         return $this;
     }

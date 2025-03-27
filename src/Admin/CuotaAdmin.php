@@ -105,6 +105,7 @@ final class CuotaAdmin extends AbstractAdmin
             ->add('numeroCuota')
             ->add('observacion')
             ->add('numeroPago')
+            ->add('recibo')
             ;
     }
 
