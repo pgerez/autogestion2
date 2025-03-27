@@ -36,6 +36,13 @@ class UserAdmin extends AbstractAdmin
      */
     protected $userManager;
 
+    public function getBatchActions()
+    {
+        $actions = parent::getBatchActions();
+        unset($actions['delete']);
+
+        return $actions;
+    }
     public function getFormBuilder()
     {
         $this->formOptions['data_class'] = $this->getClass();

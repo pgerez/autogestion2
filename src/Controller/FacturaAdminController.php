@@ -191,6 +191,7 @@ final class FacturaAdminController extends CRUDController{
      */
     public function listitemsAction(Request $request) : Response
     {
+        $checked = '';
         $em         = $this->getDoctrine()->getManager();
         $data1      = $request->getContent();
         #$data      = str_replace('"', '', $array->{'dni'});
@@ -201,6 +202,10 @@ final class FacturaAdminController extends CRUDController{
         $id         = $data->id;
         $items      = $em->getRepository(Factura::class)->find($idfactura)->getItemPrefacturacions();
         $cuota      = $em->getRepository(Cuota::class)->find($idcuota);
+        $factura    = $em->getRepository(Factura::class)->find($idfactura);
+        if($factura->getEstadoId()->getCodEstado() == 15):
+            $checked = 'checked';
+        endif;
         $url        = $this->generateUrl(
             'admin_app_factura_saveitems',
             [],
@@ -215,7 +220,15 @@ final class FacturaAdminController extends CRUDController{
                 <table class="table table-bordered table-striped table-hover sonata-ba-list">
                     <tbody>
                     <tr>
-                        <td colspan="8" style="text-align: center">Factura: '.$em->getRepository(Factura::class)->find($idfactura)->getNumeroCompleto().'<br> ID:'.$idcuota.'</td>
+                        <td colspan="8" style="text-align: center">
+                        <div class="icheckbox_square-blue"  style="position: relative;">
+                                <input type="checkbox" id="debitounilateral" name="debitounilateral" '.$checked.' style="position: absolute; opacity: 0;">
+                        </div>
+                            <span class="label label-danger">Debito Unilateral</span> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8" style="text-align: center">Factura: '.$factura->getNumeroCompleto().'<br> ID:'.$idcuota.'</td>
                     </tr>
                     <tr>
                         <th class="sonata-ba-list-field-header sonata-ba-list-field-header-batch">
@@ -303,13 +316,14 @@ EOF;
         $idfactura = $request->get('idfactura');
         $idcuota = $request->get('idcuota');
         $checked = $request->get('idx');
+        $debitounilateral = $request->get('debitounilateral');
         $montoFact = 0;
         $uncheck = $em->getRepository(ItemPrefacturacion::class)->updateUncheckItems($idfactura, $idcuota, $idfactura);
         if(isset($checked)):
             foreach ($checked as $ch):
                 $array[$ch] = $request->get('monto_pago_'.$ch);
             endforeach;
-            $check = $em->getRepository(ItemPrefacturacion::class)->updateCheckItems($array, $idcuota, $idfactura);
+            $check = $em->getRepository(ItemPrefacturacion::class)->updateCheckItems($array, $idcuota, $idfactura, $debitounilateral);
         endif;
         $this->addFlash('sonata_flash_success', 'Los itemas de las facturas asociadas al pago: '.$idpago.' Se guardaron exitosamenete.');
         return $this->redirectToRoute('admin_app_pago_edit',['id' => $idpago]);
@@ -333,7 +347,17 @@ EOF;
         $condicion = $this->isGranted('ROLE_AUTOGESTION') ? 'IVA Sujeto Exento' : $factura->getHospitalId()->getCondicion();
         $domicilio = $this->isGranted('ROLE_AUTOGESTION') ? 'Av Belgrano Sud 2050 - Santiago Del Estero, Santiago del Estero' : $factura->getHospitalId()->getDomicilio();
         $cuit = $this->isGranted('ROLE_AUTOGESTION') ? '30675068441' : $factura->getHospitalId()->getCuit();
-
+        $iva = [1 => 'IVA Responsable Inscripto',
+            2 => 'IVA Sujeto Exento',
+            3 => 'Consumidor Final',
+            4 => 'Responsable Monotributo',
+            5 => 'Sujeto No Categorizado',
+            6 => 'Proveedor del Exterior',
+            7 => 'Cliente del Exterior',
+            8 => 'IVA Liberado - Ley Nº 19.640',
+            9 => 'Monotributista Social',
+            10=> 'IVA No Alcanzado',
+            11=> 'Monotributista Trabajador Independiente Promovido'];
         $html=<<<EOF
 <!DOCTYPE html>
 <html lang="en">
@@ -501,7 +525,7 @@ EOF;
         </span>
         <br>
         <span style="flex-wrap: nowrap;">
-            <span><b>Condición frente al IVA:</b> IVA Responsable Inscripto</span>
+            <span><b>Condición frente al IVA:</b> {$iva[$factura->getCodOs()->getIva()]}</span>
             <span><b>Domicilio:</b> {$factura->getCodOs()->getDomicilio()}</span>
         </span>
         <br>
@@ -652,6 +676,17 @@ EOF;
 
         $texto = $factura->getTipoFact() == 'X'? 'POR FACTURA '.$factura->getFacturaIdFactura()->getNumeroCompleto() : ($this->isGranted('ROLE_AUTOGESTION') ? '<strong>'.$factura->getHospitalId().'</strong><br><br>Prestaciones médicas realizadas a vuestros<br> afiliados según detalle adjunto.' : 'Prestaciones médicas realizadas a vuestros<br> afiliados según detalle adjunto.');
         #$texto = $factura->getTipoFact() == 'X'? 'POR FACTURA '.$factura->getFacturaIdFactura()->getNumeroCompleto() : ($this->isGranted('ROLE_AUTOGESTION') ? 'Prestaciones médicas realizadas a vuestros<br>'.$factura->getHospitalId().' afiliados según detalle adjunto.' : 'Prestaciones médicas realizadas a vuestros<br> afiliados según detalle adjunto.');
+        $iva = [1 => 'IVA Responsable Inscripto',
+            2 => 'IVA Sujeto Exento',
+            3 => 'Consumidor Final',
+            4 => 'Responsable Monotributo',
+            5 => 'Sujeto No Categorizado',
+            6 => 'Proveedor del Exterior',
+            7 => 'Cliente del Exterior',
+            8 => 'IVA Liberado - Ley Nº 19.640',
+            9 => 'Monotributista Social',
+            10=> 'IVA No Alcanzado',
+            11=> 'Monotributista Trabajador Independiente Promovido'];
         $html=<<<EOF
 <!DOCTYPE html>
 <html lang="en">
@@ -819,7 +854,7 @@ EOF;
         </span>
         <br>
         <span style="flex-wrap: nowrap;">
-            <span><b>Condición frente al IVA:</b> IVA Responsable Inscripto</span>
+            <span><b>Condición frente al IVA:</b> {$iva[$factura->getCodOs()->getIva()]}</span>
             <span><b>Domicilio:</b> {$factura->getCodOs()->getDomicilio()}</span>
         </span>
         <br>

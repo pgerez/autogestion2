@@ -154,6 +154,11 @@ class ObrasSociales
      */
     private $recibos;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $iva;
+
     public function __construct()
     {
         $this->liquidacions = new ArrayCollection();
@@ -468,6 +473,18 @@ class ObrasSociales
                 $recibo->setObrasocial(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIva(): ?int
+    {
+        return $this->iva;
+    }
+
+    public function setIva(?int $iva): self
+    {
+        $this->iva = $iva;
 
         return $this;
     }

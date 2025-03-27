@@ -125,7 +125,7 @@ class ItemPrefacturacionRepository extends ServiceEntityRepository
     /**
      *
      */
-    public function updateCheckItems($array, $idc, $idF)
+    public function updateCheckItems($array, $idc, $idF, $du)
     {
         $debitoT = null;
         $cantidad = 0;
@@ -169,7 +169,11 @@ class ItemPrefacturacionRepository extends ServiceEntityRepository
             $factura->setEstadoId($debTotal);
             $factura->setDebito($debitoT);
         else:
-            $factura->setEstadoId($debParcial);
+            if($du):
+                $factura->setEstadoId($debUnilateral);
+            else:
+                $factura->setEstadoId($debParcial);
+            endif;
             $factura->setDebito($debitoT);
         endif;
         $cantidad = $this->createQueryBuilder('i')
