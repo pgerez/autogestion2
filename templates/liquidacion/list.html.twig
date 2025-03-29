@@ -29,6 +29,7 @@
             <table class="table table-bordered table-striped table-hover sonata-ba-list">
                 <tbody>
                 {% set total = 0 %}
+                {% set i = 0 %}
                 {% set debito = 0 %}
                 {% set totalg = 0 %}
                 {% set totalgos = 0 %}
@@ -40,7 +41,7 @@
                 {% set sumamitados3 = 0 %}
                 {% set header = '' %}
                 {% set t = 1 %}
-                {% set arr = [] %}
+                {% set arrayHosp = [] %}
                 {% for item in listado %}
                     {% if header != item['hospital'] %}
                         {% if t == 0 %}
@@ -51,6 +52,10 @@
                                 <th>${{ (total - debito) |number_format(2, ',', '.')}}</th>
                                 {% set totalg = totalg + total  %}
                                 {% set debitog = debitog + debito  %}
+                                {% set hospital = item['hospital']  %}
+                                {% set arrayHosp = arrayHosp|merge({
+                                    (hospital): { 'total':total, 'debito':debito, 'neto':(total - debito) }
+                                }) %}
                                 {% set total = 0 %}
                                 {% set debito = 0 %}
                             </tr>
@@ -98,6 +103,9 @@
                         <th>${{ (total - debito) |number_format(2, ',', '.')}}</th>
                         {% set totalg = totalg + total  %}
                         {% set debitog = debitog + debito  %}
+                        {% set arrayHosp = arrayHosp|merge({
+                            (header): { 'total':total, 'debito':debito, 'neto':(total - debito) }
+                        }) %}
                     </tr>
                     <tr class="bg-black-gradient">
                         <th colspan="3" style="text-align: right">TOTAL GENERAL</th>
@@ -110,7 +118,7 @@
         </div>
     </div>
     <div class="box box-success">
-        <h4 class="box-body table-responsive no-padding">
+        <h4 class="box-body table-responsive no-padding"></h4>
             {% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_AUTOGESTION' in app.user.roles%}
             <h4 style="text-align: center"><strong>Listado Por Obra Social</strong></h4>
             <table class="table table-bordered table-striped table-hover sonata-ba-list">
@@ -152,6 +160,28 @@
                 </tr>
             </table>
             {% endif %}
-        </div>
+    </div>
+
+    <div class="box box-success">
+        <h4 class="box-body table-responsive no-padding"></h4>
+            {% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_AUTOGESTION' in app.user.roles%}
+                <h4 style="text-align: center"><strong>Listado Por Hospital</strong></h4>
+                <table class="table table-bordered table-striped table-hover sonata-ba-list">
+                    <tr>
+                        <th>Hospital</th>
+                        <th>Total Facturado</th>
+                        <th>Total Debito</th>
+                        <th>Neto</th>
+                    </tr>
+                    {% for hospital, h in arrayHosp %}
+                    <tr>
+                        <td>{{ hospital }}</td>
+                        <td>{{ h.total|number_format(2, ',', '.') }}</td>
+                        <td>{{ h.debito|number_format(2, ',', '.') }}</td>
+                        <td>{{ h.neto|number_format(2, ',', '.') }}</td>
+                    </tr>
+                    {% endfor%}
+                </table>
+            {% endif %}
     </div>
 {% endblock%}
