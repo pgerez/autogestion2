@@ -11,16 +11,23 @@ sonata_admin:
             - position: left
               type: sonata.admin.block.admin_list
             - position: right
+              roles: [ROLE_AUTOGESTION,ROLE_USER_HOSPITAL]
               type: sonata.block.service.text
               settings:
-                  content: >
+                  content:
                       <div class="container">
                           <div class="alert alert-warning" role="alert">
                           <h2>Informacion Importante</h2>
-                          <hr>
-                            
+                          <h4>- Se recuerda que deberá consultar periodicamente la documentacion solicitada por la Obra Social<br>
+                            para evitar futuros débitos</h4>
                           </div>
                       </div>
+            - position: right
+              roles: [ROLE_HPGD]
+              type: sonata.block.service.text
+              settings:
+                  content:
+
 
 
 sonata_block:
