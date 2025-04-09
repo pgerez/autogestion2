@@ -342,11 +342,11 @@ EOF;
         $tipoF = $factura->getTipoFact() == 'C'? 'FACTURA' : 'NOTA DE CREDITO';
         $texto = $factura->getTipoFact() == 'X'? 'POR FACTURA '.$factura->getFacturaIdFactura()->getNumeroCompleto() : ($this->isGranted('ROLE_AUTOGESTION') ? '<strong>'.$factura->getHospitalId().'</strong><br><br>Prestaciones médicas realizadas a vuestros<br> afiliados según detalle adjunto.' : 'Prestaciones médicas realizadas a vuestros<br> afiliados según detalle adjunto.');
         #$texto = $factura->getTipoFact() == 'X'? 'POR FACTURA '.$factura->getFacturaIdFactura()->getNumeroCompleto() :'Prestaciones médicas realizadas a vuestros<br> afiliados según detalle adjunto.';
-        $fantacia = $this->isGranted('ROLE_AUTOGESTION') ? 'SUBSECRETARIA DE SALUD' : $factura->getHospitalId()->getDescriph();
-        $fechaInicio = $this->isGranted('ROLE_AUTOGESTION') ? '01/05/1994' : $factura->getHospitalId()->getFechaInicio()->format('d/m/Y');
-        $condicion = $this->isGranted('ROLE_AUTOGESTION') ? 'IVA Sujeto Exento' : $factura->getHospitalId()->getCondicion();
-        $domicilio = $this->isGranted('ROLE_AUTOGESTION') ? 'Av Belgrano Sud 2050 - Santiago Del Estero, Santiago del Estero' : $factura->getHospitalId()->getDomicilio();
-        $cuit = $this->isGranted('ROLE_AUTOGESTION') ? '30675068441' : $factura->getHospitalId()->getCuit();
+        $fantacia = !$this->isGranted('ROLE_HPGD') ? 'SUBSECRETARIA DE SALUD' : $factura->getHospitalId()->getDescriph();
+        $fechaInicio = !$this->isGranted('ROLE_HPGD') ? '01/05/1994' : $factura->getHospitalId()->getFechaInicio()->format('d/m/Y');
+        $condicion = !$this->isGranted('ROLE_HPGD') ? 'IVA Sujeto Exento' : $factura->getHospitalId()->getCondicion();
+        $domicilio = !$this->isGranted('ROLE_HPGD') ? 'Av Belgrano Sud 2050 - Santiago Del Estero, Santiago del Estero' : $factura->getHospitalId()->getDomicilio();
+        $cuit = !$this->isGranted('ROLE_HPGD') ? '30675068441' : $factura->getHospitalId()->getCuit();
         $iva = [1 => 'IVA Responsable Inscripto',
             2 => 'IVA Sujeto Exento',
             3 => 'Consumidor Final',
@@ -668,11 +668,11 @@ EOF;
         $items = $em->getRepository(Factura::class)->findAnexoItems($factura->getIdFactura());
         $fechaCae = $factura->getCaeVto() ? $factura->getCaeVto()->format('d/m/Y') : 'SIN FECHA';
         $tipoF = $factura->getTipoFact() == 'C'? 'FACTURA' : 'NOTA DE CREDITO';
-        $fantacia = $this->isGranted('ROLE_AUTOGESTION') ? 'SUBSECRETARIA DE SALUD' : $factura->getHospitalId()->getDescriph();
-        $fechaInicio = $this->isGranted('ROLE_AUTOGESTION') ? '01/05/1994' : $factura->getHospitalId()->getFechaInicio()->format('d/m/Y');
-        $condicion = $this->isGranted('ROLE_AUTOGESTION') ? 'IVA Sujeto Exento' : $factura->getHospitalId()->getCondicion();
-        $domicilio = $this->isGranted('ROLE_AUTOGESTION') ? 'Av Belgrano Sud 2050 - Santiago Del Estero, Santiago del Estero' : $factura->getHospitalId()->getDomicilio();
-        $cuit = $this->isGranted('ROLE_AUTOGESTION') ? '30675068441' : $factura->getHospitalId()->getCuit();
+        $fantacia = !$this->isGranted('ROLE_HPGD') ? 'SUBSECRETARIA DE SALUD' : $factura->getHospitalId()->getDescriph();
+        $fechaInicio = !$this->isGranted('ROLE_HPGD') ? '01/05/1994' : $factura->getHospitalId()->getFechaInicio()->format('d/m/Y');
+        $condicion = !$this->isGranted('ROLE_HPGD') ? 'IVA Sujeto Exento' : $factura->getHospitalId()->getCondicion();
+        $domicilio = !$this->isGranted('ROLE_HPGD') ? 'Av Belgrano Sud 2050 - Santiago Del Estero, Santiago del Estero' : $factura->getHospitalId()->getDomicilio();
+        $cuit = !$this->isGranted('ROLE_HPGD') ? '30675068441' : $factura->getHospitalId()->getCuit();
 
         $texto = $factura->getTipoFact() == 'X'? 'POR FACTURA '.$factura->getFacturaIdFactura()->getNumeroCompleto() : ($this->isGranted('ROLE_AUTOGESTION') ? '<strong>'.$factura->getHospitalId().'</strong><br><br>Prestaciones médicas realizadas a vuestros<br> afiliados según detalle adjunto.' : 'Prestaciones médicas realizadas a vuestros<br> afiliados según detalle adjunto.');
         #$texto = $factura->getTipoFact() == 'X'? 'POR FACTURA '.$factura->getFacturaIdFactura()->getNumeroCompleto() : ($this->isGranted('ROLE_AUTOGESTION') ? 'Prestaciones médicas realizadas a vuestros<br>'.$factura->getHospitalId().' afiliados según detalle adjunto.' : 'Prestaciones médicas realizadas a vuestros<br> afiliados según detalle adjunto.');

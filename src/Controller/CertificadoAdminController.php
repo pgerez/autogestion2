@@ -199,7 +199,6 @@ final class CertificadoAdminController extends CRUDController{
         #$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO); //set image scale factor
 
         $pdf->AddPage();
-
         $html = <<<EOF
                 <!DOCTYPE html>
                 <html lang="es">
@@ -238,8 +237,9 @@ EOF;
         $html .= '<tr><td style="text-align: right">TOTAL</td><td> $'.$total.'</td></tr></table><br>';
         $html .= 'Son: <strong>'.$this->numtoletras((string)$total).'</strong><br><br>';
         $html .= <<<EOF
-        <span style="text-align: justify">Por el presente CERTIFICAMOS que la entidad supra referenciada ADEUDA al MINISTERIO DE SALUD DE LA PROVINCIA DE SANTIAGO DEL ESTERO la suma consignada, como deuda liquida y exigible a la fecha de emisión del presente CERTIFICADO, en concepto de servicios médico asistenciales prestados a/los benediciario/s -afiliado/s, asegurado(s, conforme surgen de las constancias administrativas obrantes en ésta dependencia.<br><br>
-        El presente Certificado es Hábil para promover Ejecución Vía Apremio y/o Embargo Preventivo contra el Responsable obligado mencionado y/o sus sucesores universales por el cobro de las sumas certificadas emergentes de la deuda determinada por el Ministerio de Salud de la Provincia, conforme las disposiciones de la Ley Pcial.N°6036, Art.1 Bis, y los respectivos actos administrativos que se hubieren emitido por parte de ésta Cartera Sanitaria.</span>
+        <span style="text-align: justify; ">Por el presente CERTIFICAMOS que la entidad supra referenciada ADEUDA al FISCO DE LA PROVINCIA DE SANTIAGO DEL ESTERO la suma consignada como deuda liquida y exigible a la fecha de emisión del presente CERTIFICADO, en concepto de servicios médico asistenciales prestados al/los beneficiario/s -afiliado/s, asegurado/s, conforme surgen de las constancias administrativas obrantes en el Ministerio de Salud de la Provincia.
+Los montos adeudados son cuantificados conforme Nomenclador de Aranceles para Prestaciones de Salud para Efectores Públicos (RESOL-2024-6411-E-GDESDE-MS)
+El presente Certificado es Hábil para promover Ejecución Vía Apremio y/o Embargo Preventivo contra el Responsable obligado mencionado por el cobro de las sumas certificadas emergentes de la deuda determinada por el Ministerio de Salud de la Provincia, conforme las disposiciones de la Ley Pcial.N ° 7384: Art.1 °: Establécese el Sistema de Recupero de Costos tendiente a recobrar, a través del mecanismo de Autogestión Hospitalaria, el valor de los servicios asistenciales brindados a beneficiarios de Obras Sociales Nacionales, Provinciales o Municipales, de Asociaciones Mutuales, Compañías de Seguro, Sistemas de Medicina Prepaga, Aseguradoras de Riesgo de Trabajo, Empresas de Asistencia Médica para Turistas, y toda entidad responsable del pago de prestaciones de salud a personas o grupos familiares. Las deudas exigibles que se generen por los agentes indicados en el párrafo precedente serán ejecutadas por Vía de Apremio, sin necesidad de intimación de pago, previa certificación de la misma por parte de la Autoridad de Aplicación, la que constituirá suficiente Título Ejecutivo, en el marco de lo dispuesto por el Artículo 529, Inciso 7) del Código Procesal Civil y Comercial de la Provincia de Santiago del Estero y Artículo 5 del Código Fiscal de la Provincia.-</span>
         <body>
         
         </body>
