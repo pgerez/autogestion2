@@ -54,7 +54,7 @@
                                 {% set debitog = debitog + debito  %}
                                 {% set hospital = item['hospital']  %}
                                 {% set arrayHosp = arrayHosp|merge({
-                                    (hospital): { 'total':total, 'debito':debito, 'neto':(total - debito) }
+                                    (header): { 'total':total, 'debito':debito, 'neto':(total - debito) }
                                 }) %}
                                 {% set total = 0 %}
                                 {% set debito = 0 %}
