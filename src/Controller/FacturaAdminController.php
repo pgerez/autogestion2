@@ -534,7 +534,7 @@ EOF;
         </span>
     </div>
     <div class="wrapper " style="width:100%; margin-top: 10px;padding-left: 0px; border: 0px">
-        <table style="margin-left: 0px">
+        <table style="margin-left: 0px;" border="1">
             <thead>
                 <tr>
                 <th class="text-left">Código</th>
@@ -550,7 +550,7 @@ EOF;
             <tbody>
                 <tr>
                     <td class="text-left">1</td>
-                    <td class="text-left">{$texto}</td>
+                    <td class="text-left" style="width=34%;text-wrap: balance; display: inline-block;">{$texto}</td>
                     <td class="text-right">1,00</td>
                     <td class="text-center">otras unidades</td>
                     <td class="text-right">{$factura->getMontoFact()}</td>
@@ -879,7 +879,7 @@ EOF;
             <tbody>
                 <tr>
                     <td class="text-left">1</td>
-                    <td class="text-left">{$texto}</td>
+                    <td class="text-left" style="width: 40%">{$texto}</td>
                     <td class="text-right">1,00</td>
                     <td class="text-center">otras unidades</td>
                     <td class="text-right">{$factura->getMontoFact()}</td>
